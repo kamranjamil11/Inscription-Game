@@ -10,16 +10,16 @@ using UnityEngine.UI;
     {
     public GameObject loadingScreen;
         public Text gameHighScoreText;
-        public BoardManager boardManager;
-        public LineManager lineManager;
-        public GameObject IntroPanel;
-        public GameObject DifficultyPanel;
-        public GameObject SelectionPanel;
-        public GameObject SettingsPanel;
+       // public BoardManager boardManager;
+       // public LineManager lineManager;
+       // public GameObject IntroPanel;
+       // public GameObject DifficultyPanel;
+        public GameObject mainCanvas;
+        public GameObject settingsPopup;
        
-        public GameObject EndingScreenPanel;
-        public GameObject grid_Panel;
-        public Sprite unselectedSelectionPanel, selectedSelectionPanel;
+       // public GameObject EndingScreenPanel;
+        //public GameObject grid_Panel;
+       // public Sprite unselectedSelectionPanel, selectedSelectionPanel;
 
 
         private void Start()
@@ -27,27 +27,29 @@ using UnityEngine.UI;
             
 
         }
-       
 
 
-        public void PlayButton()
-        {
+
+    public void PlayButton()
+    {
 
         loadingScreen.SetActive(true);
 
+    }
+    public void SettingBtn()
+    {
+        Instantiate(settingsPopup, transform.position,Quaternion.identity, mainCanvas.transform);
 
-        }
-        public void BackFromIntroButton()
-        {
+    }
+    //public void CancelSetting()
+    //{
+    //    if (tempObj != null)
+    //    {
+    //        Destroy(tempObj);
+    //    }
+    //}
 
-
-        }
-        public void BackToIntroPanel()
-        {
-
-        }
-
-        public void GoToSelectionPanel()
+    public void GoToSelectionPanel()
         {
 
         }

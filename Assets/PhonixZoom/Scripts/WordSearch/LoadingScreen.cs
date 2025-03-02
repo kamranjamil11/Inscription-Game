@@ -33,6 +33,7 @@ public class LoadingScreen : MonoBehaviour
             if ( currentValue >= 100)
             {
                 SceneManager.LoadSceneAsync(sceneName);
+                break;
             }
             yield return null; // Wait for next frame
         }

@@ -1,4 +1,5 @@
 
+using BiffeProd;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,7 +7,8 @@ using UnityEngine.UI;
 
 public class Generic_Timer : MonoBehaviour
 {
-    public float totalTime;
+    public GameController game_Controller;
+    public static float totalTime = 60;
     public static bool isStop = false;
     public Text timeText;
 
@@ -23,6 +25,8 @@ public class Generic_Timer : MonoBehaviour
             if (totalTime <= 0)
             {
                 isStop = false;
+                game_Controller.GameOver();
+               
             }
             else
             {
