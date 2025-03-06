@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-namespace BiffeProd
-{
+
     public class SingleLetter : MonoBehaviour
     {
 
@@ -14,4 +13,4 @@ namespace BiffeProd
 
     }
 
-}
+

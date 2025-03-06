@@ -7,12 +7,9 @@ using UnityEngine.UI;
 using System.Text.RegularExpressions;
 using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.SceneManagement;
-//using UnityEngine.UIElements;
+using System.IO;
 
-
-namespace BiffeProd
-{
-    public class GameController : MonoBehaviour
+public class GameController : MonoBehaviour
     {
         public EventHandler<OncCastLetterArgs> OnCastLetter;
         public class OncCastLetterArgs : EventArgs
@@ -57,25 +54,27 @@ namespace BiffeProd
         public GameObject hintPrefab,hintBox;
         private string hintInfo;
         public List<string> hints = new List<string>() { "1stLetter", "2ndLetter", "descTextual" };
+        public HashSet<string> wordSet = new HashSet<string>(); // Fast lookup storage
         public AudioSource sfx;
         public Button hintButton;
         public Generic_Timer generic_Timer;
         public LevelCreator LevelCreator;
         public HighScoreManager hS_Manager;
-        private void Start()
-        {
-            score_Text.text = score.ToString();
-            int coins = PlayerPrefs.GetInt("COINS");           
-            coins_Text.text = coins.ToString();
-            PlayerPrefs.SetInt("HINT_POWERUP", 5);
-            hintButton.GetComponentInChildren<Text>().text = "5";
-            activeLetters = new List<GameObject>();
-            lvlCreator = FindObjectOfType<LevelCreator>();
-            timeLeft = totalTime;
-            tmpCol = lvlCreator.lettersGrid[0].GetComponentInChildren<Text>().color;
+    private void Start()
+    {
+        score_Text.text = score.ToString();
+        int coins = PlayerPrefs.GetInt("COINS");
+        coins_Text.text = coins.ToString();
+        PlayerPrefs.SetInt("HINT_POWERUP", 5);
+        hintButton.GetComponentInChildren<Text>().text = "5";
+        activeLetters = new List<GameObject>();
+        lvlCreator = FindObjectOfType<LevelCreator>();
+        timeLeft = totalTime;
+        tmpCol = lvlCreator.lettersGrid[0].GetComponentInChildren<Text>().color;
 
-        }
-        private void OnNewLetterCasted(object sender, OncCastLetterArgs e)
+        StartCoroutine(LoadWords());
+    }
+    private void OnNewLetterCasted(object sender, OncCastLetterArgs e)
         {
             OnCastLetter -= OnNewLetterCasted;
             print("Select_Letter");
@@ -160,28 +159,31 @@ namespace BiffeProd
             //whene relese mouse button
             if (Input.GetMouseButtonUp(0))
             {
-                //verify result
-
-                if (formedWord == LevelCreator.levelWord)
-                {
+            //verify result
+            bool isFound = WordExists(formedWord);
+            //if (formedWord == LevelCreator.levelWord)
+            if (isFound)
+            {
                     print("WordComplete:");
                     //show win popup
                    // winPanel.SetActive(true);
-                    correctWord.text = LevelCreator.levelWord;
+                   // correctWord.text = LevelCreator.levelWord;
                     gameOn = false;
-                    currTime.text = string.Format("{0:0}:{1:00}", minutes, seconds);
-                    if (!PlayerPrefs.HasKey(LevelCreator.levelWord))
-                    {
-                        PlayerPrefs.SetString(LevelCreator.levelWord, string.Format("{0:0}:{1:00}", minutes, seconds));
-                        bestTime.text = string.Format("{0:0}:{1:00}", minutes, seconds);
-                    }
-                    else
-                    {
-                        checkIfBestRecord(LevelCreator.levelWord);
-                    }
-                    ScoreSystem(LevelCreator.levelWord.Length);
-                    Next();
-                }
+                //currTime.text = string.Format("{0:0}:{1:00}", minutes, seconds);
+                //if (!PlayerPrefs.HasKey(LevelCreator.levelWord))
+                //{
+                //    PlayerPrefs.SetString(LevelCreator.levelWord, string.Format("{0:0}:{1:00}", minutes, seconds));
+                //    bestTime.text = string.Format("{0:0}:{1:00}", minutes, seconds);
+                //}
+                //else
+                //{
+                //    checkIfBestRecord(LevelCreator.levelWord);
+                //}
+                ScoreSystem(formedWord.Length);
+                formedWord = "";
+                Next();
+
+            }
                 else
                 {
                     results.Clear();
@@ -441,7 +443,8 @@ namespace BiffeProd
                 hintButton.GetComponentInChildren<Text>().text = hint_Count.ToString();
                 for (int i = 0; i < lvlCreator.hintObjs.Count; i++)
                 {
-                    lvlCreator.hintObjs[i].GetComponent<Image>().sprite = selectedLetterSprite;
+                lvlCreator.hintObjs[i].GetComponent<Animator>().Play("Hint");
+                    //lvlCreator.hintObjs[i].GetComponent<Image>().sprite = selectedLetterSprite;
                 }
             }
             else 
@@ -503,8 +506,55 @@ namespace BiffeProd
             lvl++;
             PlayerPrefs.SetInt("LEVEL_NUMBER", lvl);
             Generic_Timer.totalTime += 30;
-            LevelCreator.NewWord();
+        foreach (var item in lvlCreator.lettersGrid)
+        {
+            item.GetComponent<Image>().sprite = unSelectedLetterSprite;
+            item.GetComponentInChildren<Text>().color = tmpCol;
+            item.GetComponent<Animator>().SetTrigger("Idle");
+
         }
+            LevelCreator.CreatWord();
+        }
+
+
+    
+
+
+    
+
+   
+
+    IEnumerator LoadWords()
+    {
+        string filePath = Path.Combine(Application.streamingAssetsPath, "wordlist.txt");
+
+        if (File.Exists(filePath))
+        {
+            using (StreamReader reader = new StreamReader(filePath))
+            {
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    wordSet.Add(line.Trim().ToLower()); // Convert to lowercase for case-insensitive check
+                }
+            }
+            Debug.Log("File Loaded! Total Words: " + wordSet.Count);
+        }
+        else
+        {
+            Debug.LogError("File not found: " + filePath);
+        }
+
+        yield return null;
+    }
+
+    // Check if a word exists in the loaded data
+    public bool WordExists(string word)
+    {
+        return wordSet.Contains(word.ToLower()); // Fast O(1) lookup
     }
 }
+
+    
+
 
