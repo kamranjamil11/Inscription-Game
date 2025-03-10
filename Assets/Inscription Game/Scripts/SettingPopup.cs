@@ -3,23 +3,40 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 //using UnityEngine.UIElements;
+//using UnityEngine.UIElements;
 
 public class SettingPopup : MonoBehaviour
     {
+    
     public Slider musicValue;
     public Slider soundValue;
+    
+    public GameObject right_Toggle, left_Toggle;
+    private bool isToggle;
     //public AudioSource musicSource;
-   // public AudioSource SoundSource;
+    // public AudioSource SoundSource;
 
     AudioManager audioManager;
+    GameController gameController;
     private void Start()
     {
-        audioManager=GameObject.FindAnyObjectByType<AudioManager>();
+        audioManager=GameObject.FindObjectOfType<AudioManager>();
+        gameController= GameObject.FindObjectOfType<GameController>();
+        if (gameController.isToggle)
+        {
+            right_Toggle.SetActive(false);
+            left_Toggle.SetActive(true);
+        }
+        else
+        {
+            right_Toggle.SetActive(true);
+            left_Toggle.SetActive(false);
+        }
         GetMusicAndSoundValue();
     }
     public void CancelSetting()
     {
-        
+        Time.timeScale = 1.0f;
         Destroy(this.gameObject);
         
     }
@@ -91,6 +108,22 @@ public class SettingPopup : MonoBehaviour
         {
              soundValue.value = PlayerPrefs.GetFloat("SOUND");
         }
+    }
+
+    public void ToggleBtn()
+    {
+       
+        if (gameController.isToggle)
+        {          
+            right_Toggle.SetActive(true);          
+            left_Toggle.SetActive(false);         
+        }
+        else
+        {          
+            right_Toggle.SetActive(false);          
+            left_Toggle.SetActive(true);          
+        }
+        gameController.ToggleBtn();
     }
 
 }

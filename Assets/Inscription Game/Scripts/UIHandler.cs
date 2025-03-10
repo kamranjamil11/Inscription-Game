@@ -39,7 +39,7 @@ using UnityEngine.UI;
     public void SettingBtn()
     {
         Instantiate(settingsPopup, transform.position,Quaternion.identity, mainCanvas.transform);
-
+        Time.timeScale = 0f;
     }
     //public void CancelSetting()
     //{

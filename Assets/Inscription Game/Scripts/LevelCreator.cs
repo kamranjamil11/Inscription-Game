@@ -20,17 +20,21 @@ public class LevelCreator : MonoBehaviour
     private List<string> alphabets = new List<string>() { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", };
     public List<char> weightedList = new List<char>();
     public int gridSize = 16; // Total boxes in the grid (4x4)
-    private char[] grid;
+    public List<char> grid;
+    
+    GameController gameController;
     void Start()
     {
+        gameController=gameObject.GetComponent<GameController>();
         // if (!isPlay)
         // {
         isPlay = true;
 
         // }
-        CreatWord();
+        CreatWord("FirstTime");
     }
-    public void CreatWord()
+
+    public void CreatWord(string id)
     {
         Dictionary<char, float> alphabetProbabilities = new Dictionary<char, float>()
         {
@@ -52,10 +56,24 @@ public class LevelCreator : MonoBehaviour
             cumulativeList.Add(new KeyValuePair<char, float>(item.Key, cumulativeSum));
         }
         // 3. Generate and Fill the 16-box Grid
-        grid = new char[gridSize];
-        FillGrid(cumulativeList, cumulativeSum);
-        PrintGrid();
-        fillTheRest();
+        // grid = new char[gridSize];
+        //grid = new List<char>(gridSize);
+        if (id == "FirstTime")
+        {
+            FillGrid(cumulativeList, cumulativeSum);           
+            PrintGrid();
+            fillTheRest();
+        }
+        else
+        {                     
+            NextFillGrid(cumulativeList, cumulativeSum);                      
+            PrintGrid();
+            NextFillTheRest();
+           // fillTheRest();
+        }
+
+
+
     }
     void FillGrid(List<KeyValuePair<char, float>> cumulativeList, float maxProbability)
     {
@@ -70,14 +88,52 @@ public class LevelCreator : MonoBehaviour
             {
                 if (randValue <= item.Value)
                 {
-                    grid[i] = item.Key;
+                    //grid[i] = item.Key;
+                    grid.Add(item.Key);
                     weightedList.Add(item.Key);
                     break;
                 }
             }
         }
     }
+    void NextFillGrid(List<KeyValuePair<char, float>> cumulativeList, float maxProbability)
+    {
+            
+        System.Random random = new System.Random();
+        
+        for (int i = 0; i < gameController.activeLetters.Count; i++)
+        {
+            int value = gameController.activeLetters[i].GetComponent<SingleLetter>().id;
+            grid[value] = ' ';
+            weightedList[value] = ' ';
+        }
+        for (int i = 0; i < gridSize; i++)
+        {
+            float randValue = (float)random.NextDouble() * maxProbability;
 
+            foreach (var item in cumulativeList)
+            {
+                if (randValue <= item.Value)
+                {
+                    foreach (var item1 in grid)
+                    {
+                        if (item1==' ')
+                        {
+                            int value = gameController.activeLetters[i].GetComponent<SingleLetter>().id;
+                           
+                            grid[value] = item.Key;
+                            weightedList[value] =(item.Key);
+                            lettersGrid[value].GetComponent<SingleLetter>().Value = item.Key.ToString();
+                            lettersGrid[value].gameObject.GetComponentInChildren<Text>().text = item.Key.ToString(); 
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+           
+        }
+    }
     // Function to Print Grid in Console
     void PrintGrid()
     {
@@ -94,89 +150,29 @@ public class LevelCreator : MonoBehaviour
         print(gridOutPut[0, 1]);
         WordsFinder();
     }
-    //public void NewWord() 
-    //{
-    //   // int lvl = PlayerPrefs.GetInt("LEVEL_NUMBER");
-    //   // print("Lvl: "+ lvl);
-    //   // if (lvl < totalWords.Count)
-    //    //{
-    //       // levelWord = totalWords[lvl]; //PlayerPrefs.GetString("lvlWord");
-    //       // createLevel();
-    //        //fillTheRest();
-    //    //}
-    //}
-    //private void createLevel()
-    //{
-    //    //place the first letter randomly on the grid
-    //    int currLetter = Random.Range(0, lettersGrid.Count);
-    //    lettersGrid[currLetter].Value = levelWord[0].ToString();
-    //    lettersGrid[currLetter].GetComponentInChildren<Text>().text = levelWord[0].ToString();
-    //    //remove the first placed letter form all letter that have a way to it
-    //    foreach (SingleLetter way in lettersGrid)
-    //    {
-    //        if (way.tempPossibleWays.Contains(lettersGrid[currLetter].gameObject))
-    //        {
-    //            way.tempPossibleWays.Remove(lettersGrid[currLetter].gameObject);
-    //        }
-    //    }
-
-    //    for (int i = 1; i < levelWord.Length; i++)
-    //    {
-    //        //pic a possible way
-    //        wayIndex = Random.Range(0, lettersGrid[currLetter].tempPossibleWays.Count);
-    //       // print("wayIndex: " + wayIndex);
-    //        //test if the way is valid (isn't used before) else remove it from possible ways list and generated new index for a new way
-    //        do
-    //        {
-    //            lettersGrid[currLetter].tempPossibleWays.Remove(lettersGrid[currLetter].tempPossibleWays[wayIndex].gameObject);
-    //            //calculate new value
-    //            wayIndex = Random.Range(0, lettersGrid[currLetter].tempPossibleWays.Count);
-    //          //  print("wayIndex1: " + wayIndex);
-    //            // if there is no way restart the scene to re - execute the code :*(yaatini bwsa rani maalem)
-    //            if (lettersGrid[currLetter].tempPossibleWays.Count == 0)
-    //            {
-    //                SceneManager.LoadScene("Game");
-    //                return;
-    //            }
-    //        }
-    //        while (lettersGrid[currLetter].tempPossibleWays[wayIndex].GetComponent<SingleLetter>().Value != "");
-    //        //is valid way 9om bel wejeb :)
-    //        lettersGrid[currLetter].tempPossibleWays[wayIndex].GetComponent<SingleLetter>().Value = levelWord[i].ToString();
-    //        lettersGrid[currLetter].tempPossibleWays[wayIndex].GetComponent<SingleLetter>().GetComponentInChildren<Text>().text = levelWord[i].ToString();
-    //        int tempLetterIndex = lettersGrid.IndexOf(lettersGrid[currLetter].tempPossibleWays[wayIndex].GetComponent<SingleLetter>());
-    //        currLetter = tempLetterIndex;
-    //       // print("wayIndex: " + wayIndex + "currLetter: " + currLetter);
-    //    }
-    //}
+   
     private void fillTheRest()
     {
         hintObjs.Clear();
-        //foreach (SingleLetter letter in lettersGrid)
-        //{
-        //    if (letter.Value == "")
-        //    {
-        //        int valIndex = Random.Range(0, alphabets.Count);
-        //        letter.Value = alphabets[valIndex];
-        //        letter.gameObject.GetComponentInChildren<Text>().text = alphabets[valIndex].ToString();
-        //    }
-        //    else
-        //    {
-        //        hintObjs.Add(letter.gameObject);
-        //        // print("main: "+letter.gameObject.GetComponentInChildren<Text>().text);
-        //    }
-        //}
+        
         for (int i = 0; i < weightedList.Count; i++)
-        {
-            // if (lettersGrid[i].Value == "")
-            //{
+        {           
             lettersGrid[i].GetComponent<SingleLetter>().Value = weightedList[i].ToString();
-            lettersGrid[i].gameObject.GetComponentInChildren<Text>().text = weightedList[i].ToString();
-            //}
+            lettersGrid[i].gameObject.GetComponentInChildren<Text>().text = weightedList[i].ToString();         
         }
         for (int i = 0; i < hints_Index.Count; i++)
         {
             hintObjs.Add(lettersGrid[hints_Index[i]].gameObject);
         }
+    }
+    private void NextFillTheRest()
+    {       
+        hintObjs.Clear();
+        for (int i = 0; i < hints_Index.Count; i++)
+        {
+            hintObjs.Add(lettersGrid[hints_Index[i]].gameObject);         
+        }
+        gameController.activeLetters.Clear();
     }
 
     char[,] ConvertStringToGrid(string input)
@@ -198,22 +194,9 @@ public class LevelCreator : MonoBehaviour
     }
 
 
-    char[,] gridOutPut; //=
-                        //{
-                        //    { 'F', 'R', 'I', 'C' },
-                        //    { 'I', 'M', 'T', 'O' },
-                        //    { 'D', 'E', 'G', 'H' },
-                        //    { 'L', 'H', 'L', 'T' }
-                        //};
-
-    // HashSet<string> dictionary = new HashSet<string>()
-    //{
-    //    "DOG", "FRIEND", "RICH", "TIME", "FIGHT", "LIGHT", "TILE", "HOT", "HIT",
-    //    "IM", "DE", "GE", "LHL", "TIL", "IC", "TO", "DO", "ME", "IT"
-    //};
-
+    char[,] gridOutPut; 
     int rows = 4, cols = 4;
-   // HashSet<string> foundWords = new HashSet<string>();
+   
     List<(string, List<int>)> foundWords = new List<(string, List<int>)>();
     // 8 possible directions (left, right, up, down, diagonals)
     int[] dx = { -1, -1, -1, 0, 1, 1, 1, 0 };
@@ -228,25 +211,22 @@ public class LevelCreator : MonoBehaviour
         for (int i = 0; i < rows; i++)
         {
             for (int j = 0; j < cols; j++)
-            {
-                // DFS(i, j, "", visited, 0);
+            {               
                 DFS(i, j, "", new List<int>(), visited);
             }
         }
 
-        // Print all found words
-        print("Words Found in Grid:");
-        //foreach (string word in foundWords)
-        //{
-        //    print(word);
-        //}
+       
+        print("Words Found in Grid:");       
         foreach (var word in foundWords)
-        {
-            hints_Index = word.Item2;
-            print($"Word: {word.Item1}, Indexes: [{string.Join(", ", word.Item2)}]");
-            break;
+        {          
+              //  hints_Index = word.Item2;
+                print($"Word: {word.Item1}, Indexes: [{string.Join(", ", word.Item2)}]");
+               // break;        
         }
-        
+        int rnd=UnityEngine.Random.Range(0, foundWords.Count);
+        hints_Index = foundWords[rnd].Item2;
+        print("Hint_Obj: "+ foundWords[rnd].Item1);
     }
      void DFS(int i, int j, string currentWord, List<int> indexes, bool[,] visited)
     {
@@ -262,10 +242,7 @@ public class LevelCreator : MonoBehaviour
             visited[i, j] = true;
 
             // Agar dictionary mein hai, to word + full path indexes save karein
-            //if (dictionary.Contains(currentWord))
-            //{
-            //    foundWords.Add((currentWord, new List<int>(indexes)));
-            //}
+            
             if (gameObject.GetComponent<GameController>().wordSet.Contains(currentWord.ToLower()))
             {
                 foundWords.Add((currentWord, new List<int>(indexes)));
@@ -292,44 +269,8 @@ public class LevelCreator : MonoBehaviour
             indexes.RemoveAt(indexes.Count - 1);
         }
     }
-    //void DFS(int i, int j, string currentWord, bool[,] visited, int depth)
-    //{
-    //    if (foundWords.Count < 6)
-    //    {
-    //        // Agar depth zyada ho jaye (10 letters se zyada ka word avoid karein)
-    //        if (depth > 10)
-    //            return;
 
-    //        // Out of bounds check or already visited
-    //        if (i < 0 || j < 0 || i >= rows || j >= cols || visited[i, j])
-    //            return;
-
-    //        // Letter ko add karein
-    //        currentWord += gridOutPut[i, j];
-    //        visited[i, j] = true;
-
-    //        // Agar dictionary mein hai, to save karein
-    //        if (gameObject.GetComponent<GameController>().wordSet.Contains(currentWord.ToLower()))
-    //        {
-    //            foundWords.Add(currentWord);
-    //        }
-
-    //        // Next letter ke liye adjacent check karein
-    //        for (int d = 0; d < 8; d++)
-    //        {
-    //            int newX = i + dx[d];
-    //            int newY = j + dy[d];
-    //            if (foundWords.Count < 6)
-    //            {
-    //                DFS(newX, newY, currentWord, visited, depth + 1);
-    //            }
-    //        }
-
-    //        // Backtracking (visited mark ko remove karein)
-    //        visited[i, j] = false;
-    //    }
-    //}
-
+   
 }
 
 
