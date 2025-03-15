@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -8,6 +8,10 @@ using System.Text.RegularExpressions;
 using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.SceneManagement;
 using System.IO;
+using Unity.VisualScripting;
+using UnityEngine.Networking;
+using Newtonsoft.Json;
+using UnityEngine.SocialPlatforms;
 
 public class GameController : MonoBehaviour
 {
@@ -16,6 +20,7 @@ public class GameController : MonoBehaviour
     {
         public SingleLetter castedLetter;
     }
+    public List<string> finded_Words = new List<string>();
     public List<GameObject> activeLetters;
     public string formedWord = "";
     List<RaycastResult> results = new List<RaycastResult>();
@@ -29,12 +34,20 @@ public class GameController : MonoBehaviour
     public GameObject winPanel;
     public GameObject losePanel;
     public GameObject pausePanel;
+    public GameObject loadingPanel;
     public GameObject gridFrame;
-    public GameObject right_Setting_Btn, left_Setting_Btn;
-    public GameObject right_Man, left_Man;
+   // public GameObject right_Setting_Btn, left_Setting_Btn;
+    public GameObject coinsAdded_Box, challenge_Box;
     // public GameObject right_Toggle, left_Toggle;
+    public GameObject scoreAdded_Box;
+    public GameObject word_Box;
+    public GameObject gameOver_Content;
     public GameObject mainCanvas;
     public GameObject settingsPopup;
+    public GameObject coins_Shop;
+    public GameObject congrats_Popup;
+    public GameObject hintPrefab, hintBox;
+    public GameObject block_Brake;
     public Text score_Text, gameOverScore_Text, highScore_Text;
     public Text coins_Text;
     public Text correctWord;
@@ -50,9 +63,7 @@ public class GameController : MonoBehaviour
     public static int score;
 
     private Color tmpCol;
-    public GameObject notEnoughCoinsPanel;
-    public GameObject hintPrefab, hintBox;
-    public GameObject block_Brake;
+    
     private string hintInfo;
     public List<string> hints = new List<string>() { "1stLetter", "2ndLetter", "descTextual" };
     public HashSet<string> wordSet = new HashSet<string>(); // Fast lookup storage
@@ -61,20 +72,35 @@ public class GameController : MonoBehaviour
     public Generic_Timer generic_Timer;
     public LevelCreator LevelCreator;
     public HighScoreManager hS_Manager;
+    public float start_Time, end_Time;
+    public float ChallengeTime;
+   // bool isChallengeTime;
+    public int consistent_Word;
+    public string[] Challenges_Description;
     private void Start()
     {
+        consistent_Word = 0;
+        finded_Words.Clear();
+        start_Time = Time.time;
         score_Text.text = score.ToString();
         int coins = PlayerPrefs.GetInt("COINS");
         coins_Text.text = coins.ToString();
-        PlayerPrefs.SetInt("HINT_POWERUP", 5);
-       hintButton.GetComponentInChildren<Text>().text = "1";
+        if (!PlayerPrefs.HasKey("HINT_POWERUP")) 
+        {
+            PlayerPrefs.SetInt("HINT_POWERUP", 1); 
+        }
+        int hint = PlayerPrefs.GetInt("HINT_POWERUP");
+        hintButton.GetComponentInChildren<Text>().text = hint.ToString();
         activeLetters = new List<GameObject>();
         lvlCreator = FindObjectOfType<LevelCreator>();
         timeLeft = totalTime;
         tmpCol = lvlCreator.lettersGrid[0].GetComponentInChildren<Text>().color;
 
         StartCoroutine(LoadWords());
+
     }
+
+   
     private void OnNewLetterCasted(object sender, OncCastLetterArgs e)
     {
         OnCastLetter -= OnNewLetterCasted;
@@ -118,6 +144,18 @@ public class GameController : MonoBehaviour
 
     private void Update()
     {
+        if (ChallengeTime < 90)
+        {
+            ChallengeTime += Time.deltaTime;
+        }
+        else
+        {
+            if (PlayerPrefs.HasKey("DAILYCHALLENGE" + 1))
+            {
+                CheckDailyReset();
+            }
+        }
+
         if (gameOn)
         {
             timeLeft -= Time.deltaTime;
@@ -165,6 +203,8 @@ public class GameController : MonoBehaviour
             //if (formedWord == LevelCreator.levelWord)
             if (isFound)
             {
+                consistent_Word++;
+                finded_Words.Add(formedWord);
                 print("WordComplete:");
                 //show win popup
                 // winPanel.SetActive(true);
@@ -229,48 +269,14 @@ public class GameController : MonoBehaviour
             });
         }
     }
-    public void ScoreSystem(int wordLength)
+    void ScoreUpdate(int newScore,float time) 
     {
-        switch (wordLength)
-        {
-            case 2:
-                score += 200;
-                Generic_Timer.totalTime += 20;
-                break;
-            case 3:
-                score += 300;
-                Generic_Timer.totalTime += 30;
-                break;
-            case 4:
-                score += 400;
-                Generic_Timer.totalTime += 40;
-                break;
-            case 5:
-                score += 500;
-                Generic_Timer.totalTime += 50;
-                break;
-            case 6:
-                score += 600;
-                Generic_Timer.totalTime += 60;
-                break;
-            case 7:
-                score += 700;
-                Generic_Timer.totalTime += 60;
-                break;
-            case 8:
-                score += 800;
-                Generic_Timer.totalTime += 60;
-                break;
-            case 9:
-                score += 900;
-                Generic_Timer.totalTime += 60;
-                break;
-            case 10:
-                score += 1000;
-                Generic_Timer.totalTime += 60;
-                break;
-        }
+        score += newScore;
+        Generic_Timer.totalTime += time;
+        scoreAdded_Box.GetComponentInChildren<Text>().text = "+" + newScore.ToString();
+
         score_Text.text = score.ToString();
+
         int HS = PlayerPrefs.GetInt("HIGHSCORE");
         if (score > HS)
         {
@@ -280,7 +286,146 @@ public class GameController : MonoBehaviour
         {
             Generic_Timer.totalTime = 60;
         }
+    }
+    public void ScoreSystem(int wordLength)
+    {
+        scoreAdded_Box.SetActive(true);
+       
+        switch (wordLength)
+        {
+            case 2:
+               // score += 200;
+               // Generic_Timer.totalTime += 20;
+               // scoreAdded_Box.GetComponentInChildren<Text>().text = "+" + score.ToString();
+                ScoreUpdate(200, 20);
+                break;
+            case 3:
+                //score += 300;
+                //Generic_Timer.totalTime += 30;
+                ScoreUpdate(300, 30);
+                break;
+            case 4:
+                //score += 400;
+                //Generic_Timer.totalTime += 40;
+                ScoreUpdate(400, 40);
+                break;
+            case 5:
+                //score += 500;
+                //Generic_Timer.totalTime += 50;
+                ScoreUpdate(500, 50);
+                break;
+            case 6:
+                //score += 600;
+                //Generic_Timer.totalTime += 60;
+                ScoreUpdate(600, 60);
+                break;
+            case 7:
+                //score += 700;
+                //Generic_Timer.totalTime += 60;
+                ScoreUpdate(700, 60);
+                break;
+            case 8:
+                //score += 800;
+                //Generic_Timer.totalTime += 60;
+                ScoreUpdate(800, 60);
+                break;
+            case 9:
+                //score += 900;
+                //Generic_Timer.totalTime += 60;
+                ScoreUpdate(900, 60);
+                break;
+            case 10:
+                //score += 1000;
+                //Generic_Timer.totalTime += 60;
+                ScoreUpdate(1000, 60);
+                break;
+        }
 
+        CheckDailyReset();
+    }
+    void CheckDailyReset()
+    {
+        string lastPlayedDate = PlayerPrefs.GetString("LASTPLAYEDDATEKEY", "");
+        string todayDate = DateTime.Now.ToString("yyyy-MM-dd");
+
+        if (lastPlayedDate != todayDate)
+        {
+            int totalChallenge = PlayerPrefs.GetInt("TOTALDAILYCHALLENGE");
+            if ((totalChallenge < 3))
+            {
+                StartCoroutine(DailyChallenge());
+            }
+            else 
+            {
+                PlayerPrefs.SetString("LASTPLAYEDDATEKEY", todayDate);                
+            }
+            PlayerPrefs.Save();
+        }
+    }
+    public IEnumerator DailyChallenge()
+    {
+        if (PlayerPrefs.HasKey("DAILYCHALLENGE" + 0))
+        {
+            int first_Challenge = PlayerPrefs.GetInt("DAILYCHALLENGE" + 0);
+            switch (first_Challenge)
+            {
+                case 0:
+                    if (score >= 1500)
+                    {
+                        ChallengeComplete();
+                        challenge_Box.GetComponentInChildren<Text>().text = Challenges_Description[0];
+                        PlayerPrefs.SetInt("TOTALDAILYCHALLENGE", 1);
+                        PlayerPrefs.DeleteKey("DAILYCHALLENGE" + 0);
+                    }
+                    break;
+            }
+        }
+        if (PlayerPrefs.HasKey("DAILYCHALLENGE" + 1))
+        {
+            int second_Challenge = PlayerPrefs.GetInt("DAILYCHALLENGE" + 1);
+            switch (second_Challenge)
+            {
+                case 0:
+                    if (ChallengeTime >= 90)
+                    {
+                        ChallengeComplete();
+                        challenge_Box.GetComponentInChildren<Text>().text = Challenges_Description[1];
+                        PlayerPrefs.SetInt("TOTALDAILYCHALLENGE", 2);
+                        PlayerPrefs.DeleteKey("DAILYCHALLENGE" + 1);
+                    }
+                    break;
+            }
+        }
+        if (PlayerPrefs.HasKey("DAILYCHALLENGE" + 2))
+        {
+            int third_Challenge = PlayerPrefs.GetInt("DAILYCHALLENGE" + 2);
+            switch (third_Challenge)
+            {
+                case 0:
+                    if (consistent_Word >= 10)
+                    {
+                        ChallengeComplete();
+                        challenge_Box.GetComponentInChildren<Text>().text = Challenges_Description[2];
+                        PlayerPrefs.SetInt("TOTALDAILYCHALLENGE", 2);
+                        PlayerPrefs.DeleteKey("DAILYCHALLENGE" + 2);
+                    }
+                    break;
+            }
+        }
+        yield return new WaitForSeconds(2f);
+        coinsAdded_Box.SetActive(false);
+        challenge_Box.SetActive(false);
+
+    }
+
+    void ChallengeComplete()
+    {
+        coinsAdded_Box.SetActive(true);
+        challenge_Box.SetActive(true);      
+        int coins = PlayerPrefs.GetInt("COINS");
+        coins += 25;
+        coins_Text.text = coins.ToString();
+        PlayerPrefs.SetInt("COINS", coins);     
     }
     public void SubscribeToEventOnPointerEnter()
     {
@@ -309,7 +454,7 @@ public class GameController : MonoBehaviour
             {
                 lastLetter.GetComponent<SingleLetter>().linkers[3].SetActive(true);
             }
-            else if (angletodir == 90 && dot == -1)
+            else if ((angletodir == 90 && dot == -1)||(lastLetter.name == "B_2" && currentLetter.name== "E_5"))
             {
                 lastLetter.GetComponent<SingleLetter>().linkers[1].SetActive(true);
             }
@@ -446,11 +591,13 @@ public class GameController : MonoBehaviour
     {
         Generic_Timer.totalTime = 60;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        AudioManager.instance.PlaySound(0);
     }
     public void GoToHome()
     {
         Generic_Timer.totalTime = 60;
         SceneManager.LoadScene("MainMenu");
+        AudioManager.instance.PlaySound(0);
     }
     public void HintPowerUp()
     {
@@ -459,6 +606,7 @@ public class GameController : MonoBehaviour
         {
             hint_Count--;
             PlayerPrefs.SetInt("HINT_POWERUP", hint_Count);
+            hintButton.interactable = false; 
             hintButton.GetComponentInChildren<Text>().text = hint_Count.ToString();
             for (int i = 0; i < lvlCreator.hintObjs.Count; i++)
             {
@@ -475,65 +623,95 @@ public class GameController : MonoBehaviour
             //// hintButton.interactable = false;
             // hintBox.GetComponentInChildren<Text>().text = hintInfo;
         }
+        AudioManager.instance.PlaySound(0);
     }
-    public void ToggleBtn()
-    {
-        if (isToggle)
-        {
-            isToggle = false;
-            right_Man.SetActive(false);
-            // right_Toggle.SetActive(false);
-            right_Setting_Btn.SetActive(false);
+    //public void ToggleBtn()
+    //{
+    //    if (isToggle)
+    //    {
+    //        isToggle = false;
+    //        right_Man.SetActive(false);
+    //        // right_Toggle.SetActive(false);
+    //        right_Setting_Btn.SetActive(false);
 
-            left_Man.SetActive(true);
-            //left_Toggle.SetActive(true);
-            left_Setting_Btn.SetActive(true);
+    //        left_Man.SetActive(true);
+    //        //left_Toggle.SetActive(true);
+    //        left_Setting_Btn.SetActive(true);
 
-            gridFrame.GetComponent<RectTransform>().anchoredPosition = new Vector2(280, 0);
-        }
-        else
-        {
-            isToggle = true;
+    //        gridFrame.GetComponent<RectTransform>().anchoredPosition = new Vector2(280, 0);
+    //    }
+    //    else
+    //    {
+    //        isToggle = true;
 
-            right_Man.SetActive(true);
-            // right_Toggle.SetActive(true);
-            right_Setting_Btn.SetActive(true);
+    //        right_Man.SetActive(true);
+    //        // right_Toggle.SetActive(true);
+    //        right_Setting_Btn.SetActive(true);
 
-            left_Man.SetActive(false);
-            //left_Toggle.SetActive(false);
-            left_Setting_Btn.SetActive(false);
+    //        left_Man.SetActive(false);
+    //        //left_Toggle.SetActive(false);
+    //        left_Setting_Btn.SetActive(false);
 
-            gridFrame.GetComponent<RectTransform>().anchoredPosition = new Vector2(-280, 0);
-        }
-    }
+    //        gridFrame.GetComponent<RectTransform>().anchoredPosition = new Vector2(-280, 0);
+    //    }
+    //}
     public void GameOver()
     {
+        end_Time = Time.time;
         int HS = PlayerPrefs.GetInt("HIGHSCORE");
         highScore_Text.text = HS.ToString();
         gameOverScore_Text.text = score.ToString();
         losePanel.SetActive(true);
-        hS_Manager.AddScore(score);
+
+        float timePlayed= end_Time- start_Time;
+        hS_Manager.AddScore(score, timePlayed);
+
+        for (int i = 0; i < finded_Words.Count; i++)
+        {
+            if (i< 6)
+            {
+                GameObject wordBox = Instantiate(word_Box, transform.position, Quaternion.identity, gameOver_Content.transform);
+                wordBox.GetComponentInChildren<Text>().text = finded_Words[i];
+            }
+            else 
+            {
+                break;
+            }
+        }
+        AudioManager.instance.PlaySound(1);
     }
     public void SettingBtn()
     {
+        
         GameObject tempObj = Instantiate(settingsPopup, transform.position, Quaternion.identity, mainCanvas.transform);
         tempObj.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
         Time.timeScale = 0f;
+        AudioManager.instance.PlaySound(0);
     }
     public IEnumerator Next()
     {
         int lvl = PlayerPrefs.GetInt("LEVEL_NUMBER");
         lvl++;
         PlayerPrefs.SetInt("LEVEL_NUMBER", lvl);
-
+        hintButton.interactable = true;
         foreach (var item in activeLetters)
         {
             item.GetComponent<Image>().enabled = false;
             item.transform.GetChild(0).GetComponent<Text>().enabled = false;
-            item.GetComponent<Image>().sprite = unSelectedLetterSprite;
-            item.GetComponentInChildren<Text>().color = tmpCol;           
+            item.GetComponent<Image>().sprite = item.GetComponent<SingleLetter>().unSelected_Sprite;
+            item.GetComponentInChildren<Text>().color = tmpCol;
+            foreach (var linker in item.GetComponent<SingleLetter>().linkers)
+           // for (int i = 0; i < item.GetComponent<SingleLetter>().linkers.Length; i++)
+            {
+                linker.SetActive(false);
+            }
         }
-        yield return new WaitForSeconds(0.5f);
+        
+        yield return new WaitForSeconds(0.4f);
+       // loadingPanel.SetActive(true);
+        //yield return new WaitForSeconds(0.1f);
+        loadingPanel.SetActive(false);
+        scoreAdded_Box.SetActive(false);
         foreach (var item in activeLetters)
         {
             item.GetComponent<Image>().enabled = true;
@@ -556,26 +734,89 @@ public class GameController : MonoBehaviour
 
    public IEnumerator LoadWords()
     {
-        string filePath = Path.Combine(Application.streamingAssetsPath, "wordlist.txt");
-
-        if (File.Exists(filePath))
+        string fileName = "wordlist.json";
+        string path = Path.Combine(Application.persistentDataPath, fileName);
+        print(path);
+        if (!File.Exists(path))
         {
-            using (StreamReader reader = new StreamReader(filePath))
-            {
-                string line;
-                while ((line = reader.ReadLine()) != null)
-                {
-                    wordSet.Add(line.Trim().ToLower()); // Convert to lowercase for case-insensitive check
-                }
-            }
-            Debug.Log("File Loaded! Total Words: " + wordSet.Count);
+            Debug.LogError("File not found in persistentDataPath, copying from StreamingAssets...");
+            StartCoroutine(CopyFileFromStreamingAssets(fileName, path));
         }
         else
         {
-            Debug.LogError("File not found: " + filePath);
+            
+            LoadAllWords(path);
         }
 
+
+        //string filePath = Path.Combine(Application.streamingAssetsPath, "wordlist.txt");
+
+        //if (File.Exists(filePath))
+        //{
+        //    using (StreamReader reader = new StreamReader(filePath))
+        //    {
+        //        string line;
+        //        while ((line = reader.ReadLine()) != null)
+        //        {
+        //            wordSet.Add(line.Trim().ToLower()); // Convert to lowercase for case-insensitive check
+        //        }
+        //    }
+        //    Debug.Log("File Loaded! Total Words: " + wordSet.Count);
+        //}
+        //else
+        //{
+        //    Debug.LogError("File not found: " + filePath);
+        //}
+
         yield return null;
+    }
+   
+    void LoadAllWords(string filePath)
+    {
+        if (!File.Exists(filePath))
+        {
+            Debug.LogError("File not found: " + filePath);
+            return;
+        }
+
+        string jsonData = File.ReadAllText(filePath);
+
+        if (string.IsNullOrWhiteSpace(jsonData))
+        {
+            Debug.LogError("JSON file is empty or corrupted.");
+            return;
+        }
+
+        Debug.Log("Loaded JSON Data (First 100 chars): " + jsonData.Substring(0, Mathf.Min(100, jsonData.Length))); // Debug
+
+        // 🔹 Split the words using newline character
+      //  wordList = new List<string>(jsonData.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries));
+
+        // 🔹 Store in HashSet for fast lookup
+        wordSet = new HashSet<string>(jsonData.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries));
+
+        Debug.Log("Words Loaded Successfully: " + wordSet.Count);
+    }
+
+    private IEnumerator CopyFileFromStreamingAssets(string fileName, string destinationPath)
+    {
+        string sourcePath = Path.Combine(Application.streamingAssetsPath, fileName);
+
+        using (UnityWebRequest www = UnityWebRequest.Get(sourcePath))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result == UnityWebRequest.Result.Success)
+            {
+                File.WriteAllBytes(destinationPath, www.downloadHandler.data);
+                Debug.Log("File copied successfully.");
+                LoadAllWords(destinationPath);
+            }
+            else
+            {
+                Debug.LogError("Error copying file: " + www.error);
+            }
+        }
     }
 
     // Check if a word exists in the loaded data

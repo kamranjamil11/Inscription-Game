@@ -6,6 +6,13 @@ using UnityEngine.SceneManagement;
 using Unity.VisualScripting.Antlr3.Runtime;
 using System;
 using System.Linq;
+using System.IO;
+using Unity.Collections;
+using Unity.Jobs;
+using Unity.Burst;
+
+
+
 
 
 public class LevelCreator : MonoBehaviour
@@ -21,11 +28,11 @@ public class LevelCreator : MonoBehaviour
     public List<char> weightedList = new List<char>();
     public int gridSize = 16; // Total boxes in the grid (4x4)
     public List<char> grid;
-    
+
     GameController gameController;
     void Start()
     {
-        gameController=gameObject.GetComponent<GameController>();
+        gameController = gameObject.GetComponent<GameController>();
         // if (!isPlay)
         // {
         isPlay = true;
@@ -60,16 +67,15 @@ public class LevelCreator : MonoBehaviour
         //grid = new List<char>(gridSize);
         if (id == "FirstTime")
         {
-            FillGrid(cumulativeList, cumulativeSum);           
+            FillGrid(cumulativeList, cumulativeSum);
             PrintGrid();
             fillTheRest();
         }
         else
-        {                     
-            NextFillGrid(cumulativeList, cumulativeSum);                      
-            PrintGrid();
-            NextFillTheRest();
-           // fillTheRest();
+        {
+            NextFillGrid(cumulativeList, cumulativeSum);
+            Invoke("PrintGrid",1); //PrintGrid();
+            Invoke("NextFillTheRest", 1);// NextFillTheRest();          
         }
 
 
@@ -98,9 +104,9 @@ public class LevelCreator : MonoBehaviour
     }
     void NextFillGrid(List<KeyValuePair<char, float>> cumulativeList, float maxProbability)
     {
-            
+
         System.Random random = new System.Random();
-        
+
         for (int i = 0; i < gameController.activeLetters.Count; i++)
         {
             int value = gameController.activeLetters[i].GetComponent<SingleLetter>().id;
@@ -117,21 +123,21 @@ public class LevelCreator : MonoBehaviour
                 {
                     foreach (var item1 in grid)
                     {
-                        if (item1==' ')
+                        if (item1 == ' ')
                         {
                             int value = gameController.activeLetters[i].GetComponent<SingleLetter>().id;
-                           
+
                             grid[value] = item.Key;
-                            weightedList[value] =(item.Key);
+                            weightedList[value] = (item.Key);
                             lettersGrid[value].GetComponent<SingleLetter>().Value = item.Key.ToString();
-                            lettersGrid[value].gameObject.GetComponentInChildren<Text>().text = item.Key.ToString(); 
+                            lettersGrid[value].gameObject.GetComponentInChildren<Text>().text = item.Key.ToString();
                             break;
                         }
                     }
                     break;
                 }
             }
-           
+
         }
     }
     // Function to Print Grid in Console
@@ -150,15 +156,15 @@ public class LevelCreator : MonoBehaviour
         print(gridOutPut[0, 1]);
         WordsFinder();
     }
-   
+
     private void fillTheRest()
     {
         hintObjs.Clear();
-        
+
         for (int i = 0; i < weightedList.Count; i++)
-        {           
+        {
             lettersGrid[i].GetComponent<SingleLetter>().Value = weightedList[i].ToString();
-            lettersGrid[i].gameObject.GetComponentInChildren<Text>().text = weightedList[i].ToString();         
+            lettersGrid[i].gameObject.GetComponentInChildren<Text>().text = weightedList[i].ToString();
         }
         for (int i = 0; i < hints_Index.Count; i++)
         {
@@ -166,11 +172,11 @@ public class LevelCreator : MonoBehaviour
         }
     }
     private void NextFillTheRest()
-    {       
+    {
         hintObjs.Clear();
         for (int i = 0; i < hints_Index.Count; i++)
         {
-            hintObjs.Add(lettersGrid[hints_Index[i]].gameObject);         
+            hintObjs.Add(lettersGrid[hints_Index[i]].gameObject);
         }
         gameController.activeLetters.Clear();
     }
@@ -194,9 +200,9 @@ public class LevelCreator : MonoBehaviour
     }
 
 
-    char[,] gridOutPut; 
+    char[,] gridOutPut;
     int rows = 4, cols = 4;
-   
+
     List<(string, List<int>)> foundWords = new List<(string, List<int>)>();
     // 8 possible directions (left, right, up, down, diagonals)
     int[] dx = { -1, -1, -1, 0, 1, 1, 1, 0 };
@@ -211,24 +217,24 @@ public class LevelCreator : MonoBehaviour
         for (int i = 0; i < rows; i++)
         {
             for (int j = 0; j < cols; j++)
-            {               
+            {
                 DFS(i, j, "", new List<int>(), visited);
             }
         }
 
-       
-        print("Words Found in Grid:");       
+
+        print("Words Found in Grid:");
         foreach (var word in foundWords)
-        {          
-              //  hints_Index = word.Item2;
-                print($"Word: {word.Item1}, Indexes: [{string.Join(", ", word.Item2)}]");
-               // break;        
+        {
+            //  hints_Index = word.Item2;
+            print($"Word: {word.Item1}, Indexes: [{string.Join(", ", word.Item2)}]");
+            // break;        
         }
-        int rnd=UnityEngine.Random.Range(0, foundWords.Count);
+        int rnd = UnityEngine.Random.Range(0, foundWords.Count);
         hints_Index = foundWords[rnd].Item2;
-        print("Hint_Obj: "+ foundWords[rnd].Item1);
+        print("Hint_Obj: " + foundWords[rnd].Item1);
     }
-     void DFS(int i, int j, string currentWord, List<int> indexes, bool[,] visited)
+    void DFS(int i, int j, string currentWord, List<int> indexes, bool[,] visited)
     {
         if (foundWords.Count < 6)
         {
@@ -242,7 +248,7 @@ public class LevelCreator : MonoBehaviour
             visited[i, j] = true;
 
             // Agar dictionary mein hai, to word + full path indexes save karein
-            
+
             if (gameObject.GetComponent<GameController>().wordSet.Contains(currentWord.ToLower()))
             {
                 foundWords.Add((currentWord, new List<int>(indexes)));
@@ -270,7 +276,7 @@ public class LevelCreator : MonoBehaviour
         }
     }
 
-   
+
 }
 
 

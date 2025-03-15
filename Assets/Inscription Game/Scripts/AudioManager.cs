@@ -10,7 +10,7 @@ public class AudioManager : MonoBehaviour
    // public Slider soundValue;
     public AudioSource musicSource;
     public AudioSource SoundSource;
-    //public GameObject[] sounds;
+    public AudioClip[] sounds;
    // private AudioSource music;
 
     public static AudioManager instance;
@@ -100,6 +100,12 @@ public class AudioManager : MonoBehaviour
             SoundSource.volume = PlayerPrefs.GetFloat("SOUND");
         }
 
+    }
+
+    public void PlaySound(int id) 
+    {
+        SoundSource.clip = sounds[id];
+        SoundSource.PlayOneShot(sounds[id]);
     }
 }
 

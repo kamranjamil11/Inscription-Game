@@ -22,23 +22,23 @@ public class SettingPopup : MonoBehaviour
     {
         audioManager=GameObject.FindObjectOfType<AudioManager>();
         gameController= GameObject.FindObjectOfType<GameController>();
-        if (gameController.isToggle)
-        {
-            right_Toggle.SetActive(false);
-            left_Toggle.SetActive(true);
-        }
-        else
-        {
-            right_Toggle.SetActive(true);
-            left_Toggle.SetActive(false);
-        }
+        //if (gameController.isToggle)
+        //{
+        //    right_Toggle.SetActive(false);
+        //    left_Toggle.SetActive(true);
+        //}
+        //else
+        //{
+        //    right_Toggle.SetActive(true);
+        //    left_Toggle.SetActive(false);
+        //}
         GetMusicAndSoundValue();
     }
     public void CancelSetting()
     {
         Time.timeScale = 1.0f;
         Destroy(this.gameObject);
-        
+        AudioManager.instance.PlaySound(0);
     }
     //private void changeMusicState()
     //    {
@@ -110,21 +110,21 @@ public class SettingPopup : MonoBehaviour
         }
     }
 
-    public void ToggleBtn()
-    {
+    //public void ToggleBtn()
+    //{
        
-        if (gameController.isToggle)
-        {          
-            right_Toggle.SetActive(true);          
-            left_Toggle.SetActive(false);         
-        }
-        else
-        {          
-            right_Toggle.SetActive(false);          
-            left_Toggle.SetActive(true);          
-        }
-        gameController.ToggleBtn();
-    }
+    //    if (gameController.isToggle)
+    //    {          
+    //        right_Toggle.SetActive(true);          
+    //        left_Toggle.SetActive(false);         
+    //    }
+    //    else
+    //    {          
+    //        right_Toggle.SetActive(false);          
+    //        left_Toggle.SetActive(true);          
+    //    }
+    //   // gameController.ToggleBtn();
+    //}
 
 }
 
