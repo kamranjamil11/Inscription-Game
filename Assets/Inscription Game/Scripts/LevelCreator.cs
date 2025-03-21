@@ -179,6 +179,7 @@ public class LevelCreator : MonoBehaviour
             hintObjs.Add(lettersGrid[hints_Index[i]].gameObject);
         }
         gameController.activeLetters.Clear();
+        gameController.isNextWork = true;
     }
 
     char[,] ConvertStringToGrid(string input)
@@ -236,7 +237,7 @@ public class LevelCreator : MonoBehaviour
     }
     void DFS(int i, int j, string currentWord, List<int> indexes, bool[,] visited)
     {
-        if (foundWords.Count < 6)
+        if (foundWords.Count < 1)
         {
             // Out of bounds check or already visited
             if (i < 0 || j < 0 || i >= rows || j >= cols || visited[i, j])
@@ -263,7 +264,7 @@ public class LevelCreator : MonoBehaviour
                 // Sirf physically connected letter ko allow karein
                 if (newX >= 0 && newY >= 0 && newX < rows && newY < cols && !visited[newX, newY])
                 {
-                    if (foundWords.Count < 6)
+                    if (foundWords.Count < 1)
                     {
                         DFS(newX, newY, currentWord, indexes, visited);
                     }

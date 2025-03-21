@@ -64,12 +64,14 @@ public class HighScoreManager : MonoBehaviour
             highScores = JsonUtility.FromJson<ScoreList>(json)?.scores ?? new List<int>();
             played_Time = JsonUtility.FromJson<ScoreList>(json)?.played_Time ?? new List<float>();
             print("json: " + json);
+            string userName = PlayerPrefs.GetString("USERNAME");
             for (int i = 0; i < highScores.Count; i++)
             {
-                int rank = i;
-                rank++;
+                //int rank = i;
+               // rank++;
                 GameObject tempObj = Instantiate(score_Tab, transform.position, Quaternion.identity, content.transform);
-                tempObj.transform.GetChild(2).GetComponent<Text>().text = rank.ToString();
+              
+                tempObj.transform.GetChild(2).GetComponent<Text>().text = userName;
                 tempObj.transform.GetChild(4).GetComponent<Text>().text = highScores[i].ToString();
                 updateTimer(played_Time[i]);
                 tempObj.transform.GetChild(3).GetComponent<Text>().text = session_Time;

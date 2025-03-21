@@ -7,14 +7,10 @@ public class DailyChallenge : MonoBehaviour
 {
     public int id;
     public Text description;
-    //// Start is called before the first frame update
-    //void Start()
-    //{
-        
-    //}
+    public GameObject coins_Tab, claimed;
     private void OnDisable()
     {
-            Destroy(gameObject);
+       Destroy(gameObject);
     }
 
 }

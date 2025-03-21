@@ -21,8 +21,10 @@ public class GameController : MonoBehaviour
         public SingleLetter castedLetter;
     }
     public List<string> finded_Words = new List<string>();
+    public List<string> words_Lenght = new List<string>();
     public List<GameObject> activeLetters;
     public string formedWord = "";
+   
     List<RaycastResult> results = new List<RaycastResult>();
     private GameObject lastLetter;
     private GameObject currLetter;
@@ -58,6 +60,7 @@ public class GameController : MonoBehaviour
     private float timeLeft;
     private bool gameOn = true;
     public bool isToggle;
+    public bool isNextWork;
     private int minutes;
     private int seconds;
     public static int score;
@@ -72,15 +75,23 @@ public class GameController : MonoBehaviour
     public Generic_Timer generic_Timer;
     public LevelCreator LevelCreator;
     public HighScoreManager hS_Manager;
+    [Header("Daily Challenges")]
     public float start_Time, end_Time;
     public float ChallengeTime;
-   // bool isChallengeTime;
+    public int usedHint;
     public int consistent_Word;
+    public string currentWord = "";
     public string[] Challenges_Description;
     private void Start()
     {
+        isNextWork=true;
+        score = 0;
+        usedHint = 0;
+        currentWord = "";
+        gameOn = true;
         consistent_Word = 0;
         finded_Words.Clear();
+        words_Lenght.Clear();   
         start_Time = Time.time;
         score_Text.text = score.ToString();
         int coins = PlayerPrefs.GetInt("COINS");
@@ -144,41 +155,44 @@ public class GameController : MonoBehaviour
 
     private void Update()
     {
-        if (ChallengeTime < 90)
+        if (isNextWork)
         {
             ChallengeTime += Time.deltaTime;
-        }
-        else
-        {
-            if (PlayerPrefs.HasKey("DAILYCHALLENGE" + 1))
+            if (ChallengeTime >= 90 && ChallengeTime < 91)
             {
-                CheckDailyReset();
+                TimeChallenges(1);
             }
-        }
+            else if (ChallengeTime >= 120 && ChallengeTime < 121)
+            {
+                TimeChallenges(7);
+            }
+            else if (ChallengeTime >= 180 && ChallengeTime < 181)
+            {
+                TimeChallenges(9);
+            }
+            //if (gameOn)
+            //{
+            //    timeLeft -= Time.deltaTime;
+            //    minutes = Mathf.FloorToInt(timeLeft / 60f);
+            //    seconds = Mathf.FloorToInt(timeLeft % 60f);
+            //    countDownText.text = string.Format("{0:0}:{1:00}", minutes, seconds);
 
-        if (gameOn)
-        {
-            timeLeft -= Time.deltaTime;
-            minutes = Mathf.FloorToInt(timeLeft / 60f);
-            seconds = Mathf.FloorToInt(timeLeft % 60f);
-            countDownText.text = string.Format("{0:0}:{1:00}", minutes, seconds);
+            //}
 
-        }
-
-        if (timeLeft <= 0)
-        {
-            gameOn = false;
-            losePanel.SetActive(true);
-            countDownText.text = "00:00";
-        }
-        if (Input.GetMouseButton(0))
-        {
-            // Create a new PointerEventData object
-            PointerEventData eventData = new PointerEventData(EventSystem.current);
-            eventData.position = Input.mousePosition;
-            // Raycast from the mouse position and store the results
-            EventSystem.current.RaycastAll(eventData, results);
-        }
+            //if (timeLeft <= 0)
+            //{
+            //    gameOn = false;
+            //    losePanel.SetActive(true);
+            //    countDownText.text = "00:00";
+            //}
+            if (Input.GetMouseButton(0))
+            {
+                // Create a new PointerEventData object
+                PointerEventData eventData = new PointerEventData(EventSystem.current);
+                eventData.position = Input.mousePosition;
+                // Raycast from the mouse position and store the results
+                EventSystem.current.RaycastAll(eventData, results);
+            }
 
 #if MOBILE
         if (Input.touchCount > 0)
@@ -195,86 +209,110 @@ public class GameController : MonoBehaviour
             }
         }
 #endif
-        //whene relese mouse button
-        if (Input.GetMouseButtonUp(0))
-        {
-            //verify result
-            bool isFound = WordExists(formedWord);
-            //if (formedWord == LevelCreator.levelWord)
-            if (isFound)
+            //whene relese mouse button
+            if (Input.GetMouseButtonUp(0))
             {
-                consistent_Word++;
-                finded_Words.Add(formedWord);
-                print("WordComplete:");
-                //show win popup
-                // winPanel.SetActive(true);
-                // correctWord.text = LevelCreator.levelWord;
-                gameOn = false;
-                //currTime.text = string.Format("{0:0}:{1:00}", minutes, seconds);
-                //if (!PlayerPrefs.HasKey(LevelCreator.levelWord))
-                //{
-                //    PlayerPrefs.SetString(LevelCreator.levelWord, string.Format("{0:0}:{1:00}", minutes, seconds));
-                //    bestTime.text = string.Format("{0:0}:{1:00}", minutes, seconds);
-                //}
-                //else
-                //{
-                //    checkIfBestRecord(LevelCreator.levelWord);
-                //}
-                foreach (GameObject selectedLetter in activeLetters)
+                //verify result
+                bool isFound = WordExists(formedWord);
+                //if (formedWord == LevelCreator.levelWord)
+                if (isFound)
                 {
-                    Instantiate(block_Brake, selectedLetter.transform.position, Quaternion.identity);                    
-                }
-                ScoreSystem(formedWord.Length);
-                formedWord = "";
-                StartCoroutine(Next());
-
-            }
-            else
-            {
-                results.Clear();
-                foreach (GameObject selectedLetter in activeLetters)
-                {
-                  
-                    selectedLetter.GetComponent<Image>().sprite = selectedLetter.GetComponent<SingleLetter>().unSelected_Sprite;//unSelectedLetterSprite;
-                    selectedLetter.GetComponentInChildren<Text>().color = tmpCol;
-
-                }
-                activeLetters.Clear();
-                currLetter = null;
-                lastLetter = null;
-                formedWord = "";
-                foreach (Transform linkerGrp in tempParent.transform)
-                {
-                    foreach (Transform link in linkerGrp)
+                    consistent_Word++;
+                    currentWord = formedWord.ToLower();
+                    finded_Words.Add(formedWord);
+                    if (currentWord.Length >= 5)
                     {
-                        if (link.gameObject.activeInHierarchy)
+                        words_Lenght.Add(currentWord);
+                    }
+                    print("WordComplete:");
+                    //show win popup
+                    // winPanel.SetActive(true);
+                    // correctWord.text = LevelCreator.levelWord;
+
+                    //currTime.text = string.Format("{0:0}:{1:00}", minutes, seconds);
+                    //if (!PlayerPrefs.HasKey(LevelCreator.levelWord))
+                    //{
+                    //    PlayerPrefs.SetString(LevelCreator.levelWord, string.Format("{0:0}:{1:00}", minutes, seconds));
+                    //    bestTime.text = string.Format("{0:0}:{1:00}", minutes, seconds);
+                    //}
+                    //else
+                    //{
+                    //    checkIfBestRecord(LevelCreator.levelWord);
+                    //}
+                    foreach (GameObject selectedLetter in activeLetters)
+                    {
+                        Instantiate(block_Brake, selectedLetter.transform.position, Quaternion.identity);
+                    }
+                    Vector3 mousePos = Input.mousePosition;
+                    mousePos.z = 10f; // Distance from the camera (adjust as needed)
+                    Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePos);
+                    ScoreSystem(formedWord.Length, worldPosition);
+
+                    StartCoroutine(Next());
+
+                }
+                else
+                {
+                    results.Clear();
+                    foreach (GameObject selectedLetter in activeLetters)
+                    {
+
+                        selectedLetter.GetComponent<Image>().sprite = selectedLetter.GetComponent<SingleLetter>().unSelected_Sprite;//unSelectedLetterSprite;
+                        selectedLetter.GetComponentInChildren<Text>().color = tmpCol;
+
+                    }
+                    activeLetters.Clear();
+                    currLetter = null;
+                    lastLetter = null;
+                    formedWord = "";
+                    foreach (Transform linkerGrp in tempParent.transform)
+                    {
+                        foreach (Transform link in linkerGrp)
                         {
-                            link.gameObject.SetActive(false);
+                            if (link.gameObject.activeInHierarchy)
+                            {
+                                link.gameObject.SetActive(false);
+                            }
                         }
                     }
+
                 }
+                sfx.pitch = 1f;
 
             }
-            sfx.pitch = 1f;
-        }
 
-        if (results.Count == 1 && results[0].gameObject.GetComponent<SingleLetter>() != null)
-        {
-            // Handle the UI element hit by the raycast
-            GameObject hitLetter = results[0].gameObject;
-
-            OnCastLetter?.Invoke(this, new OncCastLetterArgs
+            if (results.Count == 1 && results[0].gameObject.GetComponent<SingleLetter>() != null)
             {
-                castedLetter = hitLetter.GetComponent<SingleLetter>()
-            });
+                // Handle the UI element hit by the raycast
+                GameObject hitLetter = results[0].gameObject;
+
+                OnCastLetter?.Invoke(this, new OncCastLetterArgs
+                {
+                    castedLetter = hitLetter.GetComponent<SingleLetter>()
+                });
+
+            }
+
         }
     }
-    void ScoreUpdate(int newScore,float time) 
+    void TimeChallenges(int challengeNum) 
     {
-        score += newScore;
-        Generic_Timer.totalTime += time;
-        scoreAdded_Box.GetComponentInChildren<Text>().text = "+" + newScore.ToString();
+        if (gameOn)
+        {
+            if (PlayerPrefs.HasKey("DAILYCHALLENGE" + challengeNum))
+            {
+                CheckDailyReset();
+            }
+        }
+    }
+    IEnumerator ScoreUpdate(int newScore,float time,Vector2 pos)
+    {
+        GameObject score_Mover = Instantiate(scoreAdded_Box, pos, Quaternion.identity, score_Text.transform.parent.transform);
+        score_Mover.GetComponentInChildren<Text>().text = "+" + newScore.ToString();
 
+        score += newScore;
+        Generic_Timer.totalTime += time;   
+        yield return new WaitForSeconds(0.7f);
         score_Text.text = score.ToString();
 
         int HS = PlayerPrefs.GetInt("HIGHSCORE");
@@ -287,57 +325,44 @@ public class GameController : MonoBehaviour
             Generic_Timer.totalTime = 60;
         }
     }
-    public void ScoreSystem(int wordLength)
+    public void ScoreSystem(int wordLength,Vector2 mousePos)
     {
         scoreAdded_Box.SetActive(true);
-       
+     
         switch (wordLength)
         {
-            case 2:
-               // score += 200;
-               // Generic_Timer.totalTime += 20;
-               // scoreAdded_Box.GetComponentInChildren<Text>().text = "+" + score.ToString();
-                ScoreUpdate(200, 20);
+            case 2:                             
+               StartCoroutine(ScoreUpdate(200, 20, mousePos));
                 break;
-            case 3:
-                //score += 300;
-                //Generic_Timer.totalTime += 30;
-                ScoreUpdate(300, 30);
+            case 3:                               
+                StartCoroutine(ScoreUpdate(300, 30, mousePos));
                 break;
-            case 4:
-                //score += 400;
-                //Generic_Timer.totalTime += 40;
-                ScoreUpdate(400, 40);
+            case 4:                             
+                StartCoroutine(ScoreUpdate(400, 40, mousePos));
                 break;
-            case 5:
-                //score += 500;
-                //Generic_Timer.totalTime += 50;
-                ScoreUpdate(500, 50);
+            case 5:               
+               
+                StartCoroutine(ScoreUpdate(500, 50, mousePos));
                 break;
-            case 6:
-                //score += 600;
-                //Generic_Timer.totalTime += 60;
-                ScoreUpdate(600, 60);
+            case 6:               
+               
+                StartCoroutine(ScoreUpdate(600, 60, mousePos));
                 break;
-            case 7:
-                //score += 700;
-                //Generic_Timer.totalTime += 60;
-                ScoreUpdate(700, 60);
+            case 7:              
+               
+                StartCoroutine(ScoreUpdate(700, 60, mousePos));
                 break;
-            case 8:
-                //score += 800;
-                //Generic_Timer.totalTime += 60;
-                ScoreUpdate(800, 60);
+            case 8:               
+               
+                StartCoroutine(ScoreUpdate(800, 60, mousePos));
                 break;
-            case 9:
-                //score += 900;
-                //Generic_Timer.totalTime += 60;
-                ScoreUpdate(900, 60);
+            case 9:              
+               
+                StartCoroutine(ScoreUpdate(900, 60, mousePos));
                 break;
-            case 10:
-                //score += 1000;
-                //Generic_Timer.totalTime += 60;
-                ScoreUpdate(1000, 60);
+            case 10:              
+                
+                StartCoroutine(ScoreUpdate(1000, 60, mousePos));
                 break;
         }
 
@@ -353,79 +378,214 @@ public class GameController : MonoBehaviour
             int totalChallenge = PlayerPrefs.GetInt("TOTALDAILYCHALLENGE");
             if ((totalChallenge < 3))
             {
-                StartCoroutine(DailyChallenge());
+                for (int i = 0; i < 3; i++)
+                {
+                    StartCoroutine(DailyChallenge1(i));
+                }
             }
-            else 
+            else
             {
-                PlayerPrefs.SetString("LASTPLAYEDDATEKEY", todayDate);                
+                PlayerPrefs.SetString("LASTPLAYEDDATEKEY", todayDate);
             }
             PlayerPrefs.Save();
         }
-    }
-    public IEnumerator DailyChallenge()
-    {
-        if (PlayerPrefs.HasKey("DAILYCHALLENGE" + 0))
+        else 
         {
-            int first_Challenge = PlayerPrefs.GetInt("DAILYCHALLENGE" + 0);
-            switch (first_Challenge)
+            print("DailyChallengeCompleted");
+        }
+    }
+    public IEnumerator DailyChallenge1(int Challenge_Id)
+    {
+        if (PlayerPrefs.HasKey("DAILYCHALLENGE" + Challenge_Id))
+        {
+            int Challenge_Num = PlayerPrefs.GetInt("DAILYCHALLENGE" + Challenge_Id);
+            switch (Challenge_Num)
             {
                 case 0:
                     if (score >= 1500)
                     {
-                        ChallengeComplete();
-                        challenge_Box.GetComponentInChildren<Text>().text = Challenges_Description[0];
-                        PlayerPrefs.SetInt("TOTALDAILYCHALLENGE", 1);
-                        PlayerPrefs.DeleteKey("DAILYCHALLENGE" + 0);
+                        ChallengeComplete(Challenge_Id,Challenge_Num);                    
                     }
                     break;
-            }
-        }
-        if (PlayerPrefs.HasKey("DAILYCHALLENGE" + 1))
-        {
-            int second_Challenge = PlayerPrefs.GetInt("DAILYCHALLENGE" + 1);
-            switch (second_Challenge)
-            {
-                case 0:
+                case 1:
                     if (ChallengeTime >= 90)
                     {
-                        ChallengeComplete();
-                        challenge_Box.GetComponentInChildren<Text>().text = Challenges_Description[1];
-                        PlayerPrefs.SetInt("TOTALDAILYCHALLENGE", 2);
-                        PlayerPrefs.DeleteKey("DAILYCHALLENGE" + 1);
+                        ChallengeComplete(Challenge_Id, Challenge_Num);
                     }
                     break;
-            }
-        }
-        if (PlayerPrefs.HasKey("DAILYCHALLENGE" + 2))
-        {
-            int third_Challenge = PlayerPrefs.GetInt("DAILYCHALLENGE" + 2);
-            switch (third_Challenge)
-            {
-                case 0:
+                case 2:
                     if (consistent_Word >= 10)
                     {
-                        ChallengeComplete();
-                        challenge_Box.GetComponentInChildren<Text>().text = Challenges_Description[2];
-                        PlayerPrefs.SetInt("TOTALDAILYCHALLENGE", 2);
-                        PlayerPrefs.DeleteKey("DAILYCHALLENGE" + 2);
+                        ChallengeComplete(Challenge_Id, Challenge_Num);
+                        // challenge_Box.GetComponentInChildren<Text>().text = Challenges_Description[Challenge_Id];
+                        // PlayerPrefs.SetInt("TOTALDAILYCHALLENGE", 3);
+                        // PlayerPrefs.DeleteKey("DAILYCHALLENGE" + Challenge_Id);
+                    }
+                    break;
+                case 3:
+                    if (currentWord.Length >= 5)
+                    {
+                        ChallengeComplete(Challenge_Id,Challenge_Num);
+                    }
+                    break;
+                case 4:
+                    if (usedHint == 1)
+                    {
+                        ChallengeComplete(Challenge_Id, Challenge_Num);
+                    }
+                    break;
+                case 5:
+                    if (usedHint == 0&& score >= 2000)
+                    {
+                        ChallengeComplete(Challenge_Id, Challenge_Num);
+                    }
+                    break;
+                case 6:
+                    int wordCount= 0;
+                    for (int i = 0; i < words_Lenght.Count; i++)
+                    {
+                        if (words_Lenght[i].Length >=5)
+                        {
+                            wordCount++;                         
+                        }
+                    }
+                    if (wordCount==3)
+                    {                      
+                        ChallengeComplete(Challenge_Id, Challenge_Num);
+                    }
+                    break;
+                case 7:
+                    if (ChallengeTime >= 120)
+                    {
+                        ChallengeComplete(Challenge_Id, Challenge_Num);
+                    }
+                    break;
+                case 8:
+                    if (score >= 2500)
+                    {
+                        ChallengeComplete(Challenge_Id, Challenge_Num);
+                    }
+                    break;
+                case 9:
+                    if (ChallengeTime >= 180)
+                    {
+                        ChallengeComplete(Challenge_Id, Challenge_Num);
+                    }
+                    break;
+                case 10:
+                    if (currentWord.Length >= 7)
+                    {
+                        ChallengeComplete(Challenge_Id, Challenge_Num);
+                    }
+                    break;
+                case 11:
+                    if (finded_Words.Count >= 25)
+                    {
+                        ChallengeComplete(Challenge_Id, Challenge_Num);
+                    }
+                    break;
+                case 12:
+                    if (currentWord.Contains("z")|| currentWord.Contains("q"))
+                    {
+                        ChallengeComplete(Challenge_Id, Challenge_Num);
+                    }
+                    break;
+                case 13:
+                    if (currentWord.Length >= 10)
+                    {
+                        ChallengeComplete(Challenge_Id, Challenge_Num);
+                    }
+                    break;
+                case 14:
+                    if (hS_Manager.highScores.Count != 0)
+                    {
+                        if (score > hS_Manager.highScores[0])
+                        {
+                            ChallengeComplete(Challenge_Id, Challenge_Num);
+                        }
                     }
                     break;
             }
         }
+             
         yield return new WaitForSeconds(2f);
         coinsAdded_Box.SetActive(false);
         challenge_Box.SetActive(false);
 
     }
+    //public IEnumerator DailyChallenge()
+    //{
+    //    if (PlayerPrefs.HasKey("DAILYCHALLENGE" + 0))
+    //    {
+    //        int first_Challenge = PlayerPrefs.GetInt("DAILYCHALLENGE" + 0);
+    //        switch (first_Challenge)
+    //        {
+    //            case 0:
+    //                if (score >= 1500)
+    //                {
+    //                    ChallengeComplete();
+    //                    challenge_Box.GetComponentInChildren<Text>().text = Challenges_Description[0];
+    //                    PlayerPrefs.SetInt("TOTALDAILYCHALLENGE", 1);
+    //                    PlayerPrefs.DeleteKey("DAILYCHALLENGE" + 0);
+    //                }
+    //                break;
+    //        }
+    //    }
+    //    if (PlayerPrefs.HasKey("DAILYCHALLENGE" + 1))
+    //    {
+    //        int second_Challenge = PlayerPrefs.GetInt("DAILYCHALLENGE" + 1);
+    //        switch (second_Challenge)
+    //        {
+    //            case 0:
+    //                if (ChallengeTime >= 90)
+    //                {
+    //                    ChallengeComplete();
+    //                    challenge_Box.GetComponentInChildren<Text>().text = Challenges_Description[1];
+    //                    PlayerPrefs.SetInt("TOTALDAILYCHALLENGE", 2);
+    //                    PlayerPrefs.DeleteKey("DAILYCHALLENGE" + 1);
+    //                }
+    //                break;
+    //        }
+    //    }
+    //    if (PlayerPrefs.HasKey("DAILYCHALLENGE" + 2))
+    //    {
+    //        int third_Challenge = PlayerPrefs.GetInt("DAILYCHALLENGE" + 2);
+    //        switch (third_Challenge)
+    //        {
+    //            case 0:
+    //                if (consistent_Word >= 10)
+    //                {
+    //                    ChallengeComplete();
+    //                    challenge_Box.GetComponentInChildren<Text>().text = Challenges_Description[2];
+    //                    PlayerPrefs.SetInt("TOTALDAILYCHALLENGE", 3);
+    //                    PlayerPrefs.DeleteKey("DAILYCHALLENGE" + 2);
+    //                }
+    //                break;
+    //        }
+    //    }
+    //    yield return new WaitForSeconds(2f);
+    //    coinsAdded_Box.SetActive(false);
+    //    challenge_Box.SetActive(false);
 
-    void ChallengeComplete()
+    //}
+
+    void ChallengeComplete(int ch_Num,int chg_Id)
     {
-        coinsAdded_Box.SetActive(true);
-        challenge_Box.SetActive(true);      
-        int coins = PlayerPrefs.GetInt("COINS");
-        coins += 25;
-        coins_Text.text = coins.ToString();
-        PlayerPrefs.SetInt("COINS", coins);     
+        if (gameOn)
+        {
+            coinsAdded_Box.SetActive(true);
+            challenge_Box.SetActive(true);
+            int coins = PlayerPrefs.GetInt("COINS");
+            coins += 25;
+            coins_Text.text = coins.ToString();
+            PlayerPrefs.SetInt("COINS", coins);
+            int totalChallenge = PlayerPrefs.GetInt("TOTALDAILYCHALLENGE");
+            totalChallenge++;
+            PlayerPrefs.SetInt("TOTALDAILYCHALLENGE", totalChallenge);
+            PlayerPrefs.DeleteKey("DAILYCHALLENGE" + ch_Num);
+            challenge_Box.GetComponentInChildren<Text>().text = Challenges_Description[chg_Id];
+
+        }
     }
     public void SubscribeToEventOnPointerEnter()
     {
@@ -433,7 +593,7 @@ public class GameController : MonoBehaviour
     }
     private void LinksManager(GameObject lastLetter, GameObject currentLetter)
     {
-        if (lastLetter != null)
+        if (lastLetter != null&&activeLetters.Contains(lastLetter))
         {
             //check the target is behin or above
             Vector3 dir = (currentLetter.transform.position - lastLetter.transform.position).normalized;
@@ -601,6 +761,7 @@ public class GameController : MonoBehaviour
     }
     public void HintPowerUp()
     {
+        usedHint++;
         int hint_Count = PlayerPrefs.GetInt("HINT_POWERUP");
         if (hint_Count > 0)
         {
@@ -623,6 +784,7 @@ public class GameController : MonoBehaviour
             //// hintButton.interactable = false;
             // hintBox.GetComponentInChildren<Text>().text = hintInfo;
         }
+        CheckDailyReset();
         AudioManager.instance.PlaySound(0);
     }
     //public void ToggleBtn()
@@ -657,6 +819,7 @@ public class GameController : MonoBehaviour
     //}
     public void GameOver()
     {
+        gameOn = false;
         end_Time = Time.time;
         int HS = PlayerPrefs.GetInt("HIGHSCORE");
         highScore_Text.text = HS.ToString();
@@ -690,9 +853,11 @@ public class GameController : MonoBehaviour
     }
     public IEnumerator Next()
     {
-        int lvl = PlayerPrefs.GetInt("LEVEL_NUMBER");
-        lvl++;
-        PlayerPrefs.SetInt("LEVEL_NUMBER", lvl);
+        isNextWork = false;
+        //int lvl = PlayerPrefs.GetInt("LEVEL_NUMBER");
+        //lvl++;
+        //PlayerPrefs.SetInt("LEVEL_NUMBER", lvl);
+
         hintButton.interactable = true;
         foreach (var item in activeLetters)
         {
@@ -710,8 +875,8 @@ public class GameController : MonoBehaviour
         yield return new WaitForSeconds(0.4f);
        // loadingPanel.SetActive(true);
         //yield return new WaitForSeconds(0.1f);
-        loadingPanel.SetActive(false);
-        scoreAdded_Box.SetActive(false);
+       //loadingPanel.SetActive(false);
+       // scoreAdded_Box.SetActive(false);
         foreach (var item in activeLetters)
         {
             item.GetComponent<Image>().enabled = true;
@@ -730,11 +895,14 @@ public class GameController : MonoBehaviour
             }
         }
         LevelCreator.CreatWord("Next");
+        formedWord = "";
+        currentWord = "";
+        usedHint = 0;
     }
 
-   public IEnumerator LoadWords()
+    public IEnumerator LoadWords()
     {
-        string fileName = "wordlist.json";
+        string fileName = "wordlist1.json";
         string path = Path.Combine(Application.persistentDataPath, fileName);
         print(path);
         if (!File.Exists(path))

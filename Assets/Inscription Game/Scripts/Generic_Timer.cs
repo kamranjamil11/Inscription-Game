@@ -40,6 +40,6 @@ public class Generic_Timer : MonoBehaviour
         int minutes = Mathf.FloorToInt(time / 60f);
         int seconds = Mathf.RoundToInt(time % 60);
         string formatedSeconds = seconds.ToString();
-        timeText.text = /*minutes.ToString("00") + ":" +*/ seconds.ToString("00");
+        timeText.text = /*minutes.ToString("00") +*/ ":" + seconds.ToString("00");
     }
 }
