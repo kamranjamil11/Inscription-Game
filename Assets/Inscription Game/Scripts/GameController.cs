@@ -872,7 +872,7 @@ public class GameController : MonoBehaviour
             }
         }
         
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(1f);
        // loadingPanel.SetActive(true);
         //yield return new WaitForSeconds(0.1f);
        //loadingPanel.SetActive(false);
