@@ -22,7 +22,7 @@ public class ScoreMultiplayer : MonoBehaviour
     void Update()
     {
         float diff=Vector2.Distance(targetPosition.anchoredPosition, uiElement.anchoredPosition);
-        print(diff);
+       // print(diff);
         if (diff<50)
         {
             Destroy(this.gameObject);

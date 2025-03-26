@@ -140,7 +140,7 @@ public class GameController : MonoBehaviour
         }
         e.castedLetter.gameObject.GetComponent<Image>().sprite = e.castedLetter.gameObject.GetComponent<SingleLetter>().selected_Sprite; //selectedLetterSprite;
         e.castedLetter.gameObject.GetComponentInChildren<Text>().color = Color.white;
-        e.castedLetter.gameObject.GetComponent<Animator>().SetTrigger("Press");
+       // e.castedLetter.gameObject.GetComponent<Animator>().SetTrigger("Press");
         sfx.Play();
         sfx.pitch = sfx.pitch + 0.22f;
         formedWord += e.castedLetter.Value;
@@ -241,7 +241,9 @@ public class GameController : MonoBehaviour
                     //}
                     foreach (GameObject selectedLetter in activeLetters)
                     {
-                        Instantiate(block_Brake, selectedLetter.transform.position, Quaternion.identity);
+                        selectedLetter.GetComponent<Image>().material = selectedLetter.GetComponent<DissolveController>().mat;       
+                        selectedLetter.GetComponent<DissolveController>().isDissolving = true; 
+                       // Instantiate(block_Brake, selectedLetter.transform.position, Quaternion.identity);
                     }
                     Vector3 mousePos = Input.mousePosition;
                     mousePos.z = 10f; // Distance from the camera (adjust as needed)
@@ -332,37 +334,37 @@ public class GameController : MonoBehaviour
         switch (wordLength)
         {
             case 2:                             
-               StartCoroutine(ScoreUpdate(200, 20, mousePos));
+               StartCoroutine(ScoreUpdate(200, 2, mousePos));
                 break;
             case 3:                               
-                StartCoroutine(ScoreUpdate(300, 30, mousePos));
+                StartCoroutine(ScoreUpdate(300, 3, mousePos));
                 break;
             case 4:                             
-                StartCoroutine(ScoreUpdate(400, 40, mousePos));
+                StartCoroutine(ScoreUpdate(400, 4, mousePos));
                 break;
             case 5:               
                
-                StartCoroutine(ScoreUpdate(500, 50, mousePos));
+                StartCoroutine(ScoreUpdate(500, 5, mousePos));
                 break;
             case 6:               
                
-                StartCoroutine(ScoreUpdate(600, 60, mousePos));
+                StartCoroutine(ScoreUpdate(600, 6, mousePos));
                 break;
             case 7:              
                
-                StartCoroutine(ScoreUpdate(700, 60, mousePos));
+                StartCoroutine(ScoreUpdate(700, 6, mousePos));
                 break;
             case 8:               
                
-                StartCoroutine(ScoreUpdate(800, 60, mousePos));
+                StartCoroutine(ScoreUpdate(800, 6, mousePos));
                 break;
             case 9:              
                
-                StartCoroutine(ScoreUpdate(900, 60, mousePos));
+                StartCoroutine(ScoreUpdate(900, 6, mousePos));
                 break;
             case 10:              
                 
-                StartCoroutine(ScoreUpdate(1000, 60, mousePos));
+                StartCoroutine(ScoreUpdate(1000, 6, mousePos));
                 break;
         }
 
@@ -854,35 +856,38 @@ public class GameController : MonoBehaviour
     public IEnumerator Next()
     {
         isNextWork = false;
-        //int lvl = PlayerPrefs.GetInt("LEVEL_NUMBER");
-        //lvl++;
-        //PlayerPrefs.SetInt("LEVEL_NUMBER", lvl);
-
-        hintButton.interactable = true;
         foreach (var item in activeLetters)
-        {
-            item.GetComponent<Image>().enabled = false;
-            item.transform.GetChild(0).GetComponent<Text>().enabled = false;
-            item.GetComponent<Image>().sprite = item.GetComponent<SingleLetter>().unSelected_Sprite;
-            item.GetComponentInChildren<Text>().color = tmpCol;
+        {        
+            item.transform.GetChild(0).GetComponent<Text>().enabled = false;                   
             foreach (var linker in item.GetComponent<SingleLetter>().linkers)
-           // for (int i = 0; i < item.GetComponent<SingleLetter>().linkers.Length; i++)
             {
                 linker.SetActive(false);
             }
         }
-        
         yield return new WaitForSeconds(1f);
-       // loadingPanel.SetActive(true);
-        //yield return new WaitForSeconds(0.1f);
-       //loadingPanel.SetActive(false);
-       // scoreAdded_Box.SetActive(false);
+        hintButton.interactable = true;
         foreach (var item in activeLetters)
         {
-            item.GetComponent<Image>().enabled = true;
+            item.GetComponent<DissolveController>().isDissolving = false;
+            item.GetComponent<DissolveController>().dissolveAmount = 1f;
+            item.GetComponent<Image>().material = null;
             item.transform.GetChild(0).GetComponent<Text>().enabled = true;
-           // item.GetComponent<Animator>().SetTrigger("Idle");
+            item.GetComponent<Image>().sprite = item.GetComponent<SingleLetter>().unSelected_Sprite;
+            item.GetComponentInChildren<Text>().color = tmpCol;
+            //foreach (var linker in item.GetComponent<SingleLetter>().linkers)       
+            //{
+            //    linker.SetActive(false);
+            //}
         }
+        
+       // yield return new WaitForSeconds(0.5f);
+       
+        //foreach (var item in activeLetters)
+        //{
+        //   // item.GetComponent<Image>().enabled = true;
+        //    item.transform.GetChild(0).GetComponent<Text>().enabled = true;
+        //   // item.GetComponent<Animator>().SetTrigger("Idle");
+        //}
         
        // yield return new WaitForSeconds(0.5f);
         foreach (var item in lvlCreator.lettersGrid)

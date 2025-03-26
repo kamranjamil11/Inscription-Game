@@ -224,13 +224,13 @@ public class LevelCreator : MonoBehaviour
         }
 
 
-        print("Words Found in Grid:");
-        foreach (var word in foundWords)
-        {
-            //  hints_Index = word.Item2;
-            print($"Word: {word.Item1}, Indexes: [{string.Join(", ", word.Item2)}]");
-            // break;        
-        }
+      //  print("Words Found in Grid:");
+        //foreach (var word in foundWords)
+        //{
+        //    //  hints_Index = word.Item2;
+        //   // print($"Word: {word.Item1}, Indexes: [{string.Join(", ", word.Item2)}]");
+        //    // break;        
+        //}
         int rnd = UnityEngine.Random.Range(0, foundWords.Count);
         hints_Index = foundWords[rnd].Item2;
         print("Hint_Obj: " + foundWords[rnd].Item1);

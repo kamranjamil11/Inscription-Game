@@ -229,6 +229,10 @@ public class UIHandler : MonoBehaviour
    
     public void EnterUserName() 
     {
-        user_Txt.text= user_Name.text;
+        print("Text Lenght: "+ user_Txt.text.Length);
+        if (user_Txt.text.Length <= 12)
+        {
+            user_Txt.text = user_Name.text;
+        }
     }
 }

@@ -369,6 +369,7 @@ GameObject:
   - component: {fileID: 25502113}
   - component: {fileID: 25502112}
   - component: {fileID: 25502111}
+  - component: {fileID: 25502116}
   m_Layer: 5
   m_Name: O_15
   m_TagString: Untagged
@@ -521,6 +522,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 25502109}
   m_CullTransparentMesh: 1
+--- !u!114 &25502116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 25502109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e342bdf7562c0374381c8694c2b91606, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dissolveAmount: 1
+  dissolveSpeed: 1.5
+  isDissolving: 0
+  isDissolveComplete: 0
+  outColor: {r: 0.25415218, g: 0.61720675, b: 1, a: 1}
+  inColor: {r: 8, g: 0.2509804, b: 0, a: 1}
+  mat: {fileID: 2100000, guid: 2aa7128bdd2dd9746933cd7f394bd7c7, type: 2}
 --- !u!1 &33230016
 GameObject:
   m_ObjectHideFlags: 0
@@ -3521,7 +3541,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 4.3100586, y: -4.3200073}
+  m_AnchoredPosition: {x: 4.3100586, y: -4.3200684}
   m_SizeDelta: {x: 60.42, y: 77.69}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &296217610
@@ -3811,6 +3831,7 @@ GameObject:
   - component: {fileID: 344190817}
   - component: {fileID: 344190816}
   - component: {fileID: 344190820}
+  - component: {fileID: 344190821}
   m_Layer: 5
   m_Name: F_6
   m_TagString: Untagged
@@ -3969,6 +3990,25 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!114 &344190821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 344190814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e342bdf7562c0374381c8694c2b91606, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dissolveAmount: 1
+  dissolveSpeed: 1.5
+  isDissolving: 0
+  isDissolveComplete: 0
+  outColor: {r: 0.25415218, g: 0.61720675, b: 1, a: 1}
+  inColor: {r: 8, g: 0.2509804, b: 0, a: 1}
+  mat: {fileID: 2100000, guid: 2aa7128bdd2dd9746933cd7f394bd7c7, type: 2}
 --- !u!1 &349300296
 GameObject:
   m_ObjectHideFlags: 0
@@ -4536,6 +4576,7 @@ GameObject:
   - component: {fileID: 406044431}
   - component: {fileID: 406044430}
   - component: {fileID: 406044429}
+  - component: {fileID: 406044434}
   m_Layer: 5
   m_Name: P_16
   m_TagString: Untagged
@@ -4684,6 +4725,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 406044427}
   m_CullTransparentMesh: 1
+--- !u!114 &406044434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 406044427}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e342bdf7562c0374381c8694c2b91606, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dissolveAmount: 1
+  dissolveSpeed: 1.5
+  isDissolving: 0
+  isDissolveComplete: 0
+  outColor: {r: 0.25415218, g: 0.61720675, b: 1, a: 1}
+  inColor: {r: 8, g: 0.2509804, b: 0, a: 1}
+  mat: {fileID: 2100000, guid: 2aa7128bdd2dd9746933cd7f394bd7c7, type: 2}
 --- !u!1 &413125485
 GameObject:
   m_ObjectHideFlags: 0
@@ -6209,6 +6269,7 @@ GameObject:
   - component: {fileID: 578400526}
   - component: {fileID: 578400525}
   - component: {fileID: 578400529}
+  - component: {fileID: 578400530}
   m_Layer: 5
   m_Name: E_5
   m_TagString: Untagged
@@ -6367,6 +6428,25 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!114 &578400530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 578400523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e342bdf7562c0374381c8694c2b91606, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dissolveAmount: 1
+  dissolveSpeed: 1.5
+  isDissolving: 0
+  isDissolveComplete: 0
+  outColor: {r: 0.25415218, g: 0.61720675, b: 1, a: 1}
+  inColor: {r: 8, g: 0.2509804, b: 0, a: 1}
+  mat: {fileID: 2100000, guid: 2aa7128bdd2dd9746933cd7f394bd7c7, type: 2}
 --- !u!1 &590588127
 GameObject:
   m_ObjectHideFlags: 0
@@ -10278,6 +10358,7 @@ GameObject:
   - component: {fileID: 880780253}
   - component: {fileID: 880780252}
   - component: {fileID: 880780256}
+  - component: {fileID: 880780257}
   m_Layer: 5
   m_Name: G_7
   m_TagString: Untagged
@@ -10430,6 +10511,25 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!114 &880780257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 880780250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e342bdf7562c0374381c8694c2b91606, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dissolveAmount: 1
+  dissolveSpeed: 1.5
+  isDissolving: 0
+  isDissolveComplete: 0
+  outColor: {r: 0.25415218, g: 0.61720675, b: 1, a: 1}
+  inColor: {r: 8, g: 0.2509804, b: 0, a: 1}
+  mat: {fileID: 2100000, guid: 2aa7128bdd2dd9746933cd7f394bd7c7, type: 2}
 --- !u!1 &882106788
 GameObject:
   m_ObjectHideFlags: 0
@@ -10444,6 +10544,7 @@ GameObject:
   - component: {fileID: 882106792}
   - component: {fileID: 882106791}
   - component: {fileID: 882106790}
+  - component: {fileID: 882106795}
   m_Layer: 5
   m_Name: M_13
   m_TagString: Untagged
@@ -10592,6 +10693,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 882106788}
   m_CullTransparentMesh: 1
+--- !u!114 &882106795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 882106788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e342bdf7562c0374381c8694c2b91606, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dissolveAmount: 1
+  dissolveSpeed: 1.5
+  isDissolving: 0
+  isDissolveComplete: 0
+  outColor: {r: 0.25415218, g: 0.61720675, b: 1, a: 1}
+  inColor: {r: 8, g: 0.2509804, b: 0, a: 1}
+  mat: {fileID: 2100000, guid: 2aa7128bdd2dd9746933cd7f394bd7c7, type: 2}
 --- !u!1 &882262210
 GameObject:
   m_ObjectHideFlags: 0
@@ -12503,6 +12623,7 @@ GameObject:
   - component: {fileID: 1075564807}
   - component: {fileID: 1075564806}
   - component: {fileID: 1075564805}
+  - component: {fileID: 1075564810}
   m_Layer: 5
   m_Name: L_12
   m_TagString: Untagged
@@ -12655,6 +12776,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1075564803}
   m_CullTransparentMesh: 1
+--- !u!114 &1075564810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1075564803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e342bdf7562c0374381c8694c2b91606, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dissolveAmount: 1
+  dissolveSpeed: 1.5
+  isDissolving: 0
+  isDissolveComplete: 0
+  outColor: {r: 0.25415218, g: 0.61720675, b: 1, a: 1}
+  inColor: {r: 8, g: 0.2509804, b: 0, a: 1}
+  mat: {fileID: 2100000, guid: 2aa7128bdd2dd9746933cd7f394bd7c7, type: 2}
 --- !u!1 &1076842352
 GameObject:
   m_ObjectHideFlags: 0
@@ -13063,6 +13203,7 @@ GameObject:
   - component: {fileID: 1146024021}
   - component: {fileID: 1146024018}
   - component: {fileID: 1146024017}
+  - component: {fileID: 1146024022}
   m_Layer: 5
   m_Name: B_2
   m_TagString: Untagged
@@ -13215,6 +13356,25 @@ MonoBehaviour:
   - {fileID: 33230016}
   selected_Sprite: {fileID: 21300000, guid: 4569d06faa0cdde479a2c238f796dc32, type: 3}
   unSelected_Sprite: {fileID: 21300000, guid: 3767cfed05da93b4ca3927b495d0faab, type: 3}
+--- !u!114 &1146024022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1146024015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e342bdf7562c0374381c8694c2b91606, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dissolveAmount: 1
+  dissolveSpeed: 1.5
+  isDissolving: 0
+  isDissolveComplete: 0
+  outColor: {r: 0.25415218, g: 0.61720675, b: 1, a: 1}
+  inColor: {r: 8, g: 0.2509804, b: 0, a: 1}
+  mat: {fileID: 2100000, guid: 2aa7128bdd2dd9746933cd7f394bd7c7, type: 2}
 --- !u!1 &1153996657
 GameObject:
   m_ObjectHideFlags: 0
@@ -14426,6 +14586,7 @@ GameObject:
   - component: {fileID: 1236707111}
   - component: {fileID: 1236707112}
   - component: {fileID: 1236707113}
+  - component: {fileID: 1236707114}
   m_Layer: 5
   m_Name: A_1
   m_TagString: Untagged
@@ -14574,6 +14735,25 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!114 &1236707114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1236707106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e342bdf7562c0374381c8694c2b91606, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dissolveAmount: 1
+  dissolveSpeed: 1.5
+  isDissolving: 0
+  isDissolveComplete: 0
+  outColor: {r: 0.25415218, g: 0.61720675, b: 1, a: 1}
+  inColor: {r: 8, g: 0.2509804, b: 0, a: 1}
+  mat: {fileID: 2100000, guid: 2aa7128bdd2dd9746933cd7f394bd7c7, type: 2}
 --- !u!1 &1238993778
 GameObject:
   m_ObjectHideFlags: 0
@@ -15622,6 +15802,7 @@ GameObject:
   - component: {fileID: 1297677077}
   - component: {fileID: 1297677076}
   - component: {fileID: 1297677075}
+  - component: {fileID: 1297677081}
   m_Layer: 5
   m_Name: J_10
   m_TagString: Untagged
@@ -15770,6 +15951,25 @@ RectTransform:
   m_AnchoredPosition: {x: 200, y: 250}
   m_SizeDelta: {x: 160, y: 160}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1297677081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1297677074}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e342bdf7562c0374381c8694c2b91606, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dissolveAmount: 1
+  dissolveSpeed: 1.5
+  isDissolving: 0
+  isDissolveComplete: 0
+  outColor: {r: 0.25415218, g: 0.61720675, b: 1, a: 1}
+  inColor: {r: 8, g: 0.2509804, b: 0, a: 1}
+  mat: {fileID: 2100000, guid: 2aa7128bdd2dd9746933cd7f394bd7c7, type: 2}
 --- !u!1 &1299184592
 GameObject:
   m_ObjectHideFlags: 0
@@ -16338,6 +16538,7 @@ GameObject:
   - component: {fileID: 1347822047}
   - component: {fileID: 1347822046}
   - component: {fileID: 1347822045}
+  - component: {fileID: 1347822050}
   m_Layer: 5
   m_Name: N_14
   m_TagString: Untagged
@@ -16490,6 +16691,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1347822043}
   m_CullTransparentMesh: 1
+--- !u!114 &1347822050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1347822043}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e342bdf7562c0374381c8694c2b91606, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dissolveAmount: 1
+  dissolveSpeed: 1.5
+  isDissolving: 0
+  isDissolveComplete: 0
+  outColor: {r: 0.25415218, g: 0.61720675, b: 1, a: 1}
+  inColor: {r: 8, g: 0.2509804, b: 0, a: 1}
+  mat: {fileID: 2100000, guid: 2aa7128bdd2dd9746933cd7f394bd7c7, type: 2}
 --- !u!1 &1364788117
 GameObject:
   m_ObjectHideFlags: 0
@@ -17107,6 +17327,7 @@ GameObject:
   - component: {fileID: 1386752847}
   - component: {fileID: 1386752846}
   - component: {fileID: 1386752850}
+  - component: {fileID: 1386752851}
   m_Layer: 5
   m_Name: D_4
   m_TagString: Untagged
@@ -17259,6 +17480,25 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!114 &1386752851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1386752844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e342bdf7562c0374381c8694c2b91606, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dissolveAmount: 1
+  dissolveSpeed: 1.5
+  isDissolving: 0
+  isDissolveComplete: 0
+  outColor: {r: 0.25415218, g: 0.61720675, b: 1, a: 1}
+  inColor: {r: 8, g: 0.2509804, b: 0, a: 1}
+  mat: {fileID: 2100000, guid: 2aa7128bdd2dd9746933cd7f394bd7c7, type: 2}
 --- !u!1 &1409634923
 GameObject:
   m_ObjectHideFlags: 0
@@ -17521,6 +17761,7 @@ GameObject:
   - component: {fileID: 1428292509}
   - component: {fileID: 1428292508}
   - component: {fileID: 1428292512}
+  - component: {fileID: 1428292513}
   m_Layer: 5
   m_Name: H_8
   m_TagString: Untagged
@@ -17679,6 +17920,25 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!114 &1428292513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1428292506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e342bdf7562c0374381c8694c2b91606, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dissolveAmount: 1
+  dissolveSpeed: 1.5
+  isDissolving: 0
+  isDissolveComplete: 0
+  outColor: {r: 0.25415218, g: 0.61720675, b: 1, a: 1}
+  inColor: {r: 8, g: 0.2509804, b: 0, a: 1}
+  mat: {fileID: 2100000, guid: 2aa7128bdd2dd9746933cd7f394bd7c7, type: 2}
 --- !u!1 &1462928409
 GameObject:
   m_ObjectHideFlags: 0
@@ -18008,6 +18268,7 @@ GameObject:
   - component: {fileID: 1517884489}
   - component: {fileID: 1517884488}
   - component: {fileID: 1517884492}
+  - component: {fileID: 1517884493}
   m_Layer: 5
   m_Name: I_9
   m_TagString: Untagged
@@ -18166,6 +18427,25 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!114 &1517884493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1517884486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e342bdf7562c0374381c8694c2b91606, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dissolveAmount: 1
+  dissolveSpeed: 1.5
+  isDissolving: 0
+  isDissolveComplete: 0
+  outColor: {r: 0.25415218, g: 0.61720675, b: 1, a: 1}
+  inColor: {r: 8, g: 0.2509804, b: 0, a: 1}
+  mat: {fileID: 2100000, guid: 2aa7128bdd2dd9746933cd7f394bd7c7, type: 2}
 --- !u!1 &1519797669
 GameObject:
   m_ObjectHideFlags: 0
@@ -19583,6 +19863,7 @@ GameObject:
   - component: {fileID: 1644571691}
   - component: {fileID: 1644571690}
   - component: {fileID: 1644571689}
+  - component: {fileID: 1644571694}
   m_Layer: 5
   m_Name: K_11
   m_TagString: Untagged
@@ -19735,6 +20016,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1644571687}
   m_CullTransparentMesh: 1
+--- !u!114 &1644571694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1644571687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e342bdf7562c0374381c8694c2b91606, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dissolveAmount: 1
+  dissolveSpeed: 1.5
+  isDissolving: 0
+  isDissolveComplete: 0
+  outColor: {r: 0.25415218, g: 0.61720675, b: 1, a: 1}
+  inColor: {r: 8, g: 0.2509804, b: 0, a: 1}
+  mat: {fileID: 2100000, guid: 2aa7128bdd2dd9746933cd7f394bd7c7, type: 2}
 --- !u!1 &1653399237
 GameObject:
   m_ObjectHideFlags: 0
@@ -20513,6 +20813,7 @@ GameObject:
   - component: {fileID: 1722869458}
   - component: {fileID: 1722869457}
   - component: {fileID: 1722869461}
+  - component: {fileID: 1722869462}
   m_Layer: 5
   m_Name: C_3
   m_TagString: Untagged
@@ -20665,6 +20966,25 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!114 &1722869462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1722869455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e342bdf7562c0374381c8694c2b91606, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dissolveAmount: 1
+  dissolveSpeed: 1.5
+  isDissolving: 0
+  isDissolveComplete: 0
+  outColor: {r: 0.25415218, g: 0.61720675, b: 1, a: 1}
+  inColor: {r: 8, g: 0.2509804, b: 0, a: 1}
+  mat: {fileID: 2100000, guid: 2aa7128bdd2dd9746933cd7f394bd7c7, type: 2}
 --- !u!1 &1729633876 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4305830595689994445, guid: fd76c2bd039aabe4ca905dbc0e1f0d88, type: 3}
