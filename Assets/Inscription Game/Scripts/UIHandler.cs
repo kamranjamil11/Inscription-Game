@@ -2,20 +2,24 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using TMPro;
+//using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 
+
 public class UIHandler : MonoBehaviour
 {
+   
     public static event Action<int> OnCoinsCollected; // Event for coin update
     private const string LastLoginKey = "LastLoginDate";
     private const string StreakCountKey = "StreakCount";
     private const string RewardClaimedKey = "RewardClaimed";
 
     public InputField user_Name;
-    public Text user_Txt, userName_Txt;
+    public TextMeshProUGUI userName_Txt;
+    public Text user_Txt;
     public GameObject daily_Reward_Popup;
     public GameObject congrats_Popup;
     public GameObject loadingScreen;
@@ -28,8 +32,10 @@ public class UIHandler : MonoBehaviour
     public GameObject daily_Challenge_Popup;
     public GameObject daily_Challenges_Prefab;
     public GameObject daily_Challenges_Parent;
+    public RectTransform underline;
+    public string[] first_Daily_Challenges;
     public string[] daily_Challenges;
-    
+
     private void Start()
     {
         Time.timeScale = 1;
@@ -43,8 +49,11 @@ public class UIHandler : MonoBehaviour
             coins_Text.text = coins.ToString();
         }
         StartCoroutine(Login());
-      
-        // CheckDailyReward();
+        if (PlayerPrefs.HasKey("FIRST_CHALLENGE"))
+        {
+            daily_Challenges[0] = PlayerPrefs.GetString("FIRST_CHALLENGE");
+        }
+       
     }
 
     public IEnumerator Login()
@@ -109,7 +118,7 @@ public class UIHandler : MonoBehaviour
             PlayerPrefs.SetInt(RewardClaimedKey, 0);
             List<int> n_List= new List<int>();
             n_List.Clear();
-            for (int i = 0; i < 15; i++)
+            for (int i = 0; i < 13; i++)
             {
                 if (PlayerPrefs.HasKey("DAILYCHALLENGE" + i))
                 {
@@ -119,11 +128,18 @@ public class UIHandler : MonoBehaviour
             }
            
              PlayerPrefs.DeleteKey("TOTALDAILYCHALLENGE");
-            
-            for (int i = 0; i < 3;)
-            {
-                            
-                int rnd = UnityEngine.Random.Range(0, daily_Challenges.Length);
+
+
+            int first_Chl = UnityEngine.Random.Range(0, first_Daily_Challenges.Length);
+            PlayerPrefs.SetInt("FIRST_CHALLENGE_ID", first_Chl);
+            PlayerPrefs.SetInt("DAILYCHALLENGE" + 0, 0);
+            PlayerPrefs.SetInt("ROUTINECHALLENGE" + 0, 0);
+            daily_Challenges[0] = first_Daily_Challenges[first_Chl];
+            PlayerPrefs.SetString("FIRST_CHALLENGE", first_Daily_Challenges[first_Chl]);
+           
+            for (int i = 1; i < 3;)
+            {                            
+                int rnd = UnityEngine.Random.Range(1, daily_Challenges.Length);
                 if (!n_List.Contains(rnd))
                 {
                     n_List.Add(rnd);
@@ -190,12 +206,14 @@ public class UIHandler : MonoBehaviour
     }
     public void CoinsShopBtn()
     {
-        Instantiate(coins_Shop, transform.position, Quaternion.identity, mainCanvas.transform);
+       GameObject tempObj= Instantiate(coins_Shop, transform.position, Quaternion.identity, mainCanvas.transform);
+        tempObj.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
         AudioManager.instance.PlaySound(0);
     }
     public void DailyChallenge()
     {
         daily_Challenge_Popup.SetActive(true);
+        
         for (int i =0; i < 3; i++)
         {
           int ch_Num= PlayerPrefs.GetInt("ROUTINECHALLENGE" + i);
@@ -232,7 +250,7 @@ public class UIHandler : MonoBehaviour
         print("Text Lenght: "+ user_Txt.text.Length);
         if (user_Txt.text.Length <= 12)
         {
-            user_Txt.text = user_Name.text;
+            user_Txt.text = user_Name.text;            
         }
     }
 }

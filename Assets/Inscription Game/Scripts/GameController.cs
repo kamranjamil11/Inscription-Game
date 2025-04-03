@@ -38,7 +38,8 @@ public class GameController : MonoBehaviour
     public GameObject pausePanel;
     public GameObject loadingPanel;
     public GameObject gridFrame;
-   // public GameObject right_Setting_Btn, left_Setting_Btn;
+    public GameObject lotusPowerPanel;
+    // public GameObject right_Setting_Btn, left_Setting_Btn;
     public GameObject coinsAdded_Box, challenge_Box;
     // public GameObject right_Toggle, left_Toggle;
     public GameObject scoreAdded_Box;
@@ -71,7 +72,7 @@ public class GameController : MonoBehaviour
     public List<string> hints = new List<string>() { "1stLetter", "2ndLetter", "descTextual" };
     public HashSet<string> wordSet = new HashSet<string>(); // Fast lookup storage
     public AudioSource sfx;
-    public Button hintButton;
+    public Button hintButton,lotusButton,scrabButton;
     public Generic_Timer generic_Timer;
     public LevelCreator LevelCreator;
     public HighScoreManager hS_Manager;
@@ -99,14 +100,30 @@ public class GameController : MonoBehaviour
         if (!PlayerPrefs.HasKey("HINT_POWERUP")) 
         {
             PlayerPrefs.SetInt("HINT_POWERUP", 1); 
-        }
+        }        
         int hint = PlayerPrefs.GetInt("HINT_POWERUP");
         hintButton.GetComponentInChildren<Text>().text = hint.ToString();
+
+        if (!PlayerPrefs.HasKey("LOTUS_POWERUP"))
+        {
+            PlayerPrefs.SetInt("LOTUS_POWERUP", 1);
+        }        
+        int lotus_Hint = PlayerPrefs.GetInt("LOTUS_POWERUP");
+        lotusButton.GetComponentInChildren<Text>().text = lotus_Hint.ToString();
+
+        if (!PlayerPrefs.HasKey("SCRAB_POWERUP"))
+        {
+            PlayerPrefs.SetInt("SCRAB_POWERUP", 1);
+        }
+        int scrab_Hint = PlayerPrefs.GetInt("SCRAB_POWERUP");
+        scrabButton.GetComponentInChildren<Text>().text = scrab_Hint.ToString();
+
         activeLetters = new List<GameObject>();
         lvlCreator = FindObjectOfType<LevelCreator>();
         timeLeft = totalTime;
         tmpCol = lvlCreator.lettersGrid[0].GetComponentInChildren<Text>().color;
-
+        string first_Chl = PlayerPrefs.GetString("FIRST_CHALLENGE");
+        Challenges_Description[0]= first_Chl; 
         StartCoroutine(LoadWords());
 
     }
@@ -250,7 +267,7 @@ public class GameController : MonoBehaviour
                     Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePos);
                     ScoreSystem(formedWord.Length, worldPosition);
 
-                    StartCoroutine(Next());
+                    StartCoroutine(Next("Next"));
 
                 }
                 else
@@ -396,6 +413,56 @@ public class GameController : MonoBehaviour
             print("DailyChallengeCompleted");
         }
     }
+    public void FirstChallengeFinder(int Challenge_Id, int Challenge_Num)
+    {
+        if (PlayerPrefs.HasKey("FIRST_CHALLENGE_ID"))
+        {
+            int first_Chl = PlayerPrefs.GetInt("FIRST_CHALLENGE_ID");
+            if (first_Chl == 0)
+            {
+                if (currentWord.Length == 3)
+                {
+                    ChallengeComplete(Challenge_Id, Challenge_Num);
+                }
+            }
+            else if (first_Chl == 1)
+            {
+                if (currentWord.Length == 4)
+                {
+                    ChallengeComplete(Challenge_Id, Challenge_Num);
+                }
+            }
+            else if (first_Chl == 2)
+            {
+                if (currentWord.Length == 5)
+                {
+                    ChallengeComplete(Challenge_Id, Challenge_Num);
+                }
+            }
+            else if (first_Chl == 3)
+            {
+                if (currentWord.Length == 6)
+                {
+                    ChallengeComplete(Challenge_Id, Challenge_Num);
+                }
+            }
+            else if (first_Chl == 4)
+            {
+                if (currentWord.Length == 7)
+                {
+                    ChallengeComplete(Challenge_Id, Challenge_Num);
+                }
+            }
+            else if (first_Chl == 5)
+            {
+                if (currentWord.Length == 8)
+                {
+                    ChallengeComplete(Challenge_Id, Challenge_Num);
+                }
+            }
+
+        }
+    }
     public IEnumerator DailyChallenge1(int Challenge_Id)
     {
         if (PlayerPrefs.HasKey("DAILYCHALLENGE" + Challenge_Id))
@@ -403,19 +470,24 @@ public class GameController : MonoBehaviour
             int Challenge_Num = PlayerPrefs.GetInt("DAILYCHALLENGE" + Challenge_Id);
             switch (Challenge_Num)
             {
-                case 0:
-                    if (score >= 1500)
-                    {
-                        ChallengeComplete(Challenge_Id,Challenge_Num);                    
-                    }
+                case 0:                    
+                    FirstChallengeFinder(Challenge_Id, Challenge_Num);                                                            
                     break;
                 case 1:
+                    if (score >= 1500)
+                    {
+                        ChallengeComplete(Challenge_Id, Challenge_Num);
+                    }
+                    
+                    break;
+                case 2:
                     if (ChallengeTime >= 90)
                     {
                         ChallengeComplete(Challenge_Id, Challenge_Num);
                     }
+                    
                     break;
-                case 2:
+                case 3:
                     if (consistent_Word >= 10)
                     {
                         ChallengeComplete(Challenge_Id, Challenge_Num);
@@ -423,12 +495,7 @@ public class GameController : MonoBehaviour
                         // PlayerPrefs.SetInt("TOTALDAILYCHALLENGE", 3);
                         // PlayerPrefs.DeleteKey("DAILYCHALLENGE" + Challenge_Id);
                     }
-                    break;
-                case 3:
-                    if (currentWord.Length >= 5)
-                    {
-                        ChallengeComplete(Challenge_Id,Challenge_Num);
-                    }
+                    
                     break;
                 case 4:
                     if (usedHint == 1)
@@ -475,30 +542,24 @@ public class GameController : MonoBehaviour
                     }
                     break;
                 case 10:
-                    if (currentWord.Length >= 7)
-                    {
-                        ChallengeComplete(Challenge_Id, Challenge_Num);
-                    }
-                    break;
-                case 11:
                     if (finded_Words.Count >= 25)
                     {
                         ChallengeComplete(Challenge_Id, Challenge_Num);
                     }
                     break;
-                case 12:
-                    if (currentWord.Contains("z")|| currentWord.Contains("q"))
+                case 11:
+                    if (currentWord.Contains("z") || currentWord.Contains("q"))
                     {
                         ChallengeComplete(Challenge_Id, Challenge_Num);
                     }
                     break;
-                case 13:
+                case 12:
                     if (currentWord.Length >= 10)
                     {
                         ChallengeComplete(Challenge_Id, Challenge_Num);
                     }
                     break;
-                case 14:
+                case 13:
                     if (hS_Manager.highScores.Count != 0)
                     {
                         if (score > hS_Manager.highScores[0])
@@ -507,6 +568,7 @@ public class GameController : MonoBehaviour
                         }
                     }
                     break;
+                
             }
         }
              
@@ -769,7 +831,7 @@ public class GameController : MonoBehaviour
         {
             hint_Count--;
             PlayerPrefs.SetInt("HINT_POWERUP", hint_Count);
-            hintButton.interactable = false; 
+           // hintButton.interactable = false; 
             hintButton.GetComponentInChildren<Text>().text = hint_Count.ToString();
             for (int i = 0; i < lvlCreator.hintObjs.Count; i++)
             {
@@ -779,8 +841,9 @@ public class GameController : MonoBehaviour
         }
         else
         {
-            GameObject tempObj = Instantiate(hintPrefab, transform.position, Quaternion.identity, mainCanvas.transform);
+            GameObject tempObj = Instantiate(coins_Shop, transform.position, Quaternion.identity, mainCanvas.transform);
             tempObj.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+            tempObj.GetComponent<Popup>().LeftAndRightClick();
             // hintBox.SetActive(true);
             // hintInfo = "There is no more hints to give..";
             //// hintButton.interactable = false;
@@ -789,6 +852,58 @@ public class GameController : MonoBehaviour
         CheckDailyReset();
         AudioManager.instance.PlaySound(0);
     }
+    public void LotusPowerUp()
+    {
+        usedHint++;
+        int hint_Count = PlayerPrefs.GetInt("LOTUS_POWERUP");
+        if (hint_Count > 0)
+        {
+            hint_Count--;
+            PlayerPrefs.SetInt("LOTUS_POWERUP", hint_Count);
+           // lotusButton.interactable = false;
+            lotusButton.GetComponentInChildren<Text>().text = hint_Count.ToString();
+            lotusPowerPanel.SetActive(true);
+            StartCoroutine(Next("FirstTime"));
+        }
+        else
+        {
+            GameObject tempObj = Instantiate(coins_Shop, transform.position, Quaternion.identity, mainCanvas.transform);
+            tempObj.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+            tempObj.GetComponent<Popup>().LeftAndRightClick();
+        }
+        CheckDailyReset();
+        AudioManager.instance.PlaySound(0);
+    }
+    public void ScrabPowerUp()
+    {
+        usedHint++;
+        int hint_Count = PlayerPrefs.GetInt("SCRAB_POWERUP");
+        if (hint_Count > 0)
+        {
+            hint_Count--;
+            PlayerPrefs.SetInt("SCRAB_POWERUP", hint_Count);
+           // scrabButton.interactable = false;
+            scrabButton.GetComponentInChildren<Text>().text = hint_Count.ToString();
+            for (int i = 0; i < lvlCreator.hintObjs.Count; i++)
+            {
+                lvlCreator.hintObjs[i].GetComponent<Animator>().Play("Hint");
+                //lvlCreator.hintObjs[i].GetComponent<Image>().sprite = selectedLetterSprite;
+            }
+        }
+        else
+        {
+            GameObject tempObj = Instantiate(coins_Shop, transform.position, Quaternion.identity, mainCanvas.transform);
+            tempObj.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+            tempObj.GetComponent<Popup>().LeftAndRightClick();
+            // hintBox.SetActive(true);
+            // hintInfo = "There is no more hints to give..";
+            //// hintButton.interactable = false;
+            // hintBox.GetComponentInChildren<Text>().text = hintInfo;
+        }
+        CheckDailyReset();
+        AudioManager.instance.PlaySound(0);
+    }
+
     //public void ToggleBtn()
     //{
     //    if (isToggle)
@@ -853,7 +968,7 @@ public class GameController : MonoBehaviour
         Time.timeScale = 0f;
         AudioManager.instance.PlaySound(0);
     }
-    public IEnumerator Next()
+    public IEnumerator Next(string key)
     {
         isNextWork = false;
         foreach (var item in activeLetters)
@@ -899,10 +1014,10 @@ public class GameController : MonoBehaviour
                 item.GetComponent<Animator>().SetTrigger("Idle");
             }
         }
-        LevelCreator.CreatWord("Next");
+        LevelCreator.CreatWord(key);
         formedWord = "";
         currentWord = "";
-        usedHint = 0;
+        //usedHint = 0;
     }
 
     public IEnumerator LoadWords()

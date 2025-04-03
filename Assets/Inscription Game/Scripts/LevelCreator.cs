@@ -21,6 +21,7 @@ public class LevelCreator : MonoBehaviour
     public static string levelWord;
     public List<string> totalWords = new List<string>();
     public List<SingleLetter> lettersGrid = new List<SingleLetter>();
+    public List<SingleLetter> lotusPowerGrid = new List<SingleLetter>();
     public List<GameObject> hintObjs = new List<GameObject>();
     public List<int> hints_Index = new List<int>();
     private int wayIndex;
@@ -165,23 +166,30 @@ public class LevelCreator : MonoBehaviour
         {
             lettersGrid[i].GetComponent<SingleLetter>().Value = weightedList[i].ToString();
             lettersGrid[i].gameObject.GetComponentInChildren<Text>().text = weightedList[i].ToString();
+            lotusPowerGrid[i].gameObject.GetComponentInChildren<Text>().text = weightedList[i].ToString();
         }
         for (int i = 0; i < hints_Index.Count; i++)
         {
             hintObjs.Add(lettersGrid[hints_Index[i]].gameObject);
         }
+        Invoke("LotusPanelOff", 1);
     }
     private void NextFillTheRest()
     {
         hintObjs.Clear();
+        gameController.lotusPowerPanel.SetActive(false);
         for (int i = 0; i < hints_Index.Count; i++)
         {
             hintObjs.Add(lettersGrid[hints_Index[i]].gameObject);
         }
         gameController.activeLetters.Clear();
         gameController.isNextWork = true;
+       
     }
-
+    private void LotusPanelOff()
+    {       
+        gameController.lotusPowerPanel.SetActive(false);       
+    }
     char[,] ConvertStringToGrid(string input)
     {
         string[] rows = input.Split('\n'); // Split by new line

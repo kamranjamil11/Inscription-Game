@@ -35,6 +35,16 @@ public class HighScoreManager : MonoBehaviour
             coins_Text.text = coins.ToString();
         }
     }
+    private void OnDisable()
+    {
+        if (scene_Name == SceneName.MainMenu)
+        {
+            for (int i = 0; i < content.transform.childCount; i++)
+            {
+                Destroy(content.transform.GetChild(i).gameObject);
+            }
+        }
+    }
     public void AddScore(int score,float time)
     {
         print(score);
