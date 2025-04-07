@@ -12,6 +12,7 @@ using Unity.VisualScripting;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
 using UnityEngine.SocialPlatforms;
+using static UnityEditor.PlayerSettings;
 
 public class GameController : MonoBehaviour
 {
@@ -51,6 +52,7 @@ public class GameController : MonoBehaviour
     public GameObject congrats_Popup;
     public GameObject hintPrefab, hintBox;
     public GameObject block_Brake;
+    public GameObject scarabPower;
     public Text score_Text, gameOverScore_Text, highScore_Text;
     public Text coins_Text;
     public Text correctWord;
@@ -62,6 +64,7 @@ public class GameController : MonoBehaviour
     private bool gameOn = true;
     public bool isToggle;
     public bool isNextWork;
+    bool isScarab = false;
     private int minutes;
     private int seconds;
     public static int score;
@@ -168,6 +171,22 @@ public class GameController : MonoBehaviour
         }
         currLetter = activeLetters[activeLetters.Count - 1];
         LinksManager(lastLetter, currLetter);
+
+        bool isFound = WordExists(formedWord);
+        if (isFound)
+        {
+            foreach (var item in activeLetters)
+            {
+                item.gameObject.GetComponent<Image>().sprite = item.gameObject.GetComponent<SingleLetter>().green_Sprite;
+            }           
+        }
+        else 
+        {
+            foreach (var item in activeLetters)
+            {
+                item.gameObject.GetComponent<Image>().sprite = item.gameObject.GetComponent<SingleLetter>().selected_Sprite;
+            }
+        }
     }
 
     private void Update()
@@ -230,7 +249,8 @@ public class GameController : MonoBehaviour
             if (Input.GetMouseButtonUp(0))
             {
                 //verify result
-                bool isFound = WordExists(formedWord);
+                Vector3 worldPosition = Vector3.zero;
+               bool isFound = WordExists(formedWord);
                 //if (formedWord == LevelCreator.levelWord)
                 if (isFound)
                 {
@@ -258,13 +278,16 @@ public class GameController : MonoBehaviour
                     //}
                     foreach (GameObject selectedLetter in activeLetters)
                     {
-                        selectedLetter.GetComponent<Image>().material = selectedLetter.GetComponent<DissolveController>().mat;       
-                        selectedLetter.GetComponent<DissolveController>().isDissolving = true; 
-                       // Instantiate(block_Brake, selectedLetter.transform.position, Quaternion.identity);
+                        //For Dissolve
+                        // selectedLetter.GetComponent<Image>().material = selectedLetter.GetComponent<DissolveController>().mat;       
+                        // selectedLetter.GetComponent<DissolveController>().isDissolving = true; 
+                        //For Rock
+                        selectedLetter.GetComponent<Image>().enabled = false;
+                        Instantiate(block_Brake, selectedLetter.transform.position, Quaternion.identity);
                     }
                     Vector3 mousePos = Input.mousePosition;
                     mousePos.z = 10f; // Distance from the camera (adjust as needed)
-                    Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePos);
+                    worldPosition = Camera.main.ScreenToWorldPoint(mousePos);
                     ScoreSystem(formedWord.Length, worldPosition);
 
                     StartCoroutine(Next("Next"));
@@ -297,7 +320,7 @@ public class GameController : MonoBehaviour
 
                 }
                 sfx.pitch = 1f;
-
+                
             }
 
             if (results.Count == 1 && results[0].gameObject.GetComponent<SingleLetter>() != null)
@@ -312,6 +335,22 @@ public class GameController : MonoBehaviour
 
             }
 
+        }
+    }
+   
+    public void TileBox() 
+    {
+        if (isScarab)
+        {
+            isScarab = false;
+            GameObject scarab = Instantiate(scarabPower, scrabButton.GetComponent<RectTransform>().anchoredPosition, Quaternion.identity, scrabButton.transform.parent.transform);          
+            scarab.GetComponent<RectTransform>().anchoredPosition=new Vector2(-302,-436);
+            GameObject targetObj = EventSystem.current.currentSelectedGameObject;
+            scarab.GetComponent<ScoreMultiplayer>().target = targetObj.transform;
+            StartCoroutine(scarab.GetComponent<ScoreMultiplayer>().ScarabMoveUI(targetObj.GetComponent<RectTransform>().anchoredPosition, 2f, targetObj, lvlCreator));
+            hintButton.interactable = true;
+            scrabButton.interactable = true;
+            lotusButton.interactable = true;
         }
     }
     void TimeChallenges(int challengeNum) 
@@ -577,61 +616,7 @@ public class GameController : MonoBehaviour
         challenge_Box.SetActive(false);
 
     }
-    //public IEnumerator DailyChallenge()
-    //{
-    //    if (PlayerPrefs.HasKey("DAILYCHALLENGE" + 0))
-    //    {
-    //        int first_Challenge = PlayerPrefs.GetInt("DAILYCHALLENGE" + 0);
-    //        switch (first_Challenge)
-    //        {
-    //            case 0:
-    //                if (score >= 1500)
-    //                {
-    //                    ChallengeComplete();
-    //                    challenge_Box.GetComponentInChildren<Text>().text = Challenges_Description[0];
-    //                    PlayerPrefs.SetInt("TOTALDAILYCHALLENGE", 1);
-    //                    PlayerPrefs.DeleteKey("DAILYCHALLENGE" + 0);
-    //                }
-    //                break;
-    //        }
-    //    }
-    //    if (PlayerPrefs.HasKey("DAILYCHALLENGE" + 1))
-    //    {
-    //        int second_Challenge = PlayerPrefs.GetInt("DAILYCHALLENGE" + 1);
-    //        switch (second_Challenge)
-    //        {
-    //            case 0:
-    //                if (ChallengeTime >= 90)
-    //                {
-    //                    ChallengeComplete();
-    //                    challenge_Box.GetComponentInChildren<Text>().text = Challenges_Description[1];
-    //                    PlayerPrefs.SetInt("TOTALDAILYCHALLENGE", 2);
-    //                    PlayerPrefs.DeleteKey("DAILYCHALLENGE" + 1);
-    //                }
-    //                break;
-    //        }
-    //    }
-    //    if (PlayerPrefs.HasKey("DAILYCHALLENGE" + 2))
-    //    {
-    //        int third_Challenge = PlayerPrefs.GetInt("DAILYCHALLENGE" + 2);
-    //        switch (third_Challenge)
-    //        {
-    //            case 0:
-    //                if (consistent_Word >= 10)
-    //                {
-    //                    ChallengeComplete();
-    //                    challenge_Box.GetComponentInChildren<Text>().text = Challenges_Description[2];
-    //                    PlayerPrefs.SetInt("TOTALDAILYCHALLENGE", 3);
-    //                    PlayerPrefs.DeleteKey("DAILYCHALLENGE" + 2);
-    //                }
-    //                break;
-    //        }
-    //    }
-    //    yield return new WaitForSeconds(2f);
-    //    coinsAdded_Box.SetActive(false);
-    //    challenge_Box.SetActive(false);
-
-    //}
+  
 
     void ChallengeComplete(int ch_Num,int chg_Id)
     {
@@ -831,7 +816,9 @@ public class GameController : MonoBehaviour
         {
             hint_Count--;
             PlayerPrefs.SetInt("HINT_POWERUP", hint_Count);
-           // hintButton.interactable = false; 
+            hintButton.interactable = false;
+            scrabButton.interactable = false;
+            lotusButton.interactable = false;
             hintButton.GetComponentInChildren<Text>().text = hint_Count.ToString();
             for (int i = 0; i < lvlCreator.hintObjs.Count; i++)
             {
@@ -860,10 +847,14 @@ public class GameController : MonoBehaviour
         {
             hint_Count--;
             PlayerPrefs.SetInt("LOTUS_POWERUP", hint_Count);
-           // lotusButton.interactable = false;
+            hintButton.interactable = false;
+            scrabButton.interactable = false;
+            lotusButton.interactable = false;
             lotusButton.GetComponentInChildren<Text>().text = hint_Count.ToString();
             lotusPowerPanel.SetActive(true);
-            StartCoroutine(Next("FirstTime"));
+            StartCoroutine(ShuffleList(lvlCreator.grid));
+
+           // StartCoroutine(Next("FirstTime"));
         }
         else
         {
@@ -876,17 +867,21 @@ public class GameController : MonoBehaviour
     }
     public void ScrabPowerUp()
     {
+        
         usedHint++;
         int hint_Count = PlayerPrefs.GetInt("SCRAB_POWERUP");
         if (hint_Count > 0)
         {
+            isScarab = true;
             hint_Count--;
             PlayerPrefs.SetInt("SCRAB_POWERUP", hint_Count);
-           // scrabButton.interactable = false;
+            hintButton.interactable = false;
+            scrabButton.interactable = false;
+            lotusButton.interactable = false;
             scrabButton.GetComponentInChildren<Text>().text = hint_Count.ToString();
-            for (int i = 0; i < lvlCreator.hintObjs.Count; i++)
+            for (int i = 0; i < lvlCreator.lettersGrid.Count; i++)
             {
-                lvlCreator.hintObjs[i].GetComponent<Animator>().Play("Hint");
+                lvlCreator.lettersGrid[i].GetComponent<Animator>().Play("Hint");
                 //lvlCreator.hintObjs[i].GetComponent<Image>().sprite = selectedLetterSprite;
             }
         }
@@ -902,6 +897,27 @@ public class GameController : MonoBehaviour
         }
         CheckDailyReset();
         AudioManager.instance.PlaySound(0);
+    }
+    public IEnumerator ShuffleList<T>(List<T> list)
+    {
+        for (int i = 0; i < list.Count; i++)
+        {
+            int randomIndex =UnityEngine.Random.Range(i, list.Count);
+            // Swap elements
+            T temp = list[i];
+            list[i] = list[randomIndex];
+            list[randomIndex] = temp;
+        }
+        
+        yield return new WaitForSeconds(1f);
+        for (int i = 0; i < lvlCreator.lettersGrid.Count; i++)
+        {
+            lvlCreator.lettersGrid[i].GetComponentInChildren<SingleLetter>().Value = lvlCreator.grid[i].ToString();
+            lvlCreator.lettersGrid[i].GetComponentInChildren<Text>().text = lvlCreator.grid[i].ToString();
+            lvlCreator.lotusPowerGrid[i].GetComponentInChildren<Text>().text = lvlCreator.grid[i].ToString();
+        }
+        yield return new WaitForSeconds(1.5f);
+        lotusPowerPanel.SetActive(false);
     }
 
     //public void ToggleBtn()
@@ -979,32 +995,26 @@ public class GameController : MonoBehaviour
                 linker.SetActive(false);
             }
         }
+       
         yield return new WaitForSeconds(1f);
         hintButton.interactable = true;
         foreach (var item in activeLetters)
         {
-            item.GetComponent<DissolveController>().isDissolving = false;
-            item.GetComponent<DissolveController>().dissolveAmount = 1f;
-            item.GetComponent<Image>().material = null;
+
+            //For Dissolve
+            // item.GetComponent<DissolveController>().isDissolving = false;
+            // item.GetComponent<DissolveController>().dissolveAmount = 1f;
+            // item.GetComponent<Image>().material = null;
+            //For Rock
+            item.GetComponent<Image>().enabled = true;
+            //For Rock and Dissolve
             item.transform.GetChild(0).GetComponent<Text>().enabled = true;
             item.GetComponent<Image>().sprite = item.GetComponent<SingleLetter>().unSelected_Sprite;
             item.GetComponentInChildren<Text>().color = tmpCol;
-            //foreach (var linker in item.GetComponent<SingleLetter>().linkers)       
-            //{
-            //    linker.SetActive(false);
-            //}
+            
         }
         
-       // yield return new WaitForSeconds(0.5f);
        
-        //foreach (var item in activeLetters)
-        //{
-        //   // item.GetComponent<Image>().enabled = true;
-        //    item.transform.GetChild(0).GetComponent<Text>().enabled = true;
-        //   // item.GetComponent<Animator>().SetTrigger("Idle");
-        //}
-        
-       // yield return new WaitForSeconds(0.5f);
         foreach (var item in lvlCreator.lettersGrid)
         {
             AnimatorStateInfo stateInfo = item.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
@@ -1014,6 +1024,9 @@ public class GameController : MonoBehaviour
                 item.GetComponent<Animator>().SetTrigger("Idle");
             }
         }
+        hintButton.interactable = true;
+        scrabButton.interactable = true;
+        lotusButton.interactable = true;
         LevelCreator.CreatWord(key);
         formedWord = "";
         currentWord = "";

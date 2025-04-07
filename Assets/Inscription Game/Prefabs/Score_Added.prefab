@@ -109,6 +109,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 277a5f8788da1c040934b5f0639f7eb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  obj_Type: 0
   uiElement: {fileID: 0}
   targetPosition: {fileID: 0}
   speed: 5
+  target: {fileID: 0}

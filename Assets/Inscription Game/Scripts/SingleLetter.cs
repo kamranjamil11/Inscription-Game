@@ -10,7 +10,7 @@ public class SingleLetter : MonoBehaviour
     public List<GameObject> tempPossibleWays;
     public string Value;
     public GameObject[] linkers;
-    public Sprite selected_Sprite, unSelected_Sprite;
+    public Sprite selected_Sprite, unSelected_Sprite,green_Sprite;
 }
 
 
