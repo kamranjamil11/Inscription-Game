@@ -89,7 +89,8 @@ public class Popup : MonoBehaviour
                 GameObject tempObj = Instantiate(gm_Controller.congrats_Popup, transform.position, Quaternion.identity, gm_Controller.mainCanvas.transform);
                 tempObj.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
                 tempObj.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = "You have successfully added a 1 power Up Pack.";
-            }            
+            }
+            AudioManager.instance.PlaySound(6);
         }
         else
         {
@@ -121,7 +122,7 @@ public class Popup : MonoBehaviour
             tempObj.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = "You have got a " + coins + " new coins pack.";
         }
 
-        AudioManager.instance.PlaySound(0);
+        AudioManager.instance.PlaySound(6);
     }
     public void LeftAndRightClick()
     {

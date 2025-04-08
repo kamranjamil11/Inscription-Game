@@ -351,6 +351,7 @@ public class GameController : MonoBehaviour
             hintButton.interactable = true;
             scrabButton.interactable = true;
             lotusButton.interactable = true;
+            AudioManager.instance.PlaySound(4);
         }
     }
     void TimeChallenges(int challengeNum) 
@@ -372,7 +373,7 @@ public class GameController : MonoBehaviour
         Generic_Timer.totalTime += time;   
         yield return new WaitForSeconds(0.7f);
         score_Text.text = score.ToString();
-
+        AudioManager.instance.PlaySound(6);
         int HS = PlayerPrefs.GetInt("HIGHSCORE");
         if (score > HS)
         {
@@ -633,7 +634,7 @@ public class GameController : MonoBehaviour
             PlayerPrefs.SetInt("TOTALDAILYCHALLENGE", totalChallenge);
             PlayerPrefs.DeleteKey("DAILYCHALLENGE" + ch_Num);
             challenge_Box.GetComponentInChildren<Text>().text = Challenges_Description[chg_Id];
-
+            AudioManager.instance.PlaySound(6);
         }
     }
     public void SubscribeToEventOnPointerEnter()
@@ -825,6 +826,7 @@ public class GameController : MonoBehaviour
                 lvlCreator.hintObjs[i].GetComponent<Animator>().Play("Hint");
                 //lvlCreator.hintObjs[i].GetComponent<Image>().sprite = selectedLetterSprite;
             }
+            AudioManager.instance.PlaySound(2);
         }
         else
         {
@@ -837,7 +839,7 @@ public class GameController : MonoBehaviour
             // hintBox.GetComponentInChildren<Text>().text = hintInfo;
         }
         CheckDailyReset();
-        AudioManager.instance.PlaySound(0);
+        
     }
     public void LotusPowerUp()
     {
@@ -853,8 +855,7 @@ public class GameController : MonoBehaviour
             lotusButton.GetComponentInChildren<Text>().text = hint_Count.ToString();
             lotusPowerPanel.SetActive(true);
             StartCoroutine(ShuffleList(lvlCreator.grid));
-
-           // StartCoroutine(Next("FirstTime"));
+            AudioManager.instance.PlaySound(5);
         }
         else
         {
@@ -863,7 +864,7 @@ public class GameController : MonoBehaviour
             tempObj.GetComponent<Popup>().LeftAndRightClick();
         }
         CheckDailyReset();
-        AudioManager.instance.PlaySound(0);
+       
     }
     public void ScrabPowerUp()
     {
@@ -884,6 +885,7 @@ public class GameController : MonoBehaviour
                 lvlCreator.lettersGrid[i].GetComponent<Animator>().Play("Hint");
                 //lvlCreator.hintObjs[i].GetComponent<Image>().sprite = selectedLetterSprite;
             }
+            AudioManager.instance.PlaySound(3);
         }
         else
         {
@@ -918,6 +920,9 @@ public class GameController : MonoBehaviour
         }
         yield return new WaitForSeconds(1.5f);
         lotusPowerPanel.SetActive(false);
+        hintButton.interactable = true;
+        scrabButton.interactable = true;
+        lotusButton.interactable = true;
     }
 
     //public void ToggleBtn()
