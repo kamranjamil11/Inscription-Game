@@ -75,6 +75,7 @@ public class ScoreMultiplayer : MonoBehaviour
             elapsed += Time.deltaTime;
             yield return null;
         }
+        Generic_Timer.isStop = true;
         scarab.anchoredPosition = target;
         foreach (var item in lvlCreator.lettersGrid)
         {

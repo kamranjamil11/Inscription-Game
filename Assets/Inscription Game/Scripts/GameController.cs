@@ -12,7 +12,6 @@ using Unity.VisualScripting;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
 using UnityEngine.SocialPlatforms;
-using static UnityEditor.PlayerSettings;
 
 public class GameController : MonoBehaviour
 {
@@ -343,6 +342,7 @@ public class GameController : MonoBehaviour
         if (isScarab)
         {
             isScarab = false;
+            Generic_Timer.isStop = false;    
             GameObject scarab = Instantiate(scarabPower, scrabButton.GetComponent<RectTransform>().anchoredPosition, Quaternion.identity, scrabButton.transform.parent.transform);          
             scarab.GetComponent<RectTransform>().anchoredPosition=new Vector2(-302,-436);
             GameObject targetObj = EventSystem.current.currentSelectedGameObject;
@@ -457,49 +457,49 @@ public class GameController : MonoBehaviour
     {
         if (PlayerPrefs.HasKey("FIRST_CHALLENGE_ID"))
         {
-            int first_Chl = PlayerPrefs.GetInt("FIRST_CHALLENGE_ID");
-            if (first_Chl == 0)
-            {
-                if (currentWord.Length == 3)
+            //int first_Chl = PlayerPrefs.GetInt("FIRST_CHALLENGE_ID");
+            //if (first_Chl == 0)
+            //{
+                if (currentWord == Challenges_Description[0])
                 {
                     ChallengeComplete(Challenge_Id, Challenge_Num);
                 }
-            }
-            else if (first_Chl == 1)
-            {
-                if (currentWord.Length == 4)
-                {
-                    ChallengeComplete(Challenge_Id, Challenge_Num);
-                }
-            }
-            else if (first_Chl == 2)
-            {
-                if (currentWord.Length == 5)
-                {
-                    ChallengeComplete(Challenge_Id, Challenge_Num);
-                }
-            }
-            else if (first_Chl == 3)
-            {
-                if (currentWord.Length == 6)
-                {
-                    ChallengeComplete(Challenge_Id, Challenge_Num);
-                }
-            }
-            else if (first_Chl == 4)
-            {
-                if (currentWord.Length == 7)
-                {
-                    ChallengeComplete(Challenge_Id, Challenge_Num);
-                }
-            }
-            else if (first_Chl == 5)
-            {
-                if (currentWord.Length == 8)
-                {
-                    ChallengeComplete(Challenge_Id, Challenge_Num);
-                }
-            }
+            //}
+            //else if (first_Chl == 1)
+            //{
+            //    if (currentWord.Length == 4)
+            //    {
+            //        ChallengeComplete(Challenge_Id, Challenge_Num);
+            //    }
+            //}
+            //else if (first_Chl == 2)
+            //{
+            //    if (currentWord.Length == 5)
+            //    {
+            //        ChallengeComplete(Challenge_Id, Challenge_Num);
+            //    }
+            //}
+            //else if (first_Chl == 3)
+            //{
+            //    if (currentWord.Length == 6)
+            //    {
+            //        ChallengeComplete(Challenge_Id, Challenge_Num);
+            //    }
+            //}
+            //else if (first_Chl == 4)
+            //{
+            //    if (currentWord.Length == 7)
+            //    {
+            //        ChallengeComplete(Challenge_Id, Challenge_Num);
+            //    }
+            //}
+            //else if (first_Chl == 5)
+            //{
+            //    if (currentWord.Length == 8)
+            //    {
+            //        ChallengeComplete(Challenge_Id, Challenge_Num);
+            //    }
+            //}
 
         }
     }
@@ -530,10 +530,7 @@ public class GameController : MonoBehaviour
                 case 3:
                     if (consistent_Word >= 10)
                     {
-                        ChallengeComplete(Challenge_Id, Challenge_Num);
-                        // challenge_Box.GetComponentInChildren<Text>().text = Challenges_Description[Challenge_Id];
-                        // PlayerPrefs.SetInt("TOTALDAILYCHALLENGE", 3);
-                        // PlayerPrefs.DeleteKey("DAILYCHALLENGE" + Challenge_Id);
+                        ChallengeComplete(Challenge_Id, Challenge_Num);                     
                     }
                     
                     break;
@@ -633,7 +630,14 @@ public class GameController : MonoBehaviour
             totalChallenge++;
             PlayerPrefs.SetInt("TOTALDAILYCHALLENGE", totalChallenge);
             PlayerPrefs.DeleteKey("DAILYCHALLENGE" + ch_Num);
-            challenge_Box.GetComponentInChildren<Text>().text = Challenges_Description[chg_Id];
+            if (chg_Id == 0) 
+            {
+                challenge_Box.GetComponentInChildren<Text>().text = "Word of the day " + "(" + Challenges_Description[chg_Id]+")";
+            }
+            else
+            {
+                challenge_Box.GetComponentInChildren<Text>().text = Challenges_Description[chg_Id];
+            }
             AudioManager.instance.PlaySound(6);
         }
     }
@@ -797,6 +801,12 @@ public class GameController : MonoBehaviour
         pausePanel.SetActive(false);
         Time.timeScale = 1f;
     }
+    public void CoinsShopBtn()
+    {
+        GameObject tempObj = Instantiate(coins_Shop, transform.position, Quaternion.identity, mainCanvas.transform);
+        tempObj.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+        AudioManager.instance.PlaySound(0);
+    }
     public void Retry()
     {
         Generic_Timer.totalTime = 60;
@@ -911,14 +921,14 @@ public class GameController : MonoBehaviour
             list[randomIndex] = temp;
         }
         
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.5f);
         for (int i = 0; i < lvlCreator.lettersGrid.Count; i++)
         {
             lvlCreator.lettersGrid[i].GetComponentInChildren<SingleLetter>().Value = lvlCreator.grid[i].ToString();
             lvlCreator.lettersGrid[i].GetComponentInChildren<Text>().text = lvlCreator.grid[i].ToString();
             lvlCreator.lotusPowerGrid[i].GetComponentInChildren<Text>().text = lvlCreator.grid[i].ToString();
         }
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(2f);
         lotusPowerPanel.SetActive(false);
         hintButton.interactable = true;
         scrabButton.interactable = true;

@@ -53,17 +53,20 @@ public class Popup : MonoBehaviour
         if (key == "SCRAB_POWERUP")
         {
             requir_Coins = 200;
-            powerButton = gm_Controller.scrabButton;
+            if (SceneManager.GetActiveScene().name != "MainMenu")
+                powerButton = gm_Controller.scrabButton;
         }
         else if (key == "HINT_POWERUP") 
         {
-            requir_Coins = 300;
-            powerButton = gm_Controller.hintButton;
+            requir_Coins = 300; 
+            if (SceneManager.GetActiveScene().name != "MainMenu")
+                powerButton = gm_Controller.hintButton;
         }
         else if (key == "LOTUS_POWERUP")
         {
             requir_Coins = 400;
-            powerButton = gm_Controller.lotusButton;
+            if (SceneManager.GetActiveScene().name != "MainMenu")
+                powerButton = gm_Controller.lotusButton;
         }
         if (coins >= requir_Coins)
         {

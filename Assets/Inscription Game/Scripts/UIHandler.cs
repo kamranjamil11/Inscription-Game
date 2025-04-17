@@ -51,7 +51,7 @@ public class UIHandler : MonoBehaviour
         StartCoroutine(Login());
         if (PlayerPrefs.HasKey("FIRST_CHALLENGE"))
         {
-            daily_Challenges[0] = PlayerPrefs.GetString("FIRST_CHALLENGE");
+            daily_Challenges[0] = "Word of the day " + "(" + PlayerPrefs.GetString("FIRST_CHALLENGE")+")";
         }
        
     }
@@ -134,7 +134,7 @@ public class UIHandler : MonoBehaviour
             PlayerPrefs.SetInt("FIRST_CHALLENGE_ID", first_Chl);
             PlayerPrefs.SetInt("DAILYCHALLENGE" + 0, 0);
             PlayerPrefs.SetInt("ROUTINECHALLENGE" + 0, 0);
-            daily_Challenges[0] = first_Daily_Challenges[first_Chl];
+            daily_Challenges[0] ="Word of the day "+"("+ first_Daily_Challenges[first_Chl]+")";
             PlayerPrefs.SetString("FIRST_CHALLENGE", first_Daily_Challenges[first_Chl]);
            
             for (int i = 1; i < 3;)
