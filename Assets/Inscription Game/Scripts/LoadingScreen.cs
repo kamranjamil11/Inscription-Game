@@ -13,7 +13,13 @@ public class LoadingScreen : MonoBehaviour
     public string sceneName;
     private void Start()
     {
-        // LoadScene("MainMenu");
+        //Screen.orientation = ScreenOrientation.AutoRotation;
+
+        //Screen.autorotateToPortrait = true;
+        //Screen.autorotateToLandscapeLeft = true;
+        //Screen.autorotateToLandscapeRight = true;
+        //Screen.autorotateToPortraitUpsideDown = false;
+
         StartCoroutine(CountTo100(5));
     }
     IEnumerator CountTo100(float duration)
@@ -29,7 +35,10 @@ public class LoadingScreen : MonoBehaviour
             int currentValue = Mathf.RoundToInt(Mathf.Lerp(startValue, endValue, progress));
 
             if (percentage_Text != null)
-                percentage_Text.text = currentValue.ToString()+"%"; // Update UI text
+            {
+                percentage_Text.text = currentValue.ToString() + "%";
+                
+            }// Update UI text
             if ( currentValue >= 100)
             {
                 SceneManager.LoadSceneAsync(sceneName);

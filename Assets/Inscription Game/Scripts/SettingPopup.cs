@@ -1,38 +1,47 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 //using UnityEngine.UIElements;
 //using UnityEngine.UIElements;
 
 public class SettingPopup : MonoBehaviour
     {
-    
+    public static bool isPortrait;
     public Slider musicValue;
     public Slider soundValue;
-    
-    public GameObject right_Toggle, left_Toggle;
-    private bool isToggle;
+    public Text direction_Txt;
+   // public GameObject right_Toggle, left_Toggle;
+   // private bool isToggle;
     //public AudioSource musicSource;
     // public AudioSource SoundSource;
 
     AudioManager audioManager;
     GameController gameController;
+    UIHandler ui_Handler;
+    
     private void Start()
     {
         audioManager=GameObject.FindObjectOfType<AudioManager>();
-        gameController= GameObject.FindObjectOfType<GameController>();
-        //if (gameController.isToggle)
-        //{
-        //    right_Toggle.SetActive(false);
-        //    left_Toggle.SetActive(true);
-        //}
-        //else
-        //{
-        //    right_Toggle.SetActive(true);
-        //    left_Toggle.SetActive(false);
-        //}
+        if (SceneManager.GetActiveScene().name == "MainMenu") 
+        {
+            ui_Handler = FindObjectOfType<UIHandler>();
+        }
+        else
+        {
+            gameController = FindObjectOfType<GameController>();
+        }
+        
         GetMusicAndSoundValue();
+        //if (!isPortrait)
+        //{
+        //    direction_Txt.text = "Switch to Landscape";
+        //}
+        //else 
+        //{
+        //    direction_Txt.text = "Switch to Portrait";
+        //}
     }
     public void CancelSetting()
     {
@@ -110,21 +119,80 @@ public class SettingPopup : MonoBehaviour
         }
     }
 
-    //public void ToggleBtn()
-    //{
+    public void SwitchDirection()
+    {
+        if (!isPortrait)
+        {
+            isPortrait=true;
+            Screen.autorotateToPortrait = false;
+            Screen.autorotateToLandscapeLeft = true;
+            Screen.autorotateToLandscapeRight = true;
+            Screen.autorotateToPortraitUpsideDown = false;
+            Screen.orientation = ScreenOrientation.LandscapeLeft;
+           
+            if (SceneManager.GetActiveScene().name == "MainMenu")
+            {
+                ui_Handler.landscape_UI.SetActive(true);
+                ui_Handler.portrait_UI.SetActive(false);
+                GameObject tempSetting = Instantiate(ui_Handler.settingsPopup, transform.position, Quaternion.identity, ui_Handler.mainCanvas.transform);   
+
+                tempSetting.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
+                Vector3 pos = tempSetting.GetComponent<RectTransform>().anchoredPosition;
+                pos.z = 0;
+                tempSetting.GetComponent<RectTransform>().localPosition = pos;
+            }
+            else
+            {
+                gameController.portrait_Objs.SetActive(false);
+                gameController.landscape_Objs.SetActive(true);
+                gameController.gridFrame.transform.localScale = new Vector2(1f, 1f);
+                GameObject tempSetting = Instantiate(gameController.settingsPopup, transform.position, Quaternion.identity, gameController.mainCanvas.transform);
+                tempSetting.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+                Vector3 pos = tempSetting.GetComponent<RectTransform>().anchoredPosition;
+                pos.z = 0;
+                tempSetting.GetComponent<RectTransform>().localPosition = pos;
+            }
+
+        
+            Debug.Log("Landscape mode detected");
+        }
+        else
+        {
+            isPortrait = false;
+            Screen.autorotateToPortrait = true;
+            Screen.autorotateToLandscapeLeft = false;
+            Screen.autorotateToLandscapeRight = false;
+            Screen.autorotateToPortraitUpsideDown = false;
+            Screen.orientation = ScreenOrientation.Portrait;
+          //  direction_Txt.text = "ON";
+            if (SceneManager.GetActiveScene().name == "MainMenu")
+            {
+                ui_Handler.landscape_UI.SetActive(false);
+                ui_Handler.portrait_UI.SetActive(true);
+               GameObject tempSetting= Instantiate(ui_Handler.settingsPopup_Portrait, transform.position, Quaternion.identity, ui_Handler.mainCanvas.transform);
+               
+                tempSetting.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
+                Vector3 pos = tempSetting.GetComponent<RectTransform>().anchoredPosition;
+                pos.z = 0;
+                tempSetting.GetComponent<RectTransform>().localPosition = pos;
+            }
+            else
+            {
+                gameController.portrait_Objs.SetActive(true);
+                gameController.landscape_Objs.SetActive(false);
+                gameController.gridFrame.transform.localScale = new Vector2(1.8f, 2f);
+                GameObject tempSetting = Instantiate(gameController.settingsPopup_Portrait, transform.position, Quaternion.identity, gameController.mainCanvas.transform);
+                tempSetting.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+                Vector3 pos = tempSetting.GetComponent<RectTransform>().anchoredPosition;
+                pos.z = 0;
+                tempSetting.GetComponent<RectTransform>().localPosition = pos;
+            }
+            Debug.Log("Portrait mode detected");
+        }
        
-    //    if (gameController.isToggle)
-    //    {          
-    //        right_Toggle.SetActive(true);          
-    //        left_Toggle.SetActive(false);         
-    //    }
-    //    else
-    //    {          
-    //        right_Toggle.SetActive(false);          
-    //        left_Toggle.SetActive(true);          
-    //    }
-    //   // gameController.ToggleBtn();
-    //}
+        CancelSetting();
+        Time.timeScale = 0f;
+    }
 
 }
 

@@ -34,27 +34,50 @@ using UnityEngine.SocialPlatforms;
         private LevelCreator lvlCreator;
         public GameObject tempParent;
         [Header("Win")]
-        public GameObject winPanel;
-        public GameObject losePanel;
-        public GameObject pausePanel;
-        public GameObject loadingPanel;
+      //  public GameObject winPanel;
+       
+       // public GameObject loadingPanel;
         public GameObject gridFrame;
         public GameObject lotusPowerPanel;
-        // public GameObject right_Setting_Btn, left_Setting_Btn;
-        public GameObject coinsAdded_Box, challenge_Box;
-        // public GameObject right_Toggle, left_Toggle;
+       
+        public GameObject coinsAdded_Box;
+      
         public GameObject scoreAdded_Box;
-        public GameObject word_Box;
-        public GameObject gameOver_Content;
+        
         public GameObject mainCanvas;
-        public GameObject settingsPopup;
-        public GameObject coins_Shop;
-        public GameObject congrats_Popup;
-        public GameObject hintPrefab, hintBox;
+    public Text score_Text;
+    [Header("Landscape UI")]  
+    public Text gameOverScore_Text;
+    public Text highScore_Text;
+    public Text coins_Text;
+    public GameObject challenge_Box;
+    public GameObject landscape_Objs;
+    public GameObject settingsPopup;
+    public GameObject coins_Shop;
+    public GameObject congrats_Popup;
+    public GameObject word_Box;
+    public GameObject gameOver_Content;
+    public GameObject losePanel;
+    public GameObject pausePanel;
+    public GameObject lotusPowerEffect;
+    [Header("Portrait UI")]
+    public Text gameOverScore_Text_Portrait;
+    public Text highScore_Text_Portrait;
+    public Text coins_Text_Portrait;
+    public GameObject challenge_Box_Portrait;
+    public GameObject portrait_Objs;
+    public GameObject settingsPopup_Portrait;
+    public GameObject coins_Shop_Portrait;
+    public GameObject congrats_Popup_Portrait;
+    public GameObject word_Box_Portrait;
+    public GameObject gameOver_Content_Portrait;
+    public GameObject losePanel_Portrait;
+    public GameObject pausePanel_Portrait;
+    public GameObject lotusPowerEffect_Portrait;
+    public GameObject hintPrefab, hintBox;
         public GameObject block_Brake;
         public GameObject scarabPower;
-        public Text score_Text, gameOverScore_Text, highScore_Text;
-        public Text coins_Text;
+       
         public Text correctWord;
         public Text bestTime;
         public Text currTime;
@@ -101,7 +124,8 @@ using UnityEngine.SocialPlatforms;
             score_Text.text = score.ToString();
             int coins = PlayerPrefs.GetInt("COINS");
             coins_Text.text = coins.ToString();
-            if (!PlayerPrefs.HasKey("HINT_POWERUP"))
+        coins_Text_Portrait.text = coins.ToString();
+        if (!PlayerPrefs.HasKey("HINT_POWERUP"))
             {
                 PlayerPrefs.SetInt("HINT_POWERUP", 1);
             }
@@ -129,10 +153,24 @@ using UnityEngine.SocialPlatforms;
             string first_Chl = PlayerPrefs.GetString("FIRST_CHALLENGE");
             Challenges_Description[0] = first_Chl;
             StartCoroutine(LoadWords());
+            ChangeOrientation();
+    }
 
+    void ChangeOrientation() 
+    {
+        if (!SettingPopup.isPortrait)
+        {
+            landscape_Objs.SetActive(false);
+            portrait_Objs.SetActive(true);
+            gridFrame.transform.localScale = new Vector2(1.8f, 2f);
         }
-
-
+        else
+        {
+            portrait_Objs.SetActive(false);
+            landscape_Objs.SetActive(true);
+            gridFrame.transform.localScale = new Vector2(1f, 1f);
+        }
+    }
         private void OnNewLetterCasted(object sender, OncCastLetterArgs e)
         {
             OnCastLetter -= OnNewLetterCasted;
@@ -285,7 +323,16 @@ using UnityEngine.SocialPlatforms;
                             // selectedLetter.GetComponent<DissolveController>().isDissolving = true; 
                             //For Rock
                             selectedLetter.GetComponent<Image>().enabled = false;
-                            Instantiate(block_Brake, selectedLetter.transform.position, Quaternion.identity);
+                       GameObject block_Effet= Instantiate(block_Brake, selectedLetter.transform.position, Quaternion.identity);
+
+                        if (!SettingPopup.isPortrait) 
+                        {
+                            block_Effet.transform.localScale = new Vector3(0.75f, 0.75f);
+                        }
+                        else
+                        {
+                            block_Effet.transform.localScale = new Vector3(1.3f,1.3f);
+                        }
                             selectedLetter.transform.GetChild(0).gameObject.SetActive(false);
                     }
                         Vector3 mousePos = Input.mousePosition;
@@ -461,55 +508,18 @@ using UnityEngine.SocialPlatforms;
         {
             if (PlayerPrefs.HasKey("FIRST_CHALLENGE_ID"))
             {
-                //int first_Chl = PlayerPrefs.GetInt("FIRST_CHALLENGE_ID");
-                //if (first_Chl == 0)
-                //{
+                
                 if (currentWord == Challenges_Description[0])
                 {
                     ChallengeComplete(Challenge_Id, Challenge_Num);
                 }
-                //}
-                //else if (first_Chl == 1)
-                //{
-                //    if (currentWord.Length == 4)
-                //    {
-                //        ChallengeComplete(Challenge_Id, Challenge_Num);
-                //    }
-                //}
-                //else if (first_Chl == 2)
-                //{
-                //    if (currentWord.Length == 5)
-                //    {
-                //        ChallengeComplete(Challenge_Id, Challenge_Num);
-                //    }
-                //}
-                //else if (first_Chl == 3)
-                //{
-                //    if (currentWord.Length == 6)
-                //    {
-                //        ChallengeComplete(Challenge_Id, Challenge_Num);
-                //    }
-                //}
-                //else if (first_Chl == 4)
-                //{
-                //    if (currentWord.Length == 7)
-                //    {
-                //        ChallengeComplete(Challenge_Id, Challenge_Num);
-                //    }
-                //}
-                //else if (first_Chl == 5)
-                //{
-                //    if (currentWord.Length == 8)
-                //    {
-                //        ChallengeComplete(Challenge_Id, Challenge_Num);
-                //    }
-                //}
-
+                
             }
         }
         public IEnumerator DailyChallenge1(int Challenge_Id)
-        {
-            if (PlayerPrefs.HasKey("DAILYCHALLENGE" + Challenge_Id))
+    {
+        yield return new WaitForSeconds(1f);
+        if (PlayerPrefs.HasKey("DAILYCHALLENGE" + Challenge_Id))
             {
                 int Challenge_Num = PlayerPrefs.GetInt("DAILYCHALLENGE" + Challenge_Id);
                 switch (Challenge_Num)
@@ -615,37 +625,70 @@ using UnityEngine.SocialPlatforms;
 
             yield return new WaitForSeconds(2f);
             coinsAdded_Box.SetActive(false);
+        if (!SettingPopup.isPortrait)
+        {
+            challenge_Box_Portrait.SetActive(false);
+        }
+        else
+        {
             challenge_Box.SetActive(false);
-
         }
 
+    }
 
-        void ChallengeComplete(int ch_Num, int chg_Id)
+
+    void ChallengeComplete(int ch_Num, int chg_Id)
+    {
+        if (gameOn)
         {
-            if (gameOn)
+            coinsAdded_Box.SetActive(true);
+
+            if (!SettingPopup.isPortrait)
             {
-                coinsAdded_Box.SetActive(true);
+                challenge_Box_Portrait.SetActive(true);
+            }
+            else
+            {
                 challenge_Box.SetActive(true);
-                int coins = PlayerPrefs.GetInt("COINS");
-                coins += 25;
-                coins_Text.text = coins.ToString();
-                PlayerPrefs.SetInt("COINS", coins);
-                int totalChallenge = PlayerPrefs.GetInt("TOTALDAILYCHALLENGE");
-                totalChallenge++;
-                PlayerPrefs.SetInt("TOTALDAILYCHALLENGE", totalChallenge);
-                PlayerPrefs.DeleteKey("DAILYCHALLENGE" + ch_Num);
-                if (chg_Id == 0)
+            }
+            int coins = PlayerPrefs.GetInt("COINS");
+            coins += 25;
+            coins_Text.text = coins.ToString();
+            coins_Text_Portrait.text = coins.ToString();
+
+            PlayerPrefs.SetInt("COINS", coins);
+            int totalChallenge = PlayerPrefs.GetInt("TOTALDAILYCHALLENGE");
+            totalChallenge++;
+            PlayerPrefs.SetInt("TOTALDAILYCHALLENGE", totalChallenge);
+            PlayerPrefs.DeleteKey("DAILYCHALLENGE" + ch_Num);
+            if (chg_Id == 0)
+            {
+                if (!SettingPopup.isPortrait)
+                {
+                    challenge_Box_Portrait.GetComponentInChildren<Text>().text = "Word of the day " + "(" + Challenges_Description[chg_Id] + ")";
+
+                }
+                else
                 {
                     challenge_Box.GetComponentInChildren<Text>().text = "Word of the day " + "(" + Challenges_Description[chg_Id] + ")";
+
+                }
+            }
+            else
+            {
+                if (!SettingPopup.isPortrait)
+                {
+                    challenge_Box_Portrait.GetComponentInChildren<Text>().text = Challenges_Description[chg_Id];
                 }
                 else
                 {
                     challenge_Box.GetComponentInChildren<Text>().text = Challenges_Description[chg_Id];
                 }
-                AudioManager.instance.PlaySound(6);
             }
+            AudioManager.instance.PlaySound(6);
         }
-        public void SubscribeToEventOnPointerEnter()
+    }
+    public void SubscribeToEventOnPointerEnter()
         {
             OnCastLetter += OnNewLetterCasted;
         }
@@ -794,24 +837,51 @@ using UnityEngine.SocialPlatforms;
 
         }
 
-        public void pauseBtn()
+    public void pauseBtn()
+    {
+        if (!SettingPopup.isPortrait)
+        {
+            pausePanel_Portrait.SetActive(true);
+        }
+        else
         {
             pausePanel.SetActive(true);
-            Time.timeScale = 0f;
         }
+        Time.timeScale = 0f;
+    }
 
-        public void unPauseBtn()
+    public void unPauseBtn()
+        {
+        if (!SettingPopup.isPortrait)
+        {
+            pausePanel_Portrait.SetActive(false);
+        }
+        else
         {
             pausePanel.SetActive(false);
-            Time.timeScale = 1f;
         }
-        public void CoinsShopBtn()
+        Time.timeScale = 1f;
+        }
+    public void CoinsShopBtn()
+    {
+        Time.timeScale = 0;
+        GameObject tempObj = null;
+        if (!SettingPopup.isPortrait)
         {
-            GameObject tempObj = Instantiate(coins_Shop, transform.position, Quaternion.identity, mainCanvas.transform);
-            tempObj.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
-            AudioManager.instance.PlaySound(0);
+            tempObj = Instantiate(coins_Shop_Portrait, transform.position, Quaternion.identity, mainCanvas.transform);
         }
-        public void Retry()
+        else
+        {
+            tempObj = Instantiate(coins_Shop, transform.position, Quaternion.identity, mainCanvas.transform);
+        }
+
+        tempObj.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+        Vector3 pos = tempObj.GetComponent<RectTransform>().anchoredPosition;
+        pos.z = 0;
+        tempObj.GetComponent<RectTransform>().localPosition = pos;
+        AudioManager.instance.PlaySound(0);
+    }
+    public void Retry()
         {
             Generic_Timer.totalTime = 60;
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
@@ -844,44 +914,74 @@ using UnityEngine.SocialPlatforms;
             }
             else
             {
-                GameObject tempObj = Instantiate(coins_Shop, transform.position, Quaternion.identity, mainCanvas.transform);
-                tempObj.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
-                tempObj.GetComponent<Popup>().LeftAndRightClick();
-                // hintBox.SetActive(true);
-                // hintInfo = "There is no more hints to give..";
-                //// hintButton.interactable = false;
-                // hintBox.GetComponentInChildren<Text>().text = hintInfo;
-            }
-            CheckDailyReset();
-
-        }
-        public void LotusPowerUp()
-        {
-            usedHint++;
-            int hint_Count = PlayerPrefs.GetInt("LOTUS_POWERUP");
-            if (hint_Count > 0)
+            Time.timeScale = 0;
+            GameObject tempObj = null;
+            if (!SettingPopup.isPortrait)
             {
-                hint_Count--;
-            Generic_Timer.isStop=false;
-                PlayerPrefs.SetInt("LOTUS_POWERUP", hint_Count);
-                hintButton.interactable = false;
-                scrabButton.interactable = false;
-                lotusButton.interactable = false;
-                lotusButton.GetComponentInChildren<Text>().text = hint_Count.ToString();
-                lotusPowerPanel.SetActive(true);
-                StartCoroutine(ShuffleList(lvlCreator.grid));
-                AudioManager.instance.PlaySound(5);
+                tempObj = Instantiate(coins_Shop_Portrait, transform.position, Quaternion.identity, mainCanvas.transform);
             }
             else
             {
-                GameObject tempObj = Instantiate(coins_Shop, transform.position, Quaternion.identity, mainCanvas.transform);
-                tempObj.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
-                tempObj.GetComponent<Popup>().LeftAndRightClick();
+                tempObj = Instantiate(coins_Shop, transform.position, Quaternion.identity, mainCanvas.transform);
+            }
+
+
+            tempObj.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+            Vector3 pos = tempObj.GetComponent<RectTransform>().anchoredPosition;
+            pos.z = 0;
+            tempObj.GetComponent<RectTransform>().localPosition = pos;
+            tempObj.GetComponent<Popup>().LeftAndRightClick();
+               
             }
             CheckDailyReset();
 
         }
-        public void ScrabPowerUp()
+    public void LotusPowerUp()
+    {
+        usedHint++;
+        int hint_Count = PlayerPrefs.GetInt("LOTUS_POWERUP");
+        if (hint_Count > 0)
+        {
+            hint_Count--;
+            Generic_Timer.isStop = false;
+            PlayerPrefs.SetInt("LOTUS_POWERUP", hint_Count);
+            hintButton.interactable = false;
+            scrabButton.interactable = false;
+            lotusButton.interactable = false;
+            lotusButton.GetComponentInChildren<Text>().text = hint_Count.ToString();
+            lotusPowerPanel.SetActive(true);
+            if (!SettingPopup.isPortrait)
+            {
+                lotusPowerEffect_Portrait.SetActive(true);
+            }
+            else
+            {
+                lotusPowerEffect.SetActive(true);
+            }
+            StartCoroutine(ShuffleList(lvlCreator.grid));
+            AudioManager.instance.PlaySound(5);
+        }
+        else
+        {
+            GameObject tempObj = null;
+            Time.timeScale = 0;
+            if (!SettingPopup.isPortrait)
+            {
+                tempObj = Instantiate(coins_Shop_Portrait, transform.position, Quaternion.identity, mainCanvas.transform);
+            }
+            else
+            {
+                tempObj = Instantiate(coins_Shop, transform.position, Quaternion.identity, mainCanvas.transform);
+            }
+            tempObj.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+            Vector3 pos = tempObj.GetComponent<RectTransform>().anchoredPosition;
+            pos.z = 0;
+            tempObj.GetComponent<RectTransform>().localPosition = pos;
+            tempObj.GetComponent<Popup>().LeftAndRightClick();
+        }
+        CheckDailyReset();
+    }
+    public void ScrabPowerUp()
         {
 
             usedHint++;
@@ -903,86 +1003,117 @@ using UnityEngine.SocialPlatforms;
                 AudioManager.instance.PlaySound(3);
             }
             else
+        {
+            Time.timeScale = 0;
+            GameObject tempObj = null; 
+            if (!SettingPopup.isPortrait)
             {
-                GameObject tempObj = Instantiate(coins_Shop, transform.position, Quaternion.identity, mainCanvas.transform);
-                tempObj.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
-                tempObj.GetComponent<Popup>().LeftAndRightClick();
-                // hintBox.SetActive(true);
-                // hintInfo = "There is no more hints to give..";
-                //// hintButton.interactable = false;
-                // hintBox.GetComponentInChildren<Text>().text = hintInfo;
+                tempObj = Instantiate(coins_Shop_Portrait, transform.position, Quaternion.identity, mainCanvas.transform);
+            }
+            else
+            {
+                tempObj = Instantiate(coins_Shop, transform.position, Quaternion.identity, mainCanvas.transform);
+            }
+            tempObj.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+            Vector3 pos = tempObj.GetComponent<RectTransform>().anchoredPosition;
+            pos.z = 0;
+            tempObj.GetComponent<RectTransform>().localPosition = pos;
+            tempObj.GetComponent<Popup>().LeftAndRightClick();
+                
             }
             CheckDailyReset();
             AudioManager.instance.PlaySound(0);
         }
-        public IEnumerator ShuffleList<T>(List<T> list)
+    public IEnumerator ShuffleList<T>(List<T> list)
+    {
+        for (int i = 0; i < list.Count; i++)
         {
-            for (int i = 0; i < list.Count; i++)
-            {
-                int randomIndex = UnityEngine.Random.Range(i, list.Count);
-                // Swap elements
-                T temp = list[i];
-                list[i] = list[randomIndex];
-                list[randomIndex] = temp;
-            }
-
-            yield return new WaitForSeconds(1.5f);
-            for (int i = 0; i < lvlCreator.lettersGrid.Count; i++)
-            {
-                lvlCreator.lettersGrid[i].GetComponentInChildren<SingleLetter>().Value = lvlCreator.grid[i].ToString();
-                lvlCreator.lettersGrid[i].GetComponentInChildren<Text>().text = lvlCreator.grid[i].ToString();
-                lvlCreator.lotusPowerGrid[i].GetComponentInChildren<Text>().text = lvlCreator.grid[i].ToString();
-            }
-            yield return new WaitForSeconds(2f);
-        Generic_Timer.isStop = true;
-        lotusPowerPanel.SetActive(false);
-            hintButton.interactable = true;
-            scrabButton.interactable = true;
-            lotusButton.interactable = true;
+            int randomIndex = UnityEngine.Random.Range(i, list.Count);
+            // Swap elements
+            T temp = list[i];
+            list[i] = list[randomIndex];
+            list[randomIndex] = temp;
         }
 
-        //public void ToggleBtn()
-        //{
-        //    if (isToggle)
-        //    {
-        //        isToggle = false;
-        //        right_Man.SetActive(false);
-        //        // right_Toggle.SetActive(false);
-        //        right_Setting_Btn.SetActive(false);
-
-        //        left_Man.SetActive(true);
-        //        //left_Toggle.SetActive(true);
-        //        left_Setting_Btn.SetActive(true);
-
-        //        gridFrame.GetComponent<RectTransform>().anchoredPosition = new Vector2(280, 0);
-        //    }
-        //    else
-        //    {
-        //        isToggle = true;
-
-        //        right_Man.SetActive(true);
-        //        // right_Toggle.SetActive(true);
-        //        right_Setting_Btn.SetActive(true);
-
-        //        left_Man.SetActive(false);
-        //        //left_Toggle.SetActive(false);
-        //        left_Setting_Btn.SetActive(false);
-
-        //        gridFrame.GetComponent<RectTransform>().anchoredPosition = new Vector2(-280, 0);
-        //    }
-        //}
-        public void GameOver()
+        yield return new WaitForSeconds(1.5f);
+        for (int i = 0; i < lvlCreator.lettersGrid.Count; i++)
         {
-            gameOn = false;
-            end_Time = Time.time;
-            int HS = PlayerPrefs.GetInt("HIGHSCORE");
+            lvlCreator.lettersGrid[i].GetComponentInChildren<SingleLetter>().Value = lvlCreator.grid[i].ToString();
+            lvlCreator.lettersGrid[i].GetComponentInChildren<Text>().text = lvlCreator.grid[i].ToString();
+            lvlCreator.lotusPowerGrid[i].GetComponentInChildren<Text>().text = lvlCreator.grid[i].ToString();
+        }
+        AudioManager.instance.PlaySound(7);
+        yield return new WaitForSeconds(2f);
+        Generic_Timer.isStop = true;
+        lotusPowerPanel.SetActive(false);
+        lotusPowerEffect.SetActive(false);
+        lotusPowerEffect_Portrait.SetActive(false);
+        hintButton.interactable = true;
+        scrabButton.interactable = true;
+        lotusButton.interactable = true;
+    }
+
+    //public void ToggleBtn()
+    //{
+    //    if (isToggle)
+    //    {
+    //        isToggle = false;
+    //        right_Man.SetActive(false);
+    //        // right_Toggle.SetActive(false);
+    //        right_Setting_Btn.SetActive(false);
+
+    //        left_Man.SetActive(true);
+    //        //left_Toggle.SetActive(true);
+    //        left_Setting_Btn.SetActive(true);
+
+    //        gridFrame.GetComponent<RectTransform>().anchoredPosition = new Vector2(280, 0);
+    //    }
+    //    else
+    //    {
+    //        isToggle = true;
+
+    //        right_Man.SetActive(true);
+    //        // right_Toggle.SetActive(true);
+    //        right_Setting_Btn.SetActive(true);
+
+    //        left_Man.SetActive(false);
+    //        //left_Toggle.SetActive(false);
+    //        left_Setting_Btn.SetActive(false);
+
+    //        gridFrame.GetComponent<RectTransform>().anchoredPosition = new Vector2(-280, 0);
+    //    }
+    //}
+    public void GameOver()
+        {
+        gameOn = false;
+        end_Time = Time.time;
+        float timePlayed = end_Time - start_Time;
+        hS_Manager.AddScore(score, timePlayed);
+        int HS = PlayerPrefs.GetInt("HIGHSCORE");
+                
+        if (!SettingPopup.isPortrait)
+        {
+            highScore_Text_Portrait.text = HS.ToString();
+            gameOverScore_Text_Portrait.text = score.ToString();
+            losePanel_Portrait.SetActive(true);
+            for (int i = 0; i < finded_Words.Count; i++)
+            {
+                if (i < 6)
+                {
+                    GameObject wordBox = Instantiate(word_Box_Portrait, transform.position, Quaternion.identity, gameOver_Content_Portrait.transform);
+                    wordBox.GetComponentInChildren<Text>().text = finded_Words[i];
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+        else
+        {
             highScore_Text.text = HS.ToString();
             gameOverScore_Text.text = score.ToString();
             losePanel.SetActive(true);
-
-            float timePlayed = end_Time - start_Time;
-            hS_Manager.AddScore(score, timePlayed);
-
             for (int i = 0; i < finded_Words.Count; i++)
             {
                 if (i < 6)
@@ -995,14 +1126,27 @@ using UnityEngine.SocialPlatforms;
                     break;
                 }
             }
-            AudioManager.instance.PlaySound(1);
+        }                  
+           AudioManager.instance.PlaySound(1);
         }
         public void SettingBtn()
+    {
+        GameObject tempSetting = null;
+        if (!SettingPopup.isPortrait)
         {
+             tempSetting = Instantiate(settingsPopup_Portrait, transform.position, Quaternion.identity, mainCanvas.transform);
 
-            GameObject tempObj = Instantiate(settingsPopup, transform.position, Quaternion.identity, mainCanvas.transform);
-            tempObj.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
-            Time.timeScale = 0f;
+        }
+        else
+        {
+             tempSetting = Instantiate(settingsPopup, transform.position, Quaternion.identity, mainCanvas.transform);
+
+        }
+        tempSetting.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+        Vector3 pos = tempSetting.GetComponent<RectTransform>().anchoredPosition;
+        pos.z = 0;
+        tempSetting.GetComponent<RectTransform>().localPosition = pos;
+        Time.timeScale = 0f;
             AudioManager.instance.PlaySound(0);
         }
         public IEnumerator Next(string key)
@@ -1032,8 +1176,8 @@ using UnityEngine.SocialPlatforms;
                 item.transform.GetChild(1).GetComponent<Text>().enabled = true;
                 item.GetComponent<Image>().sprite = item.GetComponent<SingleLetter>().unSelected_Sprite;
                 item.GetComponentInChildren<Text>().color = tmpCol;
-
-            }
+                
+        }
 
 
             foreach (var item in lvlCreator.lettersGrid)
@@ -1044,7 +1188,8 @@ using UnityEngine.SocialPlatforms;
                 {
                     item.GetComponent<Animator>().SetTrigger("Idle");
                 }
-            }
+            item.transform.GetChild(0).gameObject.SetActive(false);
+        }
             hintButton.interactable = true;
             scrabButton.interactable = true;
             lotusButton.interactable = true;
@@ -1062,35 +1207,10 @@ using UnityEngine.SocialPlatforms;
             if (!File.Exists(path))
             {
                 Debug.LogError("File not found in persistentDataPath, copying from StreamingAssets...");
-                StartCoroutine(CopyFileFromStreamingAssets(fileName, path));
-            }
-            else
-            {
-
-                LoadAllWords(path);
-            }
-
-
-            //string filePath = Path.Combine(Application.streamingAssetsPath, "wordlist.txt");
-
-            //if (File.Exists(filePath))
-            //{
-            //    using (StreamReader reader = new StreamReader(filePath))
-            //    {
-            //        string line;
-            //        while ((line = reader.ReadLine()) != null)
-            //        {
-            //            wordSet.Add(line.Trim().ToLower()); // Convert to lowercase for case-insensitive check
-            //        }
-            //    }
-            //    Debug.Log("File Loaded! Total Words: " + wordSet.Count);
-            //}
-            //else
-            //{
-            //    Debug.LogError("File not found: " + filePath);
-            //}
-
-            yield return null;
+                yield return StartCoroutine(CopyFileFromStreamingAssets(fileName, path));
+            }   
+            
+            LoadAllWords(path);                    
         }
 
         void LoadAllWords(string filePath)
@@ -1118,31 +1238,63 @@ using UnityEngine.SocialPlatforms;
             wordSet = new HashSet<string>(jsonData.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries));
 
             Debug.Log("Words Loaded Successfully: " + wordSet.Count);
-        }
+            LevelCreator.CreatWord("FirstTime");
+    }
+    private IEnumerator CopyFileFromStreamingAssets(string fileName, string destinationPath)
+    {
+        string sourcePath = Path.Combine(Application.streamingAssetsPath, fileName);
 
-        private IEnumerator CopyFileFromStreamingAssets(string fileName, string destinationPath)
+#if UNITY_ANDROID && !UNITY_EDITOR
+    UnityEngine.Networking.UnityWebRequest request = UnityEngine.Networking.UnityWebRequest.Get(sourcePath);
+    yield return request.SendWebRequest();
+
+    if (request.result != UnityEngine.Networking.UnityWebRequest.Result.Success)
+    {
+        Debug.LogError("Failed to load from StreamingAssets: " + request.error);
+    }
+    else
+    {
+        File.WriteAllBytes(destinationPath, request.downloadHandler.data);
+        // LoadAllWords(destinationPath);
+    }
+#else
+        // For Windows, Mac, iOS (non-Android)
+        if (File.Exists(sourcePath))
         {
-            string sourcePath = Path.Combine(Application.streamingAssetsPath, fileName);
-
-            using (UnityWebRequest www = UnityWebRequest.Get(sourcePath))
-            {
-                yield return www.SendWebRequest();
-
-                if (www.result == UnityWebRequest.Result.Success)
-                {
-                    File.WriteAllBytes(destinationPath, www.downloadHandler.data);
-                    Debug.Log("File copied successfully.");
-                    LoadAllWords(destinationPath);
-                }
-                else
-                {
-                    Debug.LogError("Error copying file: " + www.error);
-                }
-            }
+            File.Copy(sourcePath, destinationPath, true);
+          //  LoadAllWords(destinationPath);
         }
+        else
+        {
+            Debug.LogError("Source file not found in StreamingAssets: " + sourcePath);
+        }
+        yield return null;
+#endif
+    }
 
-        // Check if a word exists in the loaded data
-        public bool WordExists(string word)
+    //private IEnumerator CopyFileFromStreamingAssets(string fileName, string destinationPath)
+    //{
+    //    string sourcePath = Path.Combine(Application.streamingAssetsPath, fileName);
+
+    //    using (UnityWebRequest www = UnityWebRequest.Get(sourcePath))
+    //    {
+    //        yield return www.SendWebRequest();
+
+    //        if (www.result == UnityWebRequest.Result.Success)
+    //        {
+    //            File.WriteAllBytes(destinationPath, www.downloadHandler.data);
+    //            Debug.Log("File copied successfully.");
+    //            LoadAllWords(destinationPath);
+    //        }
+    //        else
+    //        {
+    //            Debug.LogError("Error copying file: " + www.error);
+    //        }
+    //    }
+    //}
+
+    // Check if a word exists in the loaded data
+    public bool WordExists(string word)
         {
             return wordSet.Contains(word.ToLower()); // Fast O(1) lookup
         }

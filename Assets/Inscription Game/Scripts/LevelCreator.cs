@@ -16,16 +16,13 @@ using Unity.Burst;
 
 
 public class LevelCreator : MonoBehaviour
-{
-    public static bool isPlay = false;
+{    
     public static string levelWord;
-    public List<string> totalWords = new List<string>();
     public List<SingleLetter> lettersGrid = new List<SingleLetter>();
     public List<SingleLetter> lotusPowerGrid = new List<SingleLetter>();
     public List<GameObject> hintObjs = new List<GameObject>();
     public List<int> hints_Index = new List<int>();
-    private int wayIndex;
-    private List<string> alphabets = new List<string>() { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", };
+     
     public List<char> weightedList = new List<char>();
     public int gridSize = 16; // Total boxes in the grid (4x4)
     public List<char> grid;
@@ -33,13 +30,7 @@ public class LevelCreator : MonoBehaviour
     GameController gameController;
     void Start()
     {
-        gameController = gameObject.GetComponent<GameController>();
-        // if (!isPlay)
-        // {
-        isPlay = true;
-
-        // }
-        CreatWord("FirstTime");
+        gameController = gameObject.GetComponent<GameController>();       
     }
 
     public void CreatWord(string id)
@@ -177,7 +168,7 @@ public class LevelCreator : MonoBehaviour
     private void NextFillTheRest()
     {
         hintObjs.Clear();
-        gameController.lotusPowerPanel.SetActive(false);
+       // gameController.lotusPowerPanel.SetActive(false);
         for (int i = 0; i < hints_Index.Count; i++)
         {
             hintObjs.Add(lettersGrid[hints_Index[i]].gameObject);
@@ -186,10 +177,7 @@ public class LevelCreator : MonoBehaviour
         gameController.isNextWork = true;
        
     }
-    private void LotusPanelOff()
-    {       
-        gameController.lotusPowerPanel.SetActive(false);       
-    }
+    
     char[,] ConvertStringToGrid(string input)
     {
         string[] rows = input.Split('\n'); // Split by new line

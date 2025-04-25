@@ -193,6 +193,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coinsText: {fileID: 0}
   powerUp_Txt: {fileID: 0}
+  coinsTilte: {fileID: 0}
+  powerUpTilte: {fileID: 0}
+  coinsShop: {fileID: 0}
+  powerShop: {fileID: 0}
 --- !u!1 &4902941137974330450
 GameObject:
   m_ObjectHideFlags: 0
@@ -496,7 +500,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 3674465537266251688}
         m_TargetAssemblyTypeName: Popup, Assembly-CSharp
-        m_MethodName: BackToGamePaly
+        m_MethodName: BackToMainScreen
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

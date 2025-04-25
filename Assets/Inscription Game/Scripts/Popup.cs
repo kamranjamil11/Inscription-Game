@@ -42,6 +42,13 @@ public class Popup : MonoBehaviour
     }
     public void BackToGamePaly()
     {
+        Time.timeScale = 1;
+        Destroy(this.gameObject);
+        AudioManager.instance.PlaySound(0);
+    }
+    public void BackToMainScreen()
+    {
+        
         Destroy(this.gameObject);
         AudioManager.instance.PlaySound(0);
     }
@@ -80,16 +87,36 @@ public class Popup : MonoBehaviour
             
             if (SceneManager.GetActiveScene().name == "MainMenu")
             {
-               // gm_Controller.hintButton.GetComponentInChildren<Text>().text = powerUps.ToString();
-                GameObject tempObj = Instantiate(uiHandler.congrats_Popup, transform.position, Quaternion.identity, uiHandler.mainCanvas.transform);
+                uiHandler.coins_Text.text = coins.ToString();
+                uiHandler.coins_Text_Portrait.text = coins.ToString();
+                GameObject tempObj = null;
+                if (!SettingPopup.isPortrait)
+                {
+                    tempObj = Instantiate(uiHandler.congrats_Popup_Portrait, transform.position, Quaternion.identity, uiHandler.mainCanvas.transform);
+                }
+                else
+                {
+                    tempObj = Instantiate(uiHandler.congrats_Popup, transform.position, Quaternion.identity, uiHandler.mainCanvas.transform);
+                }
                 tempObj.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
                 tempObj.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = "You have successfully added a 1 power Up.";
             }
             else
             {
                 gm_Controller.coins_Text.text = coins.ToString();
+                gm_Controller.coins_Text_Portrait.text = coins.ToString();
+                
                 powerButton.GetComponentInChildren<Text>().text = powerUps.ToString();
-                GameObject tempObj = Instantiate(gm_Controller.congrats_Popup, transform.position, Quaternion.identity, gm_Controller.mainCanvas.transform);
+                GameObject tempObj = null;
+                if (!SettingPopup.isPortrait)
+                {
+                    tempObj = Instantiate(gm_Controller.congrats_Popup_Portrait, transform.position, Quaternion.identity, gm_Controller.mainCanvas.transform);
+                }
+                else
+                {
+                    tempObj = Instantiate(gm_Controller.congrats_Popup, transform.position, Quaternion.identity, gm_Controller.mainCanvas.transform);
+                }
+               // GameObject tempObj = Instantiate(gm_Controller.congrats_Popup, transform.position, Quaternion.identity, gm_Controller.mainCanvas.transform);
                 tempObj.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
                 tempObj.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = "You have successfully added a 1 power Up Pack.";
             }
@@ -113,14 +140,33 @@ public class Popup : MonoBehaviour
         if (SceneManager.GetActiveScene().name == "MainMenu")
         {
             uiHandler.coins_Text.text = cns.ToString();
-            GameObject tempObj = Instantiate(uiHandler.congrats_Popup, transform.position, Quaternion.identity, uiHandler.mainCanvas.transform);
+            uiHandler.coins_Text_Portrait.text = cns.ToString();
+            GameObject tempObj = null;
+            if (!SettingPopup.isPortrait)
+            {
+                tempObj = Instantiate(uiHandler.congrats_Popup_Portrait, transform.position, Quaternion.identity, uiHandler.mainCanvas.transform);
+            }
+            else
+            {
+                tempObj = Instantiate(uiHandler.congrats_Popup, transform.position, Quaternion.identity, uiHandler.mainCanvas.transform);
+            }
             tempObj.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
             tempObj.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = "You have got a "+ coins + " new coins pack.";
         }
         else
         {
             gm_Controller.coins_Text.text = cns.ToString();
-            GameObject tempObj = Instantiate(gm_Controller.congrats_Popup, transform.position, Quaternion.identity, gm_Controller.mainCanvas.transform);
+            gm_Controller.coins_Text_Portrait.text = cns.ToString();
+            
+            GameObject tempObj = null;
+            if (!SettingPopup.isPortrait)
+            {
+                tempObj = Instantiate(gm_Controller.congrats_Popup_Portrait, transform.position, Quaternion.identity, gm_Controller.mainCanvas.transform);
+            }
+            else
+            {
+                tempObj = Instantiate(gm_Controller.congrats_Popup, transform.position, Quaternion.identity, gm_Controller.mainCanvas.transform);
+            }
             tempObj.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
             tempObj.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = "You have got a " + coins + " new coins pack.";
         }
