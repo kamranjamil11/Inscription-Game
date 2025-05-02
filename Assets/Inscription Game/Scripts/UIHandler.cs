@@ -1,8 +1,12 @@
-
+﻿
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
 using TMPro;
+using Unity.Mathematics;
 //using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -54,7 +58,7 @@ public class UIHandler : MonoBehaviour
     public GameObject daily_Challenges_Parent_Portrait;
     public string[] first_Daily_Challenges;
     public string[] daily_Challenges;
-
+    public HashSet<string> wordSet = new HashSet<string>();
     private void Start()
     {
         Time.timeScale = 1;
@@ -63,17 +67,20 @@ public class UIHandler : MonoBehaviour
             PlayerPrefs.SetInt("COINS", 1000);
         }
         int coins = PlayerPrefs.GetInt("COINS");
+       
         if (coins_Text != null)
         {
-            coins_Text.text = coins.ToString();
-            coins_Text_Portrait.text = coins.ToString();
+            coins_Text.text = FormatNumber(coins);
+            coins_Text_Portrait.text = FormatNumber(coins);
         }
+        
         StartCoroutine(Login());
         if (PlayerPrefs.HasKey("FIRST_CHALLENGE"))
         {
             daily_Challenges[0] = "Word of the day " + "(" + PlayerPrefs.GetString("FIRST_CHALLENGE")+")";
         }
         ChangeOrientation();
+        StartCoroutine(LoadWords());
     }
     void ChangeOrientation()
     {
@@ -201,8 +208,11 @@ public class UIHandler : MonoBehaviour
             PlayerPrefs.SetInt("FIRST_CHALLENGE_ID", first_Chl);
             PlayerPrefs.SetInt("DAILYCHALLENGE" + 0, 0);
             PlayerPrefs.SetInt("ROUTINECHALLENGE" + 0, 0);
-            daily_Challenges[0] ="Word of the day "+"("+ first_Daily_Challenges[first_Chl]+")";
-            PlayerPrefs.SetString("FIRST_CHALLENGE", first_Daily_Challenges[first_Chl]);
+            int rndWord = UnityEngine.Random.Range(0,wordSet.Count);
+            string wordOfDay = wordSet.ElementAt(rndWord);
+            print("wordOfDay: "+ wordOfDay);
+            daily_Challenges[0] ="Word of the day "+"("+ wordOfDay /*first_Daily_Challenges[first_Chl]*/+ ")";
+            PlayerPrefs.SetString("FIRST_CHALLENGE", wordOfDay /*first_Daily_Challenges[first_Chl]*/);
            
             for (int i = 1; i < 3;)
             {                            
@@ -244,8 +254,8 @@ public class UIHandler : MonoBehaviour
             int coins = PlayerPrefs.GetInt("COINS");
             coins += 25;
             PlayerPrefs.SetInt("COINS", coins);
-            coins_Text.text = coins.ToString();
-            coins_Text_Portrait.text = coins.ToString();
+            coins_Text.text = FormatNumber(coins);
+            coins_Text_Portrait.text =FormatNumber(coins);
             string today = DateTime.UtcNow.ToString("yyyy-MM-dd");
             PlayerPrefs.SetString(LastLoginKey, today);
             //int streak = PlayerPrefs.GetInt(StreakCountKey, 1);
@@ -369,6 +379,10 @@ public class UIHandler : MonoBehaviour
                 {
                     daily_Challenges_Parent_Portrait.transform.GetChild(i).GetComponent<DailyChallenge>().coins_Tab.SetActive(true);
                 }
+                if (i == 0) 
+                {
+                    daily_Challenges_Parent_Portrait.transform.GetChild(i).GetComponent<DailyChallenge>().coins_Tab.GetComponentInChildren<Text>().text = "100";
+                }
             }
         }
         else
@@ -382,6 +396,10 @@ public class UIHandler : MonoBehaviour
                 else
                 {
                     daily_Challenges_Parent.transform.GetChild(i).GetComponent<DailyChallenge>().coins_Tab.SetActive(true);
+                }
+                if (i == 0)
+                {
+                    daily_Challenges_Parent.transform.GetChild(i).GetComponent<DailyChallenge>().coins_Tab.GetComponentInChildren<Text>().text = "100";
                 }
             }
         }
@@ -415,5 +433,87 @@ public class UIHandler : MonoBehaviour
             }
         }
         
+    }
+    public static string FormatNumber(long number)
+    {      
+         if (number >= 1_000_000)
+            return (number / 1_000_000f).ToString("0.#") + "M";
+        else if (number >= 10000)
+            return (number / 1000f).ToString("0.#") + "K";
+        else
+            return number.ToString();
+    }
+
+    public IEnumerator LoadWords()
+    {
+        string fileName = "wordlist1.json";
+        string path = Path.Combine(Application.persistentDataPath, fileName);
+        print(path);
+        if (!File.Exists(path))
+        {
+            Debug.LogError("File not found in persistentDataPath, copying from StreamingAssets...");
+            yield return StartCoroutine(CopyFileFromStreamingAssets(fileName, path));
+        }
+
+        LoadAllWords(path);
+    }
+
+    void LoadAllWords(string filePath)
+    {
+        if (!File.Exists(filePath))
+        {
+            Debug.LogError("File not found: " + filePath);
+            return;
+        }
+
+        string jsonData = File.ReadAllText(filePath);
+
+        if (string.IsNullOrWhiteSpace(jsonData))
+        {
+            Debug.LogError("JSON file is empty or corrupted.");
+            return;
+        }
+
+        Debug.Log("Loaded JSON Data (First 100 chars): " + jsonData.Substring(0, Mathf.Min(100, jsonData.Length))); // Debug
+
+        // 🔹 Split the words using newline character
+        //  wordList = new List<string>(jsonData.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries));
+
+        // 🔹 Store in HashSet for fast lookup
+        wordSet = new HashSet<string>(jsonData.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries));
+
+        Debug.Log("Words Loaded Successfully: " + wordSet.Count);
+       
+    }
+    private IEnumerator CopyFileFromStreamingAssets(string fileName, string destinationPath)
+    {
+        string sourcePath = Path.Combine(Application.streamingAssetsPath, fileName);
+
+#if UNITY_ANDROID && !UNITY_EDITOR
+    UnityEngine.Networking.UnityWebRequest request = UnityEngine.Networking.UnityWebRequest.Get(sourcePath);
+    yield return request.SendWebRequest();
+
+    if (request.result != UnityEngine.Networking.UnityWebRequest.Result.Success)
+    {
+        Debug.LogError("Failed to load from StreamingAssets: " + request.error);
+    }
+    else
+    {
+        File.WriteAllBytes(destinationPath, request.downloadHandler.data);
+        // LoadAllWords(destinationPath);
+    }
+#else
+        // For Windows, Mac, iOS (non-Android)
+        if (File.Exists(sourcePath))
+        {
+            File.Copy(sourcePath, destinationPath, true);
+            //  LoadAllWords(destinationPath);
+        }
+        else
+        {
+            Debug.LogError("Source file not found in StreamingAssets: " + sourcePath);
+        }
+        yield return null;
+#endif
     }
 }

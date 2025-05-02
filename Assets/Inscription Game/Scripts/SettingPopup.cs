@@ -151,6 +151,12 @@ public class SettingPopup : MonoBehaviour
                 Vector3 pos = tempSetting.GetComponent<RectTransform>().anchoredPosition;
                 pos.z = 0;
                 tempSetting.GetComponent<RectTransform>().localPosition = pos;
+
+                gameController.gridFrame.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+                Vector3 pos1 = gameController.gridFrame.GetComponent<RectTransform>().anchoredPosition;
+                pos.z = 0;
+                gameController.gridFrame.GetComponent<RectTransform>().localPosition = pos1;
+                gameController.header.GetComponent<RectTransform>().anchoredPosition = new Vector2(0,-106f);
             }
 
         
@@ -186,6 +192,12 @@ public class SettingPopup : MonoBehaviour
                 Vector3 pos = tempSetting.GetComponent<RectTransform>().anchoredPosition;
                 pos.z = 0;
                 tempSetting.GetComponent<RectTransform>().localPosition = pos;
+
+                gameController.gridFrame.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -265);
+                Vector3 pos1 = gameController.gridFrame.GetComponent<RectTransform>().anchoredPosition;
+                pos.z = 0;
+                gameController.gridFrame.GetComponent<RectTransform>().localPosition = pos1;
+                gameController.header.GetComponent<RectTransform>().anchoredPosition = new Vector2(0,9.5f);
             }
             Debug.Log("Portrait mode detected");
         }

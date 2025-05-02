@@ -245,10 +245,12 @@ public class LevelCreator : MonoBehaviour
             visited[i, j] = true;
 
             // Agar dictionary mein hai, to word + full path indexes save karein
-
-            if (gameObject.GetComponent<GameController>().wordSet.Contains(currentWord.ToLower()))
+            if (currentWord.Length < 5)
             {
-                foundWords.Add((currentWord, new List<int>(indexes)));
+                if (gameObject.GetComponent<GameController>().wordSet.Contains(currentWord.ToLower()))
+                {
+                    foundWords.Add((currentWord, new List<int>(indexes)));
+                }
             }
 
             // Next letter ke liye adjacent check karein

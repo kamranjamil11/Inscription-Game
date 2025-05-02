@@ -23,7 +23,7 @@ public class Popup : MonoBehaviour
         int coins = PlayerPrefs.GetInt("COINS");
         if (coinsText != null)
         {
-            coinsText.text = coins.ToString();
+            coinsText.text = UIHandler.FormatNumber(coins);
         }
         int powerUps = PlayerPrefs.GetInt("HINT_POWERUP");
         if (powerUp_Txt != null)
@@ -79,16 +79,16 @@ public class Popup : MonoBehaviour
         {
             coins -= 300;
             PlayerPrefs.SetInt("COINS", coins);
-            coinsText.text = coins.ToString();
-           
+            coinsText.text = UIHandler.FormatNumber(coins);
+
             int powerUps = PlayerPrefs.GetInt(key);
             powerUps++;
             PlayerPrefs.SetInt(key, powerUps);
             
             if (SceneManager.GetActiveScene().name == "MainMenu")
             {
-                uiHandler.coins_Text.text = coins.ToString();
-                uiHandler.coins_Text_Portrait.text = coins.ToString();
+                uiHandler.coins_Text.text =UIHandler.FormatNumber(coins);
+                uiHandler.coins_Text_Portrait.text = UIHandler.FormatNumber(coins);
                 GameObject tempObj = null;
                 if (!SettingPopup.isPortrait)
                 {
@@ -103,9 +103,9 @@ public class Popup : MonoBehaviour
             }
             else
             {
-                gm_Controller.coins_Text.text = coins.ToString();
-                gm_Controller.coins_Text_Portrait.text = coins.ToString();
-                
+                gm_Controller.coins_Text.text = UIHandler.FormatNumber(coins);
+                gm_Controller.coins_Text_Portrait.text = UIHandler.FormatNumber(coins);
+
                 powerButton.GetComponentInChildren<Text>().text = powerUps.ToString();
                 GameObject tempObj = null;
                 if (!SettingPopup.isPortrait)
@@ -135,12 +135,12 @@ public class Popup : MonoBehaviour
         PlayerPrefs.SetInt("COINS", cns);
         if (coinsText != null)
         {
-            coinsText.text = cns.ToString();
+            coinsText.text = UIHandler.FormatNumber(cns);
         }
         if (SceneManager.GetActiveScene().name == "MainMenu")
         {
-            uiHandler.coins_Text.text = cns.ToString();
-            uiHandler.coins_Text_Portrait.text = cns.ToString();
+            uiHandler.coins_Text.text = UIHandler.FormatNumber(cns);
+            uiHandler.coins_Text_Portrait.text = UIHandler.FormatNumber(cns);
             GameObject tempObj = null;
             if (!SettingPopup.isPortrait)
             {
@@ -155,9 +155,9 @@ public class Popup : MonoBehaviour
         }
         else
         {
-            gm_Controller.coins_Text.text = cns.ToString();
-            gm_Controller.coins_Text_Portrait.text = cns.ToString();
-            
+            gm_Controller.coins_Text.text = UIHandler.FormatNumber(cns); 
+            gm_Controller.coins_Text_Portrait.text = UIHandler.FormatNumber(cns);
+
             GameObject tempObj = null;
             if (!SettingPopup.isPortrait)
             {

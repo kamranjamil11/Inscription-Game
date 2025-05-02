@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System;
+using System.Linq;
 using UnityEngine.UI;
 using System.Text.RegularExpressions;
 using UnityEngine.SocialPlatforms.Impl;
@@ -12,6 +13,8 @@ using Unity.VisualScripting;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
 using UnityEngine.SocialPlatforms;
+//using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
+//using System.Net;
 //using ShaderType = AllIn1SpriteShader.AllIn1Shader.ShaderTypes;
 
     public class GameController : MonoBehaviour
@@ -37,7 +40,7 @@ using UnityEngine.SocialPlatforms;
       //  public GameObject winPanel;
        
        // public GameObject loadingPanel;
-        public GameObject gridFrame;
+        public GameObject header, gridFrame;
         public GameObject lotusPowerPanel;
        
         public GameObject coinsAdded_Box;
@@ -123,8 +126,8 @@ using UnityEngine.SocialPlatforms;
             start_Time = Time.time;
             score_Text.text = score.ToString();
             int coins = PlayerPrefs.GetInt("COINS");
-            coins_Text.text = coins.ToString();
-        coins_Text_Portrait.text = coins.ToString();
+            coins_Text.text = UIHandler.FormatNumber(coins);
+        coins_Text_Portrait.text = UIHandler.FormatNumber(coins);
         if (!PlayerPrefs.HasKey("HINT_POWERUP"))
             {
                 PlayerPrefs.SetInt("HINT_POWERUP", 1);
@@ -163,12 +166,22 @@ using UnityEngine.SocialPlatforms;
             landscape_Objs.SetActive(false);
             portrait_Objs.SetActive(true);
             gridFrame.transform.localScale = new Vector2(1.8f, 2f);
+            gridFrame.GetComponent<RectTransform>().anchoredPosition = new Vector2(0,-265);
+            Vector3 pos = gridFrame.GetComponent<RectTransform>().anchoredPosition;
+            pos.z = 0;
+            gridFrame.GetComponent<RectTransform>().localPosition = pos;
+            header.GetComponent<RectTransform>().anchoredPosition = new Vector2(0,9.5f);
         }
         else
         {
             portrait_Objs.SetActive(false);
             landscape_Objs.SetActive(true);
             gridFrame.transform.localScale = new Vector2(1f, 1f);
+            gridFrame.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+            Vector3 pos = gridFrame.GetComponent<RectTransform>().anchoredPosition;
+            pos.z = 0;
+            gridFrame.GetComponent<RectTransform>().localPosition = pos;
+            header.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -106f);
         }
     }
         private void OnNewLetterCasted(object sender, OncCastLetterArgs e)
@@ -652,11 +665,8 @@ using UnityEngine.SocialPlatforms;
                 challenge_Box.SetActive(true);
             }
             int coins = PlayerPrefs.GetInt("COINS");
-            coins += 25;
-            coins_Text.text = coins.ToString();
-            coins_Text_Portrait.text = coins.ToString();
-
-            PlayerPrefs.SetInt("COINS", coins);
+           
+            
             int totalChallenge = PlayerPrefs.GetInt("TOTALDAILYCHALLENGE");
             totalChallenge++;
             PlayerPrefs.SetInt("TOTALDAILYCHALLENGE", totalChallenge);
@@ -673,6 +683,7 @@ using UnityEngine.SocialPlatforms;
                     challenge_Box.GetComponentInChildren<Text>().text = "Word of the day " + "(" + Challenges_Description[chg_Id] + ")";
 
                 }
+                coins += 100;
             }
             else
             {
@@ -684,7 +695,12 @@ using UnityEngine.SocialPlatforms;
                 {
                     challenge_Box.GetComponentInChildren<Text>().text = Challenges_Description[chg_Id];
                 }
+                coins += 25;
             }
+
+            coins_Text.text = UIHandler.FormatNumber(coins);
+            coins_Text_Portrait.text = coins.ToString();
+            PlayerPrefs.SetInt("COINS", coins);
             AudioManager.instance.PlaySound(6);
         }
     }
@@ -1090,7 +1106,7 @@ using UnityEngine.SocialPlatforms;
         float timePlayed = end_Time - start_Time;
         hS_Manager.AddScore(score, timePlayed);
         int HS = PlayerPrefs.GetInt("HIGHSCORE");
-                
+        finded_Words = finded_Words.OrderByDescending(word => word.Length).ToList();
         if (!SettingPopup.isPortrait)
         {
             highScore_Text_Portrait.text = HS.ToString();
@@ -1098,15 +1114,15 @@ using UnityEngine.SocialPlatforms;
             losePanel_Portrait.SetActive(true);
             for (int i = 0; i < finded_Words.Count; i++)
             {
-                if (i < 6)
-                {
+               // if (i < 6)
+               // {
                     GameObject wordBox = Instantiate(word_Box_Portrait, transform.position, Quaternion.identity, gameOver_Content_Portrait.transform);
                     wordBox.GetComponentInChildren<Text>().text = finded_Words[i];
-                }
-                else
-                {
-                    break;
-                }
+               // }
+               // else
+               // {
+                //    break;
+                //}
             }
         }
         else
@@ -1116,15 +1132,15 @@ using UnityEngine.SocialPlatforms;
             losePanel.SetActive(true);
             for (int i = 0; i < finded_Words.Count; i++)
             {
-                if (i < 6)
-                {
+                //if (i < 6)
+               // {
                     GameObject wordBox = Instantiate(word_Box, transform.position, Quaternion.identity, gameOver_Content.transform);
                     wordBox.GetComponentInChildren<Text>().text = finded_Words[i];
-                }
-                else
-                {
-                    break;
-                }
+               // }
+               // else
+               // {
+                  //  break;
+               // }
             }
         }                  
            AudioManager.instance.PlaySound(1);

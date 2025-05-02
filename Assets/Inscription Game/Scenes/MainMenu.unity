@@ -3342,7 +3342,7 @@ MonoBehaviour:
   settingsPopup_Portrait: {fileID: 8102418156204916316, guid: 6a156dbfd56ea9f41a53a53d121bf3ba, type: 3}
   coins_Shop_Portrait: {fileID: 5250496761680309016, guid: dd0c40a74f8c40e4e9e38e3348dae444, type: 3}
   daily_Challenge_Popup_Portrait: {fileID: 1012013816}
-  daily_Challenges_Prefab_Portrait: {fileID: 4238432419982863533, guid: e55e44a707b593e4086fddeec47f4bd0, type: 3}
+  daily_Challenges_Prefab_Portrait: {fileID: 4238432419982863533, guid: 91b4fd59d80221f4f8ab704284d9dfc3, type: 3}
   daily_Challenges_Parent_Portrait: {fileID: 30046775}
   first_Daily_Challenges:
   - add
@@ -7958,7 +7958,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &875238062
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9412,7 +9412,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1492181011}
   m_HandleRect: {fileID: 1492181010}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -11513,7 +11513,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: e0f9fe392f7783e41811d0faf7f454ea, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7427400494d32bd479f0a6a9ea96e0b6, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -13173,7 +13173,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1494936979
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14000,7 +14000,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1578634828
 RectTransform:
   m_ObjectHideFlags: 0
@@ -17740,7 +17740,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1993329338
 RectTransform:
   m_ObjectHideFlags: 0
