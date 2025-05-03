@@ -77,7 +77,7 @@ public class Popup : MonoBehaviour
         }
         if (coins >= requir_Coins)
         {
-            coins -= 300;
+            coins -= requir_Coins;
             PlayerPrefs.SetInt("COINS", coins);
             coinsText.text = UIHandler.FormatNumber(coins);
 

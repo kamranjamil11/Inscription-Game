@@ -1683,6 +1683,7 @@ GameObject:
   - component: {fileID: 4818757610844527123}
   - component: {fileID: 4818757610844527122}
   - component: {fileID: 4818757610844527117}
+  - component: {fileID: 2635946383887127927}
   m_Layer: 5
   m_Name: Shop_btn
   m_TagString: Untagged
@@ -1795,6 +1796,39 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: -1318211647778023517}
         m_TargetAssemblyTypeName: Popup, Assembly-CSharp
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2000
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &2635946383887127927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4818757610844527119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36a5f511b0d8142cba0aeb92d0b264c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  productId: 2000CoinsPack
+  buttonType: 0
+  consumePurchase: 1
+  onTransactionsRestored:
+    m_PersistentCalls:
+      m_Calls: []
+  onPurchaseComplete:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: -1318211647778023517}
+        m_TargetAssemblyTypeName: Popup, Assembly-CSharp
         m_MethodName: AddCoins
         m_Mode: 3
         m_Arguments:
@@ -1805,6 +1839,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onPurchaseFailed:
+    m_PersistentCalls:
+      m_Calls: []
+  titleText: {fileID: 0}
+  descriptionText: {fileID: 0}
+  priceText: {fileID: 0}
 --- !u!1 &4818757610887209933
 GameObject:
   m_ObjectHideFlags: 0
@@ -2547,6 +2587,7 @@ GameObject:
   - component: {fileID: 4818757611711356186}
   - component: {fileID: 4818757611711356181}
   - component: {fileID: 4818757611711356180}
+  - component: {fileID: 5223216702113896982}
   m_Layer: 5
   m_Name: Shop_btn
   m_TagString: Untagged
@@ -2659,6 +2700,39 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: -1318211647778023517}
         m_TargetAssemblyTypeName: Popup, Assembly-CSharp
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 5000
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &5223216702113896982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4818757611711356182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36a5f511b0d8142cba0aeb92d0b264c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  productId: 5000CoinsPack
+  buttonType: 0
+  consumePurchase: 1
+  onTransactionsRestored:
+    m_PersistentCalls:
+      m_Calls: []
+  onPurchaseComplete:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: -1318211647778023517}
+        m_TargetAssemblyTypeName: Popup, Assembly-CSharp
         m_MethodName: AddCoins
         m_Mode: 3
         m_Arguments:
@@ -2669,6 +2743,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onPurchaseFailed:
+    m_PersistentCalls:
+      m_Calls: []
+  titleText: {fileID: 0}
+  descriptionText: {fileID: 0}
+  priceText: {fileID: 0}
 --- !u!1 &4818757611888806872
 GameObject:
   m_ObjectHideFlags: 0
@@ -2760,6 +2840,7 @@ GameObject:
   - component: {fileID: 4818757611892570823}
   - component: {fileID: 4818757611892570822}
   - component: {fileID: 4818757611892570817}
+  - component: {fileID: 2197289363202149563}
   m_Layer: 5
   m_Name: Shop_btn
   m_TagString: Untagged
@@ -2872,6 +2953,39 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: -1318211647778023517}
         m_TargetAssemblyTypeName: Popup, Assembly-CSharp
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 500
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &2197289363202149563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4818757611892570819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36a5f511b0d8142cba0aeb92d0b264c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  productId: 500CoinsPack
+  buttonType: 0
+  consumePurchase: 1
+  onTransactionsRestored:
+    m_PersistentCalls:
+      m_Calls: []
+  onPurchaseComplete:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: -1318211647778023517}
+        m_TargetAssemblyTypeName: Popup, Assembly-CSharp
         m_MethodName: AddCoins
         m_Mode: 3
         m_Arguments:
@@ -2882,6 +2996,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onPurchaseFailed:
+    m_PersistentCalls:
+      m_Calls: []
+  titleText: {fileID: 0}
+  descriptionText: {fileID: 0}
+  priceText: {fileID: 0}
 --- !u!1 &4818757612102827804
 GameObject:
   m_ObjectHideFlags: 0

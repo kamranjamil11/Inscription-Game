@@ -766,7 +766,9 @@ PlayerSettings:
   XboxOneOverrideIdentityName: 
   XboxOneOverrideIdentityPublisher: 
   vrEditorSettings: {}
-  cloudServicesEnabled: {}
+  cloudServicesEnabled:
+    Legacy Analytics: 1
+    Purchasing: 1
   luminIcon:
     m_Name: 
     m_ModelFolderPath: 
@@ -781,11 +783,11 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: df90c543-294c-4f59-b62a-2b1d10b6802a
+  cloudProjectId: 18de0dce-f8cd-4f5e-8140-a52d749ee2c6
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: CrossConnectTest
-  organizationId: root-pointers
+  projectName: Inscription
+  organizationId: rpconsoles
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   playerDataPath: 

@@ -24,6 +24,7 @@ using UnityEngine.SocialPlatforms;
         {
             public SingleLetter castedLetter;
         }
+    public Text wordText;
         public List<string> finded_Words = new List<string>();
         public List<string> words_Lenght = new List<string>();
         public List<GameObject> activeLetters;
@@ -412,9 +413,7 @@ using UnityEngine.SocialPlatforms;
                 GameObject targetObj = EventSystem.current.currentSelectedGameObject;
                 scarab.GetComponent<ScoreMultiplayer>().target = targetObj.transform;
                 StartCoroutine(scarab.GetComponent<ScoreMultiplayer>().ScarabMoveUI(targetObj.GetComponent<RectTransform>().anchoredPosition, 2f, targetObj, lvlCreator));
-                hintButton.interactable = true;
-                scrabButton.interactable = true;
-                lotusButton.interactable = true;
+                
                 AudioManager.instance.PlaySound(4);
             }
         }
@@ -903,33 +902,33 @@ using UnityEngine.SocialPlatforms;
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             AudioManager.instance.PlaySound(0);
         }
-        public void GoToHome()
+    public void GoToHome()
+    {
+        Generic_Timer.totalTime = 60;
+        SceneManager.LoadScene("MainMenu");
+        AudioManager.instance.PlaySound(0);
+    }
+    public void HintPowerUp()
+    {
+        usedHint++;
+        int hint_Count = PlayerPrefs.GetInt("HINT_POWERUP");
+        if (hint_Count > 0)
         {
-            Generic_Timer.totalTime = 60;
-            SceneManager.LoadScene("MainMenu");
-            AudioManager.instance.PlaySound(0);
-        }
-        public void HintPowerUp()
-        {
-            usedHint++;
-            int hint_Count = PlayerPrefs.GetInt("HINT_POWERUP");
-            if (hint_Count > 0)
+            hint_Count--;
+            PlayerPrefs.SetInt("HINT_POWERUP", hint_Count);
+            hintButton.interactable = false;
+            scrabButton.interactable = false;
+            lotusButton.interactable = false;
+            hintButton.GetComponentInChildren<Text>().text = hint_Count.ToString();
+            for (int i = 0; i < lvlCreator.hintObjs.Count; i++)
             {
-                hint_Count--;
-                PlayerPrefs.SetInt("HINT_POWERUP", hint_Count);
-                hintButton.interactable = false;
-                scrabButton.interactable = false;
-                lotusButton.interactable = false;
-                hintButton.GetComponentInChildren<Text>().text = hint_Count.ToString();
-                for (int i = 0; i < lvlCreator.hintObjs.Count; i++)
-                {
-                    lvlCreator.hintObjs[i].GetComponent<Animator>().Play("Hint");
-                    lvlCreator.hintObjs[i].transform.GetChild(0).gameObject.SetActive(true);
-                }
-                AudioManager.instance.PlaySound(2);
+                lvlCreator.hintObjs[i].GetComponent<Animator>().Play("Hint");
+                lvlCreator.hintObjs[i].transform.GetChild(0).gameObject.SetActive(true);
             }
-            else
-            {
+            AudioManager.instance.PlaySound(2);
+        }
+        else
+        {
             Time.timeScale = 0;
             GameObject tempObj = null;
             if (!SettingPopup.isPortrait)
@@ -947,11 +946,11 @@ using UnityEngine.SocialPlatforms;
             pos.z = 0;
             tempObj.GetComponent<RectTransform>().localPosition = pos;
             tempObj.GetComponent<Popup>().LeftAndRightClick();
-               
-            }
-            CheckDailyReset();
 
         }
+        CheckDailyReset();
+
+    }
     public void LotusPowerUp()
     {
         usedHint++;
@@ -1178,7 +1177,7 @@ using UnityEngine.SocialPlatforms;
             }
 
             yield return new WaitForSeconds(1f);
-            hintButton.interactable = true;
+           // hintButton.interactable = true;
             foreach (var item in activeLetters)
             {
 
@@ -1206,9 +1205,9 @@ using UnityEngine.SocialPlatforms;
                 }
             item.transform.GetChild(0).gameObject.SetActive(false);
         }
-            hintButton.interactable = true;
-            scrabButton.interactable = true;
-            lotusButton.interactable = true;
+            //hintButton.interactable = true;
+           // scrabButton.interactable = true;
+           // lotusButton.interactable = true;
             LevelCreator.CreatWord(key);
             formedWord = "";
             currentWord = "";

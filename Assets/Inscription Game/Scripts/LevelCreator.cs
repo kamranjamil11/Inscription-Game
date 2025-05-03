@@ -27,11 +27,11 @@ public class LevelCreator : MonoBehaviour
     public int gridSize = 16; // Total boxes in the grid (4x4)
     public List<char> grid;
 
-    GameController gameController;
-    void Start()
-    {
-        gameController = gameObject.GetComponent<GameController>();       
-    }
+    public GameController gameController;
+    //void Start()
+    //{
+    //    gameController = gameObject.GetComponent<GameController>();       
+    //}
 
     public void CreatWord(string id)
     {
@@ -133,7 +133,7 @@ public class LevelCreator : MonoBehaviour
         }
     }
     // Function to Print Grid in Console
-    void PrintGrid()
+   public void PrintGrid()
     {
         string gridOutputResult = "";
         for (int i = 0; i < gridSize; i++)
@@ -230,6 +230,13 @@ public class LevelCreator : MonoBehaviour
         int rnd = UnityEngine.Random.Range(0, foundWords.Count);
         hints_Index = foundWords[rnd].Item2;
         print("Hint_Obj: " + foundWords[rnd].Item1);
+        if (gameController != null)
+        {
+            gameController.hintButton.interactable = true;
+            gameController.scrabButton.interactable = true;
+            gameController.lotusButton.interactable = true;
+            gameController.wordText.text = foundWords[rnd].Item1;
+        }
     }
     void DFS(int i, int j, string currentWord, List<int> indexes, bool[,] visited)
     {

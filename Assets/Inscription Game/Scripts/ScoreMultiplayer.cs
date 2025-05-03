@@ -88,11 +88,18 @@ public class ScoreMultiplayer : MonoBehaviour
         }
         scarabBtn.transform.GetChild(2).gameObject.SetActive(true);
         gameObject.transform.GetChild(0).gameObject.SetActive(false);
+       
         yield return new WaitForSeconds(1);
         scarabBtn.transform.GetChild(2).gameObject.SetActive(false);
         char randomUpperChar = (char)Random.Range('A', 'Z' + 1);
         scarabBtn.GetComponent<SingleLetter>().Value= randomUpperChar.ToString();
-        scarabBtn.GetComponentInChildren<Text>().text= randomUpperChar.ToString();  
+        scarabBtn.GetComponentInChildren<Text>().text= randomUpperChar.ToString();
+        gameController.activeLetters.Add(scarabBtn);
+        lvlCreator.CreatWord("Next");
+        gameController.hintButton.interactable = true;
+        gameController.scrabButton.interactable = true;
+        gameController.lotusButton.interactable = true;
+
         Destroy(gameObject);
     }
 }
