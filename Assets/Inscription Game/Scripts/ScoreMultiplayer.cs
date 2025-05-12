@@ -85,6 +85,9 @@ public class ScoreMultiplayer : MonoBehaviour
             {
                 item.GetComponent<Animator>().SetTrigger("Idle");
             }
+            item.GetComponent<Image>().raycastTarget = false;
+            item.GetComponent<Button>().enabled = false;
+            item.GetComponentInChildren<Text>().raycastTarget = true;
         }
         scarabBtn.transform.GetChild(2).gameObject.SetActive(true);
         gameObject.transform.GetChild(0).gameObject.SetActive(false);
@@ -95,11 +98,14 @@ public class ScoreMultiplayer : MonoBehaviour
         scarabBtn.GetComponent<SingleLetter>().Value= randomUpperChar.ToString();
         scarabBtn.GetComponentInChildren<Text>().text= randomUpperChar.ToString();
         gameController.activeLetters.Add(scarabBtn);
-        lvlCreator.CreatWord("Next");
+      //  gameController.UnSelectedTilesGrid();
+         lvlCreator.CreatWord("Next");
+       // gameController.UpdateGrid();
         gameController.hintButton.interactable = true;
         gameController.scrabButton.interactable = true;
         gameController.lotusButton.interactable = true;
-
+        gameController.isNextWork = true;
+        gameController.loading_Panel.SetActive(false);
         Destroy(gameObject);
     }
 }

@@ -103,11 +103,11 @@ public class UIHandler : MonoBehaviour
           string name=  PlayerPrefs.GetString("USERNAME");
             userName_Txt.text = name;
             userName_Txt_Portrait.text = name;
-            Invoke("CheckDailyReward", 1);
+            Invoke("CheckDailyReward", 0.5f);
         }
         else 
         {
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(0.5f);
             if (!SettingPopup.isPortrait)
             {
                 loginPopup_Portrait.SetActive(true);
@@ -132,7 +132,7 @@ public class UIHandler : MonoBehaviour
                 userName_Txt_Portrait.text = user_Txt_Portrait.text;
                 userName_Txt.text = user_Txt_Portrait.text;
                 PlayerPrefs.SetString("USERNAME", user_Txt_Portrait.text);
-                Invoke("CheckDailyReward", 1);
+                Invoke("CheckDailyReward", 0.5f);
             }
         }
         else
@@ -144,7 +144,7 @@ public class UIHandler : MonoBehaviour
                 userName_Txt.text = user_Txt.text;
                 userName_Txt_Portrait.text = user_Txt.text;
                 PlayerPrefs.SetString("USERNAME", user_Txt.text);
-                Invoke("CheckDailyReward", 1);
+                Invoke("CheckDailyReward", 0.5f);
             }
         }
         
@@ -158,7 +158,7 @@ public class UIHandler : MonoBehaviour
 
         if (lastLogin != today)
         {
-            Time.timeScale = 0;
+           // Time.timeScale = 0;
             if (!SettingPopup.isPortrait)
             {
                 daily_Reward_Popup_Portrait.SetActive(true);
@@ -208,8 +208,18 @@ public class UIHandler : MonoBehaviour
             PlayerPrefs.SetInt("FIRST_CHALLENGE_ID", first_Chl);
             PlayerPrefs.SetInt("DAILYCHALLENGE" + 0, 0);
             PlayerPrefs.SetInt("ROUTINECHALLENGE" + 0, 0);
-            int rndWord = UnityEngine.Random.Range(0,wordSet.Count);
-            string wordOfDay = wordSet.ElementAt(rndWord);
+            string wordOfDay = "";
+            for (int i = 0; i < 1;)
+            {
+                int rndWord = UnityEngine.Random.Range(0, wordSet.Count);
+                wordOfDay = wordSet.ElementAt(rndWord);
+                if (wordOfDay.Length < 6)
+                {
+                    i++;
+                    break;
+                }
+            }
+            
             print("wordOfDay: "+ wordOfDay);
             daily_Challenges[0] ="Word of the day "+"("+ wordOfDay /*first_Daily_Challenges[first_Chl]*/+ ")";
             PlayerPrefs.SetString("FIRST_CHALLENGE", wordOfDay /*first_Daily_Challenges[first_Chl]*/);
@@ -276,6 +286,7 @@ public class UIHandler : MonoBehaviour
 
     public void PlayButton()
     {
+        //Time.timeScale = 1;
         if (!SettingPopup.isPortrait)
         {
             loadingScreen_Portrait.SetActive(true);

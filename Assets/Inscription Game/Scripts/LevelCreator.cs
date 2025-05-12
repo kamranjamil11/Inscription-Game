@@ -66,12 +66,14 @@ public class LevelCreator : MonoBehaviour
         else
         {
             NextFillGrid(cumulativeList, cumulativeSum);
-            Invoke("PrintGrid",1); //PrintGrid();
-            Invoke("NextFillTheRest", 1);// NextFillTheRest();          
+           // Invoke("PrintGrid",1); //PrintGrid();
+           // Invoke("NextFillTheRest", 1);// NextFillTheRest();          
         }
-
-
-
+    }
+    public void EyeHorusPowerup() 
+    {
+        PrintGrid();
+        NextFillTheRest();
     }
     void FillGrid(List<KeyValuePair<char, float>> cumulativeList, float maxProbability)
     {
@@ -131,6 +133,17 @@ public class LevelCreator : MonoBehaviour
             }
 
         }
+        
+        if (gameController != null)
+        {
+            gameController.activeLetters.Clear();
+            gameController.isNextWork = true;
+            gameController.loading_Panel.SetActive(false);                
+            gameController.hintButton.interactable = true;
+            gameController.scrabButton.interactable = true;
+            gameController.lotusButton.interactable = true;
+           // gameController.wordText.text = foundWords[rnd].Item1;
+        }
     }
     // Function to Print Grid in Console
    public void PrintGrid()
@@ -173,7 +186,7 @@ public class LevelCreator : MonoBehaviour
         {
             hintObjs.Add(lettersGrid[hints_Index[i]].gameObject);
         }
-        gameController.activeLetters.Clear();
+        //gameController.activeLetters.Clear();
         gameController.isNextWork = true;
        
     }
@@ -231,11 +244,8 @@ public class LevelCreator : MonoBehaviour
         hints_Index = foundWords[rnd].Item2;
         print("Hint_Obj: " + foundWords[rnd].Item1);
         if (gameController != null)
-        {
-            gameController.hintButton.interactable = true;
-            gameController.scrabButton.interactable = true;
-            gameController.lotusButton.interactable = true;
-            gameController.wordText.text = foundWords[rnd].Item1;
+        {            
+           gameController.wordText.text = foundWords[rnd].Item1;
         }
     }
     void DFS(int i, int j, string currentWord, List<int> indexes, bool[,] visited)
