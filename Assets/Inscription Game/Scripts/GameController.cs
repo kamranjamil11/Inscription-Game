@@ -475,37 +475,31 @@ public class GameController : MonoBehaviour
         switch (wordLength)
         {
             case 2:
-                StartCoroutine(ScoreUpdate(200, 2, mousePos));
+                StartCoroutine(ScoreUpdate(200, 3, mousePos));
                 break;
             case 3:
-                StartCoroutine(ScoreUpdate(300, 3, mousePos));
+                StartCoroutine(ScoreUpdate(300, 4, mousePos));
                 break;
             case 4:
-                StartCoroutine(ScoreUpdate(400, 4, mousePos));
+                StartCoroutine(ScoreUpdate(400, 5, mousePos));
                 break;
             case 5:
-
-                StartCoroutine(ScoreUpdate(500, 5, mousePos));
+                StartCoroutine(ScoreUpdate(500, 6, mousePos));
                 break;
             case 6:
-
-                StartCoroutine(ScoreUpdate(600, 6, mousePos));
+                StartCoroutine(ScoreUpdate(600, 7, mousePos));
                 break;
             case 7:
-
-                StartCoroutine(ScoreUpdate(700, 6, mousePos));
+                StartCoroutine(ScoreUpdate(700, 8, mousePos));
                 break;
             case 8:
-
-                StartCoroutine(ScoreUpdate(800, 6, mousePos));
+                StartCoroutine(ScoreUpdate(800, 9, mousePos));
                 break;
             case 9:
-
-                StartCoroutine(ScoreUpdate(900, 6, mousePos));
+                StartCoroutine(ScoreUpdate(900,10, mousePos));
                 break;
             case 10:
-
-                StartCoroutine(ScoreUpdate(1000, 6, mousePos));
+                StartCoroutine(ScoreUpdate(1000, 11, mousePos));
                 break;
         }
 
