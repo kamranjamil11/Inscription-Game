@@ -112,7 +112,7 @@ GameObject:
   - component: {fileID: 2853383334308636677}
   - component: {fileID: 6997812880119353187}
   - component: {fileID: 7013844671387946750}
-  - component: {fileID: 3674465537266251688}
+  - component: {fileID: 861585027628077431}
   m_Layer: 5
   m_Name: Congrats_Coins_Pack
   m_TagString: Untagged
@@ -179,7 +179,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3674465537266251688
+--- !u!114 &861585027628077431
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -498,7 +498,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3674465537266251688}
+      - m_Target: {fileID: 861585027628077431}
         m_TargetAssemblyTypeName: Popup, Assembly-CSharp
         m_MethodName: BackToMainScreen
         m_Mode: 1

@@ -916,12 +916,14 @@ public class GameController : MonoBehaviour
         Generic_Timer.totalTime = 60;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         AudioManager.instance.PlaySound(0);
+        AdManager.Instance.ShowInterstitialAd();
     }
     public void GoToHome()
     {
         Generic_Timer.totalTime = 60;
         SceneManager.LoadScene("MainMenu");
         AudioManager.instance.PlaySound(0);
+        AdManager.Instance.ShowInterstitialAd();
     }
     public void HintPowerUp()
     {

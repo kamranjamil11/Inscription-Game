@@ -40,6 +40,8 @@ public class UIHandler : MonoBehaviour
     public GameObject daily_Challenge_Popup;
     public GameObject daily_Challenges_Prefab;
     public GameObject daily_Challenges_Parent;
+    public GameObject removeAds_Landscape;
+    public GameObject removeAds_Popup_Landscape;
     [Header("Portrait UI")]
     public InputField user_Name_Portrait;
     public TextMeshProUGUI userName_Txt_Portrait;
@@ -56,6 +58,8 @@ public class UIHandler : MonoBehaviour
     public GameObject daily_Challenge_Popup_Portrait;
     public GameObject daily_Challenges_Prefab_Portrait;
     public GameObject daily_Challenges_Parent_Portrait;
+    public GameObject removeAds_Portrait;
+    public GameObject removeAds_Popup_Portrait;
     public string[] first_Daily_Challenges;
     public string[] daily_Challenges;
     public HashSet<string> wordSet = new HashSet<string>();
@@ -79,6 +83,8 @@ public class UIHandler : MonoBehaviour
         {
             daily_Challenges[0] = "Word of the day " + "(" + PlayerPrefs.GetString("FIRST_CHALLENGE")+")";
         }
+
+        RemoveAds();
         ChangeOrientation();
         StartCoroutine(LoadWords());
     }
@@ -283,7 +289,46 @@ public class UIHandler : MonoBehaviour
         AudioManager.instance.PlaySound(0);
     }
 
-
+    public void RemoveAds()
+    {
+        if (PlayerPrefs.HasKey("NO_ADS"))
+        {
+           
+            removeAds_Portrait.GetComponent<Image>().enabled = false;
+            removeAds_Portrait.transform.GetChild(0).gameObject.SetActive(true);
+            removeAds_Landscape.GetComponent<Image>().enabled = false;
+            removeAds_Landscape.transform.GetChild(0).gameObject.SetActive(true);
+            
+        }
+        else 
+        {
+            removeAds_Portrait.GetComponent<Image>().enabled = true;
+            removeAds_Portrait.transform.GetChild(0).gameObject.SetActive(false);
+            removeAds_Landscape.GetComponent<Image>().enabled = true;
+            removeAds_Landscape.transform.GetChild(0).gameObject.SetActive(false);
+        }
+    }
+    public void PurchaseAds()
+    {
+        if (!SettingPopup.isPortrait)
+        {
+            removeAds_Popup_Landscape.SetActive(false);
+            removeAds_Popup_Portrait.SetActive(true);
+        }
+        else
+        {
+            removeAds_Popup_Landscape.SetActive(true);
+            removeAds_Popup_Portrait.SetActive(false);
+        }
+    }
+   public void RemoveAdsCompleted() 
+    {
+        print("Ads_Purchased");
+        PlayerPrefs.SetString("NO_ADS", "Purchased");
+        RemoveAds();
+        removeAds_Popup_Landscape.SetActive(false);
+        removeAds_Popup_Portrait.SetActive(false);
+    }
     public void PlayButton()
     {
         //Time.timeScale = 1;
@@ -445,6 +490,7 @@ public class UIHandler : MonoBehaviour
         }
         
     }
+
     public static string FormatNumber(long number)
     {      
          if (number >= 1_000_000)
