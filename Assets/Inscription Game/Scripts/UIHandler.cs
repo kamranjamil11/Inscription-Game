@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using TMPro;
+using Unity.VisualScripting;
 //using Unity.Mathematics;
 //using Unity.VisualScripting;
 using UnityEngine;
@@ -35,7 +36,7 @@ public class UIHandler : MonoBehaviour
     public GameObject leaderBoard;
     public Text coins_Text;  
     public GameObject loginPopup;
-    public GameObject settingsPopup;
+    public GameObject settingsPopup, settingsPopup_IOS;
     public GameObject coins_Shop;
     public GameObject daily_Challenge_Popup;
     public GameObject daily_Challenges_Prefab;
@@ -53,7 +54,7 @@ public class UIHandler : MonoBehaviour
     public GameObject leaderBoard_Portrait;
     public Text coins_Text_Portrait;  
     public GameObject loginPopup_Portrait;
-    public GameObject settingsPopup_Portrait;
+    public GameObject settingsPopup_Portrait, settingsPopup_Portrait_IOS;
     public GameObject coins_Shop_Portrait;
     public GameObject daily_Challenge_Popup_Portrait;
     public GameObject daily_Challenges_Prefab_Portrait;
@@ -63,13 +64,13 @@ public class UIHandler : MonoBehaviour
     public string[] first_Daily_Challenges;
     public string[] daily_Challenges;
     public HashSet<string> wordSet = new HashSet<string>();
+    
     private void Start()
     {
+        IsPalindrome(121);
+       // PrimeNumber();
         Time.timeScale = 1;
-        if (!PlayerPrefs.HasKey("COINS"))
-        {
-            PlayerPrefs.SetInt("COINS", 1000);
-        }
+        OnGameStartDataSet();
         int coins = PlayerPrefs.GetInt("COINS");
        
         if (coins_Text != null)
@@ -87,6 +88,34 @@ public class UIHandler : MonoBehaviour
         RemoveAds();
         ChangeOrientation();
         StartCoroutine(LoadWords());
+    }
+
+  
+
+   
+    void OnGameStartDataSet()
+    {
+        if (!PlayerPrefs.HasKey("COINS"))
+        {
+            PlayerPrefs.SetInt("COINS", 1000);
+        }
+
+        if (!PlayerPrefs.HasKey("HINT_POWERUP"))
+        {
+            PlayerPrefs.SetInt("HINT_POWERUP", 1);
+        }
+        
+
+        if (!PlayerPrefs.HasKey("LOTUS_POWERUP"))
+        {
+            PlayerPrefs.SetInt("LOTUS_POWERUP", 1);
+        }
+       
+
+        if (!PlayerPrefs.HasKey("SCRAB_POWERUP"))
+        {
+            PlayerPrefs.SetInt("SCRAB_POWERUP", 1);
+        }
     }
     void ChangeOrientation()
     {
@@ -348,14 +377,19 @@ public class UIHandler : MonoBehaviour
         GameObject tempSetting = null;
         if (!SettingPopup.isPortrait)
         {
-            tempSetting = Instantiate(settingsPopup_Portrait, transform.position, Quaternion.identity, mainCanvas.transform);
+#if UNITY_IOS
+            tempSetting = Instantiate(settingsPopup_Portrait_IOS, transform.position, Quaternion.identity, mainCanvas.transform);
            // tempSetting.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
-
+#endif
+            tempSetting = Instantiate(settingsPopup_Portrait, transform.position, Quaternion.identity, mainCanvas.transform);
         }
         else
         {
-            tempSetting = Instantiate(settingsPopup, transform.position, Quaternion.identity, mainCanvas.transform);
+#if UNITY_IOS
+            tempSetting = Instantiate(settingsPopup_IOS, transform.position, Quaternion.identity, mainCanvas.transform);
             //tempSetting.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+#endif
+            tempSetting = Instantiate(settingsPopup, transform.position, Quaternion.identity, mainCanvas.transform);
         }
         tempSetting.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
         Vector3 pos = tempSetting.GetComponent<RectTransform>().anchoredPosition;
@@ -573,4 +607,48 @@ public class UIHandler : MonoBehaviour
         yield return null;
 #endif
     }
+
+
+
+    void PrimeNumber()
+    {
+        int[] digits = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+        foreach (int number in digits)
+        {
+            if (IsPrime(number))
+            {
+                print("Prime Num: " + number);
+            }
+        }
+    }
+
+    bool IsPrime(int num)
+    {
+        if (num < 2)
+            return false;
+
+        for (int i = 2; i <= Mathf.Sqrt(num); i++)
+        {
+            if (num % i == 0)
+                return false;
+        }
+        return true;
+    }
+
+    bool IsPalindrome(int number)
+    {
+        int original = number;
+        int reversed = 0;
+
+        while (number > 0)
+        {
+            int digit = number % 10;
+            reversed = reversed * 10 + digit;
+            number /= 10;
+        }
+
+        return original == reversed;
+    }
+
 }

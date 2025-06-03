@@ -59,9 +59,10 @@ public class AdManager : MonoBehaviour
 
     #region Interstitial Ads
     private InterstitialAd interstitial;
-
+    public GameController gm_Controller;
     public void LoadInterstitialAd()
     {
+        
         string interstitialAdUnitId = "ca-app-pub-3940256099942544/1033173712"; // Test ID
 
 #if UNITY_ANDROID
@@ -71,7 +72,8 @@ public class AdManager : MonoBehaviour
 #endif
 
         AdRequest adRequest = new AdRequest();
-
+        // Add event handlers
+        
         InterstitialAd.Load(interstitialAdUnitId, adRequest,
             (InterstitialAd ad, LoadAdError error) =>
             {
@@ -83,21 +85,51 @@ public class AdManager : MonoBehaviour
 
                 interstitial = ad;
                 Debug.Log("Interstitial ad loaded.");
+               // Set FullScreenContentCallback events
+                interstitial.OnAdFullScreenContentClosed += () =>
+                {
+                    Debug.Log("Interstitial ad closed.");
+                    LoadInterstitialAd(); // Load the next one
+                    gm_Controller = GameObject.FindObjectOfType<GameController>();
+                    gm_Controller.ShowLoading();
+                };
+
+                interstitial.OnAdFullScreenContentFailed += (AdError adError) =>
+                {
+                    Debug.LogError("Interstitial ad failed to show: " + adError);
+                    gm_Controller = GameObject.FindObjectOfType<GameController>();
+                    gm_Controller.ShowLoading();
+                };
+
+                interstitial.OnAdFullScreenContentOpened += () =>
+                {
+                    Debug.Log("Interstitial ad opened.");
+                   // gm_Controller.ShowLoading();
+                };
             });
+
     }
 
     public void ShowInterstitialAd()
     {
         if (!PlayerPrefs.HasKey("NO_ADS")) 
         {
-            if (interstitial != null && interstitial.CanShowAd())
+            if (Application.internetReachability != NetworkReachability.NotReachable)
             {
-                interstitial.Show();
-                LoadInterstitialAd();
+                if (interstitial != null && interstitial.CanShowAd())
+                {
+                    interstitial.Show();
+
+                }
+            }
+            else
+            {
+                gm_Controller = GameObject.FindObjectOfType<GameController>();
+                gm_Controller.ShowLoading();
             }
         }
     }
-
+    
 
 
     //    public void RequestInterstitial()

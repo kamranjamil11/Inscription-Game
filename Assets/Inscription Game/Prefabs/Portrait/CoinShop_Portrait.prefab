@@ -854,7 +854,7 @@ GameObject:
   - component: {fileID: 1432566321230987448}
   - component: {fileID: 1432566321230987455}
   - component: {fileID: 1432566321230987454}
-  - component: {fileID: 2221428798639437729}
+  - component: {fileID: 4086955428664816417}
   m_Layer: 5
   m_Name: Shop_btn
   m_TagString: Untagged
@@ -977,7 +977,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &2221428798639437729
+--- !u!114 &4086955428664816417
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -989,7 +989,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36a5f511b0d8142cba0aeb92d0b264c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  productId: 500CoinsPack
+  productId: com.wordgame.inscription.coins_500
   buttonType: 0
   consumePurchase: 1
   onTransactionsRestored:
@@ -1697,7 +1697,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36a5f511b0d8142cba0aeb92d0b264c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  productId: 2000CoinsPack
+  productId: com.wordgame.inscription.coins_2000
   buttonType: 0
   consumePurchase: 1
   onTransactionsRestored:
@@ -3350,7 +3350,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36a5f511b0d8142cba0aeb92d0b264c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  productId: 5000CoinsPack
+  productId: com.wordgame.inscription.coins_5000
   buttonType: 0
   consumePurchase: 1
   onTransactionsRestored:

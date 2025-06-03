@@ -12,11 +12,7 @@ public class SettingPopup : MonoBehaviour
     public Slider musicValue;
     public Slider soundValue;
     public Text direction_Txt;
-   // public GameObject right_Toggle, left_Toggle;
-   // private bool isToggle;
-    //public AudioSource musicSource;
-    // public AudioSource SoundSource;
-
+   
     AudioManager audioManager;
     GameController gameController;
     UIHandler ui_Handler;
@@ -34,14 +30,7 @@ public class SettingPopup : MonoBehaviour
         }
         
         GetMusicAndSoundValue();
-        //if (!isPortrait)
-        //{
-        //    direction_Txt.text = "Switch to Landscape";
-        //}
-        //else 
-        //{
-        //    direction_Txt.text = "Switch to Portrait";
-        //}
+        
     }
     public void CancelSetting()
     {
@@ -49,46 +38,7 @@ public class SettingPopup : MonoBehaviour
         Destroy(this.gameObject);
         AudioManager.instance.PlaySound(0);
     }
-    //private void changeMusicState()
-    //    {
-    //        if (PlayerPrefs.GetInt("music") == 0)
-    //        {
-    //            music.enabled = true;
-    //        }
-    //        else
-    //        {
-    //            music.enabled = false;
-    //        }
-    //    }
-    //    //private void Update()
-    //    //{
-    //    //    sounds = GameObject.FindGameObjectsWithTag("Sound");
-    //    //    changeSoundState();
-    //    //    changeMusicState();
-    //    //}
-    //private void changeSoundState()
-    //    {
-    //        if (PlayerPrefs.GetInt("sound") == 0)
-    //        {
-    //            foreach (GameObject Sound in sounds)
-    //            {
-    //                if (!Sound.GetComponent<AudioSource>().enabled)
-    //                {
-    //                    Sound.GetComponent<AudioSource>().enabled = true;
-    //                }
-    //            }
-    //        }
-    //        else
-    //        {
-    //            foreach (GameObject Sound in sounds)
-    //            {
-    //                if (Sound.GetComponent<AudioSource>().enabled)
-    //                {
-    //                    Sound.GetComponent<AudioSource>().enabled = false;
-    //                }
-    //            }
-    //        }
-    //    }
+    
     public void MusicSlider()
     {
         audioManager.musicSource.volume = musicValue.value;
@@ -206,6 +156,13 @@ public class SettingPopup : MonoBehaviour
         Time.timeScale = 0f;
     }
 
+    public void OnRestore() 
+    {
+        if (SceneManager.GetActiveScene().name == "MainMenu") 
+        {
+            ui_Handler.RemoveAdsCompleted();
+        }
+    }
 }
 
 

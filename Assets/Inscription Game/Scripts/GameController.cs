@@ -56,7 +56,7 @@ public class GameController : MonoBehaviour
     public Text coins_Text;
     public GameObject challenge_Box;
     public GameObject landscape_Objs;
-    public GameObject settingsPopup;
+    public GameObject settingsPopup, settingsPopup_IOS;
     public GameObject coins_Shop;
     public GameObject congrats_Popup;
     public GameObject word_Box;
@@ -64,13 +64,14 @@ public class GameController : MonoBehaviour
     public GameObject losePanel;
     public GameObject pausePanel;
     public GameObject lotusPowerEffect;
+    public LoadingScreen loadingScreen_Landscape;
     [Header("Portrait UI")]
     public Text gameOverScore_Text_Portrait;
     public Text highScore_Text_Portrait;
     public Text coins_Text_Portrait;
     public GameObject challenge_Box_Portrait;
     public GameObject portrait_Objs;
-    public GameObject settingsPopup_Portrait;
+    public GameObject settingsPopup_Portrait, settingsPopup_Portrait_IOS;
     public GameObject coins_Shop_Portrait;
     public GameObject congrats_Popup_Portrait;
     public GameObject word_Box_Portrait;
@@ -81,7 +82,7 @@ public class GameController : MonoBehaviour
     public GameObject hintPrefab, hintBox;
     public GameObject block_Brake;
     public GameObject scarabPower;
-
+    public LoadingScreen loadingScreen_Portrait;
     public Text correctWord;
     public Text bestTime;
     public Text currTime;
@@ -116,6 +117,7 @@ public class GameController : MonoBehaviour
     public string[] Challenges_Description;
     private void Start()
     {
+        
         Time.timeScale = 1f;
         isNextWork = true;
         score = 0;
@@ -130,24 +132,24 @@ public class GameController : MonoBehaviour
         int coins = PlayerPrefs.GetInt("COINS");
         coins_Text.text = UIHandler.FormatNumber(coins);
         coins_Text_Portrait.text = UIHandler.FormatNumber(coins);
-        if (!PlayerPrefs.HasKey("HINT_POWERUP"))
-        {
-            PlayerPrefs.SetInt("HINT_POWERUP", 1);
-        }
+        //if (!PlayerPrefs.HasKey("HINT_POWERUP"))
+        //{
+        //    PlayerPrefs.SetInt("HINT_POWERUP", 1);
+        //}
         int hint = PlayerPrefs.GetInt("HINT_POWERUP");
         hintButton.GetComponentInChildren<Text>().text = hint.ToString();
 
-        if (!PlayerPrefs.HasKey("LOTUS_POWERUP"))
-        {
-            PlayerPrefs.SetInt("LOTUS_POWERUP", 1);
-        }
+        //if (!PlayerPrefs.HasKey("LOTUS_POWERUP"))
+        //{
+        //    PlayerPrefs.SetInt("LOTUS_POWERUP", 1);
+        //}
         int lotus_Hint = PlayerPrefs.GetInt("LOTUS_POWERUP");
         lotusButton.GetComponentInChildren<Text>().text = lotus_Hint.ToString();
 
-        if (!PlayerPrefs.HasKey("SCRAB_POWERUP"))
-        {
-            PlayerPrefs.SetInt("SCRAB_POWERUP", 1);
-        }
+        //if (!PlayerPrefs.HasKey("SCRAB_POWERUP"))
+        //{
+        //    PlayerPrefs.SetInt("SCRAB_POWERUP", 1);
+        //}
         int scrab_Hint = PlayerPrefs.GetInt("SCRAB_POWERUP");
         scrabButton.GetComponentInChildren<Text>().text = scrab_Hint.ToString();
 
@@ -161,6 +163,7 @@ public class GameController : MonoBehaviour
         ChangeOrientation();
     }
 
+    
     void ChangeOrientation()
     {
         if (!SettingPopup.isPortrait)
@@ -247,6 +250,7 @@ public class GameController : MonoBehaviour
 
     private void Update()
     {
+       
         if (isNextWork)
         {
             ChallengeTime += Time.deltaTime;
@@ -454,7 +458,12 @@ public class GameController : MonoBehaviour
         score_Mover.GetComponentInChildren<Text>().text = "+" + newScore.ToString();
 
         score += newScore;
-        Generic_Timer.totalTime += time;
+        //float remainingTime =60- Generic_Timer.totalTime;
+        //remainingTime+
+        //if (exceededTime <=60) { }
+
+        Generic_Timer.totalTime = Mathf.Min(Generic_Timer.totalTime + time, 60);
+       // Generic_Timer.totalTime += time;
         yield return new WaitForSeconds(0.7f);
         score_Text.text = score.ToString();
         AudioManager.instance.PlaySound(6);
@@ -463,10 +472,10 @@ public class GameController : MonoBehaviour
         {
             PlayerPrefs.SetInt("HIGHSCORE", score);
         }
-        if (Generic_Timer.totalTime > 60)
-        {
-            Generic_Timer.totalTime = 60;
-        }
+        //if (Generic_Timer.totalTime > 60)
+        //{
+        //    Generic_Timer.totalTime = 60;
+        //}
     }
     public void ScoreSystem(int wordLength, Vector2 mousePos)
     {
@@ -913,17 +922,40 @@ public class GameController : MonoBehaviour
     }
     public void Retry()
     {
+        Generic_Timer.isStop = false;
         Generic_Timer.totalTime = 60;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        AudioManager.instance.PlaySound(0);
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        AudioManager.instance.PlaySound(0);       
+        loadingScreen_Landscape.sceneName = SceneManager.GetActiveScene().name;
+        loadingScreen_Portrait.sceneName = SceneManager.GetActiveScene().name;
+        
         AdManager.Instance.ShowInterstitialAd();
     }
     public void GoToHome()
     {
+        Generic_Timer.isStop = false;
         Generic_Timer.totalTime = 60;
-        SceneManager.LoadScene("MainMenu");
+       // SceneManager.LoadScene("MainMenu");
         AudioManager.instance.PlaySound(0);
+        loadingScreen_Landscape.sceneName = "MainMenu";
+        loadingScreen_Portrait.sceneName = "MainMenu";
+       
         AdManager.Instance.ShowInterstitialAd();
+    }
+    public void ShowLoading()
+    {
+       
+        if (!SettingPopup.isPortrait)
+        {
+            loadingScreen_Landscape.gameObject.SetActive(false);
+            loadingScreen_Portrait.gameObject.SetActive(true);
+        }
+        else
+        {
+            loadingScreen_Landscape.gameObject.SetActive(true);
+            loadingScreen_Portrait.gameObject.SetActive(false);
+        }
+        
     }
     public void HintPowerUp()
     {
@@ -1173,13 +1205,17 @@ public class GameController : MonoBehaviour
         GameObject tempSetting = null;
         if (!SettingPopup.isPortrait)
         {
+#if UNITY_IOS
+            tempSetting = Instantiate(settingsPopup_Portrait_IOS, transform.position, Quaternion.identity, mainCanvas.transform);
+#endif
             tempSetting = Instantiate(settingsPopup_Portrait, transform.position, Quaternion.identity, mainCanvas.transform);
-
         }
         else
         {
+#if UNITY_IOS
+            tempSetting = Instantiate(settingsPopup_IOS, transform.position, Quaternion.identity, mainCanvas.transform);
+#endif
             tempSetting = Instantiate(settingsPopup, transform.position, Quaternion.identity, mainCanvas.transform);
-
         }
         tempSetting.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
         Vector3 pos = tempSetting.GetComponent<RectTransform>().anchoredPosition;

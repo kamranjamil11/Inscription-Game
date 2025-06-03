@@ -9,12 +9,12 @@ public class Generic_Timer : MonoBehaviour
 {
     public GameController game_Controller;
     public static float totalTime = 60;
-    public static bool isStop = false;
+    public static bool isStop = true;
     public Text timeText;
 
     private void Start()
     {
-        isStop=true;
+        isStop = true;
     }
     void Update()
     {

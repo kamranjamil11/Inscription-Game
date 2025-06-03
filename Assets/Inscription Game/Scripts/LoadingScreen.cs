@@ -11,6 +11,11 @@ public class LoadingScreen : MonoBehaviour
     int DownloadCounterToShow = 0;
     public Text percentage_Text;
     public string sceneName;
+   
+    private void OnEnable()
+    {
+            Time.timeScale = 1.0f;
+    }
     private void Start()
     {
         //Screen.orientation = ScreenOrientation.AutoRotation;
