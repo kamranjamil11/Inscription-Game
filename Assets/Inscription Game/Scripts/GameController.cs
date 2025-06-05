@@ -40,7 +40,7 @@ public class GameController : MonoBehaviour
     [Header("Win")]
     //  public GameObject winPanel;
 
-    public GameObject loading_Panel;
+    //public GameObject loading_Panel;
     public GameObject header, gridFrame;
     public GameObject lotusPowerPanel;
 
@@ -161,6 +161,7 @@ public class GameController : MonoBehaviour
         Challenges_Description[0] = first_Chl;
         StartCoroutine(LoadWords());
         ChangeOrientation();
+        AdManager.Instance.ShowBanner();
     }
 
     
@@ -323,7 +324,7 @@ public class GameController : MonoBehaviour
                 //if (formedWord == LevelCreator.levelWord)
                 if (isFound)
                 {
-                    loading_Panel.SetActive(true);
+                    //loading_Panel.SetActive(true);
                     consistent_Word++;
                     currentWord = formedWord.ToLower();
                     finded_Words.Add(formedWord);
@@ -430,7 +431,7 @@ public class GameController : MonoBehaviour
             isNextWork = false;
             isScarab = false;
             Generic_Timer.isStop = false;
-            loading_Panel.SetActive(true);
+           // loading_Panel.SetActive(true);
             GameObject scarab = Instantiate(scarabPower, scrabButton.GetComponent<RectTransform>().anchoredPosition, Quaternion.identity, scrabButton.transform.parent.transform);
             scarab.GetComponent<RectTransform>().anchoredPosition = new Vector2(-302, -436);
             GameObject targetObj = EventSystem.current.currentSelectedGameObject;
@@ -939,7 +940,7 @@ public class GameController : MonoBehaviour
         AudioManager.instance.PlaySound(0);
         loadingScreen_Landscape.sceneName = "MainMenu";
         loadingScreen_Portrait.sceneName = "MainMenu";
-       
+        AdManager.Instance.HideBanner();
         AdManager.Instance.ShowInterstitialAd();
     }
     public void ShowLoading()
@@ -1011,7 +1012,7 @@ public class GameController : MonoBehaviour
             hint_Count--;
             Generic_Timer.isStop = false;
             PlayerPrefs.SetInt("LOTUS_POWERUP", hint_Count);
-            loading_Panel.SetActive(true);
+           // loading_Panel.SetActive(true);
             hintButton.interactable = false;
             scrabButton.interactable = false;
             lotusButton.interactable = false;
@@ -1121,7 +1122,7 @@ public class GameController : MonoBehaviour
         hintButton.interactable = true;
         scrabButton.interactable = true;
         lotusButton.interactable = true;
-        loading_Panel.SetActive(false);
+        //loading_Panel.SetActive(false);
     }
 
     //public void ToggleBtn()

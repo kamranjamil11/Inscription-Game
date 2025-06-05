@@ -32,30 +32,53 @@ public class AdManager : MonoBehaviour
             Debug.Log("AdMob Initialized");
         });
 
-        //RequestBanner();
+       // RequestBanner();
         // RequestInterstitial();
         // RequestRewarded();
         LoadInterstitialAd();
     }
 
-    //    #region Banner Ads
+    #region Banner Ads
 
-    //    public void RequestBanner()
-    //    {
-    //        string bannerAdUnitId = "ca-app-pub-3940256099942544/6300978111"; // Test ID
+    public void RequestBanner()
+    {
+        string bannerAdUnitId = "ca-app-pub-3940256099942544/6300978111"; // Test ID
 
-    //#if UNITY_ANDROID
-    //        bannerAdUnitId = "ca-app-pub-3940256099942544/6300978111"; // Replace with your actual ID
-    //#elif UNITY_IOS
-    //        bannerAdUnitId = "ca-app-pub-3940256099942544/2934735716"; // Replace with your actual ID
-    //#endif
+#if UNITY_ANDROID
+        bannerAdUnitId = "ca-app-pub-3940256099942544/6300978111"; // Replace with your actual ID
+#elif UNITY_IOS
+            bannerAdUnitId = "ca-app-pub-3940256099942544/2934735716"; // Replace with your actual ID
+#endif
 
-    //        bannerView = new BannerView(bannerAdUnitId, AdSize.Banner, AdPosition.Bottom);
-    //        AdRequest request = new AdRequest.Builder().Build();
-    //        bannerView.LoadAd(request);
-    //    }
+        bannerView = new BannerView(bannerAdUnitId, AdSize.Banner, AdPosition.Bottom);
+        AdRequest request = new AdRequest.Builder().Build();
+        bannerView.LoadAd(request);
+    }
+    public void ShowBanner()
+    {
+        if (!SettingPopup.isPortrait)
+        {
+            if (bannerView == null)
+            {
+                RequestBanner();
+            }
+            else
+            {
+                bannerView.Show();
+            }
+        }
+    }
 
-    //    #endregion
+    public void HideBanner()
+    {
+        if (bannerView != null)
+        {
+            bannerView.Hide();
+        }
+    }
+
+
+    #endregion
 
     #region Interstitial Ads
     private InterstitialAd interstitial;
@@ -82,8 +105,10 @@ public class AdManager : MonoBehaviour
                     Debug.LogError("Failed to load interstitial ad: " + error);
                     return;
                 }
+                
 
                 interstitial = ad;
+               
                 Debug.Log("Interstitial ad loaded.");
                // Set FullScreenContentCallback events
                 interstitial.OnAdFullScreenContentClosed += () =>
@@ -112,21 +137,29 @@ public class AdManager : MonoBehaviour
 
     public void ShowInterstitialAd()
     {
-        if (!PlayerPrefs.HasKey("NO_ADS")) 
+        if (!SettingPopup.isPortrait)
         {
-            if (Application.internetReachability != NetworkReachability.NotReachable)
+            if (!PlayerPrefs.HasKey("NO_ADS"))
             {
-                if (interstitial != null && interstitial.CanShowAd())
+                if (Application.internetReachability != NetworkReachability.NotReachable)
                 {
-                    interstitial.Show();
+                    if (interstitial != null && interstitial.CanShowAd())
+                    {
+                        interstitial.Show();
 
+                    }
+                }
+                else
+                {
+                    gm_Controller = GameObject.FindObjectOfType<GameController>();
+                    gm_Controller.ShowLoading();
                 }
             }
-            else
-            {
-                gm_Controller = GameObject.FindObjectOfType<GameController>();
-                gm_Controller.ShowLoading();
-            }
+        }
+        else 
+        {
+            gm_Controller = GameObject.FindObjectOfType<GameController>();
+            gm_Controller.ShowLoading();
         }
     }
     

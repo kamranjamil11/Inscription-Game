@@ -107,6 +107,7 @@ public class SettingPopup : MonoBehaviour
                 pos.z = 0;
                 gameController.gridFrame.GetComponent<RectTransform>().localPosition = pos1;
                 gameController.header.GetComponent<RectTransform>().anchoredPosition = new Vector2(0,-106f);
+                AdManager.Instance.HideBanner();
             }
 
         
@@ -148,6 +149,7 @@ public class SettingPopup : MonoBehaviour
                 pos.z = 0;
                 gameController.gridFrame.GetComponent<RectTransform>().localPosition = pos1;
                 gameController.header.GetComponent<RectTransform>().anchoredPosition = new Vector2(0,9.5f);
+                AdManager.Instance.ShowBanner();
             }
             Debug.Log("Portrait mode detected");
         }

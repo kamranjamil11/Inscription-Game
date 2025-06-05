@@ -138,7 +138,7 @@ public class LevelCreator : MonoBehaviour
         {
             gameController.activeLetters.Clear();
             gameController.isNextWork = true;
-            gameController.loading_Panel.SetActive(false);                
+           // gameController.loading_Panel.SetActive(false);                
             gameController.hintButton.interactable = true;
             gameController.scrabButton.interactable = true;
             gameController.lotusButton.interactable = true;

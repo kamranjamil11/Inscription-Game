@@ -105,7 +105,7 @@ public class ScoreMultiplayer : MonoBehaviour
         gameController.scrabButton.interactable = true;
         gameController.lotusButton.interactable = true;
         gameController.isNextWork = true;
-        gameController.loading_Panel.SetActive(false);
+       // gameController.loading_Panel.SetActive(false);
         Destroy(gameObject);
     }
 }

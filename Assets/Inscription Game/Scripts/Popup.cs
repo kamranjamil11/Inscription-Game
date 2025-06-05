@@ -38,19 +38,23 @@ public class Popup : MonoBehaviour
         {
             gm_Controller = GameObject.FindObjectOfType<GameController>();
         }
-
+        AdManager.Instance.HideBanner();
     }
     public void BackToGamePaly()
     {
         Time.timeScale = 1;
-        Destroy(this.gameObject);
         AudioManager.instance.PlaySound(0);
+        if (SceneManager.GetActiveScene().name != "MainMenu")
+        {
+            AdManager.Instance.ShowBanner();
+        }
+        Destroy(this.gameObject);
+       
     }
     public void BackToMainScreen()
-    {
-        
-        Destroy(this.gameObject);
+    {      
         AudioManager.instance.PlaySound(0);
+        Destroy(this.gameObject);
     }
     public void AddPowerUps(string key)
     {
