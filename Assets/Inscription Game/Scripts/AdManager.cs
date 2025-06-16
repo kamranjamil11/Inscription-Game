@@ -56,15 +56,18 @@ public class AdManager : MonoBehaviour
     }
     public void ShowBanner()
     {
-        if (!SettingPopup.isPortrait)
+        if (!PlayerPrefs.HasKey("NO_ADS"))
         {
-            if (bannerView == null)
+            if (!SettingPopup.isPortrait)
             {
-                RequestBanner();
-            }
-            else
-            {
-                bannerView.Show();
+                if (bannerView == null)
+                {
+                    RequestBanner();
+                }
+                else
+                {
+                    bannerView.Show();
+                }
             }
         }
     }
@@ -115,27 +118,26 @@ public class AdManager : MonoBehaviour
                 {
                     Debug.Log("Interstitial ad closed.");
                     LoadInterstitialAd(); // Load the next one
-                    gm_Controller = GameObject.FindObjectOfType<GameController>();
-                    gm_Controller.ShowLoading();
+                    gm_Controller = GameObject.FindObjectOfType<GameController>();                  
+                    gm_Controller.ShowLoading(GameController.buttonType);                    
                 };
 
                 interstitial.OnAdFullScreenContentFailed += (AdError adError) =>
                 {
                     Debug.LogError("Interstitial ad failed to show: " + adError);
                     gm_Controller = GameObject.FindObjectOfType<GameController>();
-                    gm_Controller.ShowLoading();
+                    gm_Controller.ShowLoading(GameController.buttonType);
                 };
 
                 interstitial.OnAdFullScreenContentOpened += () =>
                 {
-                    Debug.Log("Interstitial ad opened.");
-                   // gm_Controller.ShowLoading();
+                    Debug.Log("Interstitial ad opened.");                 
                 };
             });
 
     }
 
-    public void ShowInterstitialAd()
+    public void ShowInterstitialAd(String key)
     {
         if (!SettingPopup.isPortrait)
         {
@@ -148,18 +150,28 @@ public class AdManager : MonoBehaviour
                         interstitial.Show();
 
                     }
+                    else 
+                    {
+                        gm_Controller = GameObject.FindObjectOfType<GameController>();
+                        gm_Controller.ShowLoading(key);
+                    }
                 }
                 else
                 {
                     gm_Controller = GameObject.FindObjectOfType<GameController>();
-                    gm_Controller.ShowLoading();
+                    gm_Controller.ShowLoading(key);
                 }
+            }
+            else
+            {
+                gm_Controller = GameObject.FindObjectOfType<GameController>();
+                gm_Controller.ShowLoading(key);
             }
         }
         else 
         {
             gm_Controller = GameObject.FindObjectOfType<GameController>();
-            gm_Controller.ShowLoading();
+            gm_Controller.ShowLoading(key);
         }
     }
     

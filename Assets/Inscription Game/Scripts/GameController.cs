@@ -13,6 +13,7 @@ using Unity.VisualScripting;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
 using UnityEngine.SocialPlatforms;
+using static UnityEngine.Purchasing.IAPButton;
 //using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 //using System.Net;
 //using ShaderType = AllIn1SpriteShader.AllIn1Shader.ShaderTypes;
@@ -115,6 +116,7 @@ public class GameController : MonoBehaviour
     public int consistent_Word;
     public string currentWord = "";
     public string[] Challenges_Description;
+    public static string buttonType;
     private void Start()
     {
         
@@ -923,6 +925,7 @@ public class GameController : MonoBehaviour
     }
     public void Retry()
     {
+        buttonType = "retry";
         Generic_Timer.isStop = false;
         Generic_Timer.totalTime = 60;
         //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
@@ -930,10 +933,11 @@ public class GameController : MonoBehaviour
         loadingScreen_Landscape.sceneName = SceneManager.GetActiveScene().name;
         loadingScreen_Portrait.sceneName = SceneManager.GetActiveScene().name;
         
-        AdManager.Instance.ShowInterstitialAd();
+        AdManager.Instance.ShowInterstitialAd(buttonType);
     }
     public void GoToHome()
     {
+        buttonType = "home";
         Generic_Timer.isStop = false;
         Generic_Timer.totalTime = 60;
        // SceneManager.LoadScene("MainMenu");
@@ -941,20 +945,28 @@ public class GameController : MonoBehaviour
         loadingScreen_Landscape.sceneName = "MainMenu";
         loadingScreen_Portrait.sceneName = "MainMenu";
         AdManager.Instance.HideBanner();
-        AdManager.Instance.ShowInterstitialAd();
+        AdManager.Instance.ShowInterstitialAd(buttonType);
     }
-    public void ShowLoading()
+   
+    public void ShowLoading(String key)
     {
-       
-        if (!SettingPopup.isPortrait)
+        
+        if (key=="home") 
         {
-            loadingScreen_Landscape.gameObject.SetActive(false);
-            loadingScreen_Portrait.gameObject.SetActive(true);
+            SceneManager.LoadScene("MainMenu");
         }
         else
         {
-            loadingScreen_Landscape.gameObject.SetActive(true);
-            loadingScreen_Portrait.gameObject.SetActive(false);
+            if (!SettingPopup.isPortrait)
+            {
+                loadingScreen_Landscape.gameObject.SetActive(false);
+                loadingScreen_Portrait.gameObject.SetActive(true);
+            }
+            else
+            {
+                loadingScreen_Landscape.gameObject.SetActive(true);
+                loadingScreen_Portrait.gameObject.SetActive(false);
+            }
         }
         
     }

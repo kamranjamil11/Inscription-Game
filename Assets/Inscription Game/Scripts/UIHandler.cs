@@ -67,7 +67,7 @@ public class UIHandler : MonoBehaviour
     
     private void Start()
     {
-        IsPalindrome(121);
+        //IsPalindrome(121);
        // PrimeNumber();
         Time.timeScale = 1;
         OnGameStartDataSet();
@@ -89,10 +89,7 @@ public class UIHandler : MonoBehaviour
         ChangeOrientation();
         StartCoroutine(LoadWords());
     }
-
-  
-
-   
+ 
     void OnGameStartDataSet()
     {
         if (!PlayerPrefs.HasKey("COINS"))
@@ -323,18 +320,18 @@ public class UIHandler : MonoBehaviour
         if (PlayerPrefs.HasKey("NO_ADS"))
         {
            
-            removeAds_Portrait.GetComponent<Image>().enabled = false;
-            removeAds_Portrait.transform.GetChild(0).gameObject.SetActive(true);
-            removeAds_Landscape.GetComponent<Image>().enabled = false;
-            removeAds_Landscape.transform.GetChild(0).gameObject.SetActive(true);
+            removeAds_Portrait.GetComponent<Button>().interactable = false;
+           // removeAds_Portrait.transform.GetChild(0).gameObject.SetActive(true);
+            removeAds_Landscape.GetComponent<Button>().interactable = false;
+            //removeAds_Landscape.transform.GetChild(0).gameObject.SetActive(true);
             
         }
         else 
         {
-            removeAds_Portrait.GetComponent<Image>().enabled = true;
-            removeAds_Portrait.transform.GetChild(0).gameObject.SetActive(false);
-            removeAds_Landscape.GetComponent<Image>().enabled = true;
-            removeAds_Landscape.transform.GetChild(0).gameObject.SetActive(false);
+            removeAds_Portrait.GetComponent<Button>().interactable = true;
+           // removeAds_Portrait.transform.GetChild(0).gameObject.SetActive(false);
+            removeAds_Landscape.GetComponent<Button>().interactable = true;
+           // removeAds_Landscape.transform.GetChild(0).gameObject.SetActive(false);
         }
     }
     public void PurchaseAds()
