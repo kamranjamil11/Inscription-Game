@@ -25,6 +25,7 @@ public class UIHandler : MonoBehaviour
 
     
     public GameObject mainCanvas;
+    public GameObject loadingPanel;
     [Header("Landscape UI")] 
     public InputField user_Name;
     public TextMeshProUGUI userName_Txt;
@@ -85,7 +86,7 @@ public class UIHandler : MonoBehaviour
             daily_Challenges[0] = "Word of the day " + "(" + PlayerPrefs.GetString("FIRST_CHALLENGE")+")";
         }
 
-        RemoveAds();
+       // RemoveAds();
         ChangeOrientation();
         StartCoroutine(LoadWords());
     }
@@ -346,9 +347,11 @@ public class UIHandler : MonoBehaviour
             removeAds_Popup_Landscape.SetActive(true);
             removeAds_Popup_Portrait.SetActive(false);
         }
+
     }
-   public void RemoveAdsCompleted() 
+   public void RemoveAdsCompleted()
     {
+        loadingPanel.SetActive(false);
         print("Ads_Purchased");
         PlayerPrefs.SetString("NO_ADS", "Purchased");
         RemoveAds();

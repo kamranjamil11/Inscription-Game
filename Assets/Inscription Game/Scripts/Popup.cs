@@ -16,7 +16,7 @@ public class Popup : MonoBehaviour
     public Text coinsText, powerUp_Txt;
     GameController gm_Controller;
     UIHandler uiHandler;
-    public GameObject coinsTilte, powerUpTilte, coinsShop, powerShop;
+    public GameObject coinsTilte, powerUpTilte, coinsShop, powerShop,loading_Panel;
     GameObject tempCoinsShop = null;
     private void Start()
     {
@@ -174,7 +174,7 @@ public class Popup : MonoBehaviour
             tempObj.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
             tempObj.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = "You have got a " + coins + " new coins pack.";
         }
-
+        loading_Panel.SetActive(false); 
         AudioManager.instance.PlaySound(6);
     }
     public void LeftAndRightClick()
@@ -196,6 +196,10 @@ public class Popup : MonoBehaviour
             powerShop.SetActive(true);
         }
         AudioManager.instance.PlaySound(0);
+    }
+    public void loadingActive()
+    {
+        loading_Panel.SetActive(true);
     }
 }
 
