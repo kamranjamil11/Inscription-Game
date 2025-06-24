@@ -86,7 +86,7 @@ public class UIHandler : MonoBehaviour
             daily_Challenges[0] = "Word of the day " + "(" + PlayerPrefs.GetString("FIRST_CHALLENGE")+")";
         }
 
-       // RemoveAds();
+        RemoveAds();
         ChangeOrientation();
         StartCoroutine(LoadWords());
     }
