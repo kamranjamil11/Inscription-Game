@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/firebase_database_url,@string/gcm_defaultSenderId,@string/google_storage_bucket,@string/project_id,@string/google_api_key,@string/google_crash_reporting_api_key,@string/google_app_id">
+  <string name="firebase_database_url" translatable="false">https://inscription-d6b80-default-rtdb.firebaseio.com</string>
+  <string name="gcm_defaultSenderId" translatable="false">54199031251</string>
+  <string name="google_storage_bucket" translatable="false">inscription-d6b80.firebasestorage.app</string>
+  <string name="project_id" translatable="false">inscription-d6b80</string>
+  <string name="google_api_key" translatable="false">AIzaSyAyIG4Br0KL1u1x1mxoBSN5r4j0_2bjljo</string>
+  <string name="google_crash_reporting_api_key" translatable="false">AIzaSyAyIG4Br0KL1u1x1mxoBSN5r4j0_2bjljo</string>
+  <string name="google_app_id" translatable="false">1:54199031251:android:dac9f10c89b9216694cb26</string>
+</resources>

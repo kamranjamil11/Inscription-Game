@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "54199031251",
+    "project_id": "inscription-d6b80",
+    "storage_bucket": "inscription-d6b80.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:54199031251:android:dac9f10c89b9216694cb26",
+        "android_client_info": {
+          "package_name": "com.wordgame.inscription"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAyIG4Br0KL1u1x1mxoBSN5r4j0_2bjljo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,4 +1,5 @@
 ﻿
+using Samples.Purchasing.GooglePlay.FraudDetection;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -68,14 +69,17 @@ public class UIHandler : MonoBehaviour
     
     private void Start()
     {
+       FirebaseData.instance.userId = PlayerPrefs.GetString("USERID");
+       FirebaseData.instance.DateLoadFunc();
         //IsPalindrome(121);
-       // PrimeNumber();
+        // PrimeNumber();
         Time.timeScale = 1;
-        OnGameStartDataSet();
-        int coins = PlayerPrefs.GetInt("COINS");
+       // OnGameStartDataSet();
        
         if (coins_Text != null)
         {
+            int coins = PlayerPrefs.GetInt("COINS");
+
             coins_Text.text = FormatNumber(coins);
             coins_Text_Portrait.text = FormatNumber(coins);
         }
@@ -93,27 +97,27 @@ public class UIHandler : MonoBehaviour
  
     void OnGameStartDataSet()
     {
-        if (!PlayerPrefs.HasKey("COINS"))
-        {
-            PlayerPrefs.SetInt("COINS", 1000);
-        }
+        //if (!PlayerPrefs.HasKey("COINS"))
+        //{
+        //    PlayerPrefs.SetInt("COINS", 1000);
+        //}
 
-        if (!PlayerPrefs.HasKey("HINT_POWERUP"))
-        {
-            PlayerPrefs.SetInt("HINT_POWERUP", 1);
-        }
+        //if (!PlayerPrefs.HasKey("HINT_POWERUP"))
+        //{
+        //    PlayerPrefs.SetInt("HINT_POWERUP", 1);
+        //}
         
 
-        if (!PlayerPrefs.HasKey("LOTUS_POWERUP"))
-        {
-            PlayerPrefs.SetInt("LOTUS_POWERUP", 1);
-        }
+        //if (!PlayerPrefs.HasKey("LOTUS_POWERUP"))
+        //{
+        //    PlayerPrefs.SetInt("LOTUS_POWERUP", 1);
+        //}
        
 
-        if (!PlayerPrefs.HasKey("SCRAB_POWERUP"))
-        {
-            PlayerPrefs.SetInt("SCRAB_POWERUP", 1);
-        }
+        //if (!PlayerPrefs.HasKey("SCRAB_POWERUP"))
+        //{
+        //    PlayerPrefs.SetInt("SCRAB_POWERUP", 1);
+        //}
     }
     void ChangeOrientation()
     {
@@ -308,6 +312,7 @@ public class UIHandler : MonoBehaviour
 
             PlayerPrefs.SetInt(RewardClaimedKey, 1);
             PlayerPrefs.Save();
+            FirebaseData.instance.DataSaveFun();
         }
         else
         {

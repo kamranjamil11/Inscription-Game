@@ -674,8 +674,6 @@ public class GameController : MonoBehaviour
         }
 
     }
-
-
     void ChallengeComplete(int ch_Num, int chg_Id)
     {
         if (gameOn)
@@ -728,6 +726,7 @@ public class GameController : MonoBehaviour
             coins_Text_Portrait.text = coins.ToString();
             PlayerPrefs.SetInt("COINS", coins);
             AudioManager.instance.PlaySound(6);
+            FirebaseData.instance.DataSaveFun();
         }
     }
     public void SubscribeToEventOnPointerEnter()
@@ -1013,7 +1012,7 @@ public class GameController : MonoBehaviour
 
         }
         CheckDailyReset();
-
+        FirebaseData.instance.DataSaveFun();
     }
     public void LotusPowerUp()
     {
@@ -1060,6 +1059,7 @@ public class GameController : MonoBehaviour
             tempObj.GetComponent<Popup>().LeftAndRightClick();
         }
         CheckDailyReset();
+        FirebaseData.instance.DataSaveFun();
     }
     public void ScrabPowerUp()
     {
@@ -1106,6 +1106,7 @@ public class GameController : MonoBehaviour
         }
         CheckDailyReset();
         AudioManager.instance.PlaySound(0);
+        FirebaseData.instance.DataSaveFun();
     }
     public IEnumerator ShuffleList<T>(List<T> list)
     {

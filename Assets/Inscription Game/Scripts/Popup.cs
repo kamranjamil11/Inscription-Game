@@ -125,12 +125,14 @@ public class Popup : MonoBehaviour
                 tempObj.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = "You have successfully added a 1 power Up Pack.";
             }
             AudioManager.instance.PlaySound(6);
+            FirebaseData.instance.DataSaveFun();
         }
         else
         {
             LeftAndRightClick();           
         }
         AudioManager.instance.PlaySound(0);
+       
     }
     public void AddCoins(int coins)
     {
@@ -176,6 +178,7 @@ public class Popup : MonoBehaviour
         }
         loading_Panel.SetActive(false); 
         AudioManager.instance.PlaySound(6);
+        FirebaseData.instance.DataSaveFun();
     }
     public void LeftAndRightClick()
     {
