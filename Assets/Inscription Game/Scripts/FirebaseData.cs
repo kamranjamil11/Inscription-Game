@@ -9,7 +9,8 @@ public class FirebaseData : MonoBehaviour
     public DataToSave dataToSave;
     public string userId;
     DatabaseReference dbReference;
-    public static FirebaseData instance;    
+    public static FirebaseData instance;
+   
     private void Awake()
     {
         if (instance == null)
@@ -28,19 +29,24 @@ public class FirebaseData : MonoBehaviour
     }
     IEnumerator DatabaseFetching() 
     {
-        yield return new WaitUntil(()=>FirebaseAuthManager.isFirebaseInitiliazed);
+        yield return new WaitUntil(()=>LoginWithGoogle.isFirebaseInitiliazed);
         print("Firebase initialized.");
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
-       // userId = PlayerPrefs.GetString("USERID");
-       // DateLoadFunc();
+       
     }
+    
     public void DateLoadFunc()
     {
-        StartCoroutine(DataLoadEnum());
+        if (!PlayerPrefs.HasKey("GUEST"))
+        {
+            StartCoroutine(DataLoadEnum());
+        }
     }
-    IEnumerator DataLoadEnum() 
+    IEnumerator DataLoadEnum()
     {
-       var serverData= dbReference.Child("users").Child(userId).GetValueAsync();
+        userId = PlayerPrefs.GetString("USERID");
+
+        var serverData= dbReference.Child("users").Child(userId).GetValueAsync();
         yield return new WaitUntil(predicate:()=> serverData.IsCompleted);
         print("Process is Completed");
 
@@ -51,12 +57,15 @@ public class FirebaseData : MonoBehaviour
         {
             print("Server data found");
             dataToSave = JsonUtility.FromJson<DataToSave>(jsonData);
-
-            PlayerPrefs.SetInt("COINS", dataToSave.coins);
-            PlayerPrefs.SetInt("SCRAB_POWERUP", dataToSave.scarabPowers);
-            PlayerPrefs.SetInt("HINT_POWERUP", dataToSave.eyeHorusPowers);
-            PlayerPrefs.SetInt("LOTUS_POWERUP", dataToSave.lotusPowers);
-
+            //if (!string.IsNullOrEmpty(dataToSave.userName))
+            //{
+                PlayerPrefs.SetString("USERNAME", dataToSave.userName);
+                PlayerPrefs.SetInt("COINS", dataToSave.coins);
+                PlayerPrefs.SetInt("SCRAB_POWERUP", dataToSave.scarabPowers);
+                PlayerPrefs.SetInt("HINT_POWERUP", dataToSave.eyeHorusPowers);
+                PlayerPrefs.SetInt("LOTUS_POWERUP", dataToSave.lotusPowers);
+           // }
+            
             UIHandler uIHandler =GameObject.FindAnyObjectByType<UIHandler>();
             uIHandler.coins_Text.text = dataToSave.coins.ToString();
             uIHandler.coins_Text_Portrait.text = dataToSave.coins.ToString();
@@ -64,24 +73,36 @@ public class FirebaseData : MonoBehaviour
         else 
         {
             print("no data found");
+            PlayerPrefs.SetString("ISUSER_ENTER","Set");
+            PlayerPrefs.SetInt("COINS", 1000);
+            PlayerPrefs.SetInt("SCRAB_POWERUP", 1);
+            PlayerPrefs.SetInt("HINT_POWERUP", 1);
+            PlayerPrefs.SetInt("LOTUS_POWERUP", 1);
+            DataSaveFun();
         }
 
 
     }
     public void DataSaveFun()
     {
-        int coins = PlayerPrefs.GetInt("COINS");
-        int scarabsCount = PlayerPrefs.GetInt("SCRAB_POWERUP");
-        int eyeHorusCount = PlayerPrefs.GetInt("HINT_POWERUP");
-        int LotusCount = PlayerPrefs.GetInt("LOTUS_POWERUP");
+        if (!PlayerPrefs.HasKey("GUEST"))
+        {
+            userId = PlayerPrefs.GetString("USERID");
+            int coins = PlayerPrefs.GetInt("COINS");
+            int scarabsCount = PlayerPrefs.GetInt("SCRAB_POWERUP");
+            int eyeHorusCount = PlayerPrefs.GetInt("HINT_POWERUP");
+            int LotusCount = PlayerPrefs.GetInt("LOTUS_POWERUP");
+            string userName = PlayerPrefs.GetString("USERNAME");
 
-        dataToSave.coins = coins;
-        dataToSave.scarabPowers = scarabsCount;
-        dataToSave.eyeHorusPowers = eyeHorusCount;
-        dataToSave.lotusPowers = LotusCount;
+            dataToSave.userName = userName;
+            dataToSave.coins = coins;
+            dataToSave.scarabPowers = scarabsCount;
+            dataToSave.eyeHorusPowers = eyeHorusCount;
+            dataToSave.lotusPowers = LotusCount;
 
-        string json=JsonUtility.ToJson(dataToSave);
-        dbReference.Child("users").Child(userId).SetRawJsonValueAsync(json);
+            string json = JsonUtility.ToJson(dataToSave);
+            dbReference.Child("users").Child(userId).SetRawJsonValueAsync(json);
+        }
     }
 
 }

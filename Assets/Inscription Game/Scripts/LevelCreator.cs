@@ -176,7 +176,7 @@ public class LevelCreator : MonoBehaviour
         {
             hintObjs.Add(lettersGrid[hints_Index[i]].gameObject);
         }
-        Invoke("LotusPanelOff", 1);
+        
     }
     private void NextFillTheRest()
     {
@@ -247,6 +247,7 @@ public class LevelCreator : MonoBehaviour
         {            
            gameController.wordText.text = foundWords[rnd].Item1;
         }
+        
     }
     void DFS(int i, int j, string currentWord, List<int> indexes, bool[,] visited)
     {

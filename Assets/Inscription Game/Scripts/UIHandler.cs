@@ -13,9 +13,6 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
-
-
 public class UIHandler : MonoBehaviour
 {
    
@@ -46,6 +43,10 @@ public class UIHandler : MonoBehaviour
     public GameObject removeAds_Landscape;
     public GameObject removeAds_Popup_Landscape;
     [Header("Portrait UI")]
+    public Button[] allButtons;
+    public GameObject touch_Btn;
+    public GameObject hand_Icon;
+    public GameObject left_InfoPanel, right_InfoPanel, left_bottom_InfoPanel, bottom_InfoPanel;  
     public InputField user_Name_Portrait;
     public TextMeshProUGUI userName_Txt_Portrait;
     public Text user_Txt_Portrait;
@@ -68,8 +69,7 @@ public class UIHandler : MonoBehaviour
     public HashSet<string> wordSet = new HashSet<string>();
     
     private void Start()
-    {
-       FirebaseData.instance.userId = PlayerPrefs.GetString("USERID");
+    {     
        FirebaseData.instance.DateLoadFunc();
         //IsPalindrome(121);
         // PrimeNumber();
@@ -89,10 +89,20 @@ public class UIHandler : MonoBehaviour
         {
             daily_Challenges[0] = "Word of the day " + "(" + PlayerPrefs.GetString("FIRST_CHALLENGE")+")";
         }
-
+        
         RemoveAds();
+        if (!PlayerPrefs.HasKey("ISUSER_ENTER"))
+        {
+            hand_Icon.gameObject.SetActive(true);
+            hand_Icon.GetComponent<RectTransform>().anchorMin = new Vector2(0,1);
+            hand_Icon.GetComponent<RectTransform>().anchorMax = new Vector2(0, 1);
+            hand_Icon.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+            hand_Icon.GetComponent<RectTransform>().anchoredPosition = new Vector2(325,-410);
+            ButtonsInteractable(0);
+        }
         ChangeOrientation();
         StartCoroutine(LoadWords());
+       
     }
  
     void OnGameStartDataSet()
@@ -318,9 +328,17 @@ public class UIHandler : MonoBehaviour
         {
             Debug.Log("Reward already claimed.");
         }
+       
         AudioManager.instance.PlaySound(0);
     }
-
+    public void ButtonsInteractable(int id) 
+    {
+        for (int i = 0; i < allButtons.Length; i++)
+        {
+            allButtons[i].interactable=false;
+        }
+        allButtons[id].interactable = true;
+    }
     public void RemoveAds()
     {
         if (PlayerPrefs.HasKey("NO_ADS"))
@@ -342,15 +360,35 @@ public class UIHandler : MonoBehaviour
     }
     public void PurchaseAds()
     {
-        if (!SettingPopup.isPortrait)
+        if (!PlayerPrefs.HasKey("ISUSER_ENTER"))
         {
-            removeAds_Popup_Landscape.SetActive(false);
-            removeAds_Popup_Portrait.SetActive(true);
+            touch_Btn.SetActive(true);
+            hand_Icon.SetActive(false);
+            hand_Icon.GetComponent<RectTransform>().anchorMin = new Vector2(1, 1);
+            hand_Icon.GetComponent<RectTransform>().anchorMax = new Vector2(1, 1);
+            hand_Icon.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+            hand_Icon.GetComponent<RectTransform>().anchoredPosition = new Vector2(-210, -450);
+
+            left_InfoPanel.GetComponent<RectTransform>().anchorMin = new Vector2(0, 1);
+            left_InfoPanel.GetComponent<RectTransform>().anchorMax = new Vector2(0, 1);
+            left_InfoPanel.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+            left_InfoPanel.GetComponent<RectTransform>().anchoredPosition = new Vector2(884, -988);
+            left_InfoPanel.GetComponentInChildren<Text>().text = "Buy the ad-free version for a smoother, uninterrupted experience.";
+            left_InfoPanel.SetActive(true);
+            ButtonsInteractable(2);
         }
         else
         {
-            removeAds_Popup_Landscape.SetActive(true);
-            removeAds_Popup_Portrait.SetActive(false);
+            if (!SettingPopup.isPortrait)
+            {
+                removeAds_Popup_Landscape.SetActive(false);
+                removeAds_Popup_Portrait.SetActive(true);
+            }
+            else
+            {
+                removeAds_Popup_Landscape.SetActive(true);
+                removeAds_Popup_Portrait.SetActive(false);
+            }
         }
 
     }
@@ -365,7 +403,7 @@ public class UIHandler : MonoBehaviour
     }
     public void PlayButton()
     {
-        //Time.timeScale = 1;
+        hand_Icon.gameObject.SetActive(false);
         if (!SettingPopup.isPortrait)
         {
             loadingScreen_Portrait.SetActive(true);
@@ -377,130 +415,260 @@ public class UIHandler : MonoBehaviour
        
         AudioManager.instance.PlaySound(0);
     }
+    public void TouchButton()
+    {
+        touch_Btn.SetActive(false);      
+        left_InfoPanel.SetActive(false);
+        right_InfoPanel.SetActive(false);
+        left_bottom_InfoPanel.SetActive(false);
+        bottom_InfoPanel.SetActive(false);
+       // if (allButtons[allButtons.Length - 1].interactable == false)
+       // {
+            hand_Icon.SetActive(true);
+        //}
+        AudioManager.instance.PlaySound(0);
+    }
     public void SettingBtn()
     {
-        GameObject tempSetting = null;
-        if (!SettingPopup.isPortrait)
+        if (!PlayerPrefs.HasKey("ISUSER_ENTER"))
         {
+            touch_Btn.SetActive(true);
+            hand_Icon.SetActive(false);
+            hand_Icon.GetComponent<RectTransform>().anchorMin = new Vector2(0, 1);
+            hand_Icon.GetComponent<RectTransform>().anchorMax = new Vector2(0, 1);
+            hand_Icon.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+            hand_Icon.GetComponent<RectTransform>().anchoredPosition = new Vector2(325, -722);
+
+            left_InfoPanel.GetComponent<RectTransform>().anchorMin = new Vector2(0, 1);
+            left_InfoPanel.GetComponent<RectTransform>().anchorMax = new Vector2(0, 1);
+            left_InfoPanel.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+            left_InfoPanel.GetComponent<RectTransform>().anchoredPosition = new Vector2(884, -700);
+            left_InfoPanel.GetComponentInChildren<Text>().text = "Switch between landscape and portrait mode, toggle music, and manage sound effects here.";
+            left_InfoPanel.SetActive(true);
+            if (!PlayerPrefs.HasKey("NO_ADS"))
+            {
+                ButtonsInteractable(1);
+            }
+            else 
+            {
+                ButtonsInteractable(2);
+            }
+        }
+        else
+        {
+            GameObject tempSetting = null;
+            if (!SettingPopup.isPortrait)
+            {
+
 #if UNITY_IOS
             tempSetting = Instantiate(settingsPopup_Portrait_IOS, transform.position, Quaternion.identity, mainCanvas.transform);
            // tempSetting.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
 #endif
-            tempSetting = Instantiate(settingsPopup_Portrait, transform.position, Quaternion.identity, mainCanvas.transform);
-        }
-        else
-        {
+                tempSetting = Instantiate(settingsPopup_Portrait, transform.position, Quaternion.identity, mainCanvas.transform);
+            }
+            else
+            {
 #if UNITY_IOS
             tempSetting = Instantiate(settingsPopup_IOS, transform.position, Quaternion.identity, mainCanvas.transform);
             //tempSetting.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
 #endif
-            tempSetting = Instantiate(settingsPopup, transform.position, Quaternion.identity, mainCanvas.transform);
+                tempSetting = Instantiate(settingsPopup, transform.position, Quaternion.identity, mainCanvas.transform);
+            }
+            tempSetting.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+            Vector3 pos = tempSetting.GetComponent<RectTransform>().anchoredPosition;
+            pos.z = 0;
+            tempSetting.GetComponent<RectTransform>().localPosition = pos;
+            Time.timeScale = 0f;
         }
-        tempSetting.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
-        Vector3 pos = tempSetting.GetComponent<RectTransform>().anchoredPosition;
-        pos.z = 0;
-        tempSetting.GetComponent<RectTransform>().localPosition = pos;
-        Time.timeScale = 0f;
         AudioManager.instance.PlaySound(0);
     }
     public void LeaderBoardBtn()
-    {        
-        if (!SettingPopup.isPortrait)
-        {          
-            leaderBoard.SetActive(false);         
-            leaderBoard_Portrait.SetActive(true);            
+    {
+        if (!PlayerPrefs.HasKey("ISUSER_ENTER"))
+        {
+            touch_Btn.SetActive(true);
+            hand_Icon.SetActive(false);
+            hand_Icon.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0.5f);
+            hand_Icon.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0.5f);
+            hand_Icon.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+            hand_Icon.GetComponent<RectTransform>().anchoredPosition = new Vector2(190,-365);
+            left_bottom_InfoPanel.GetComponentInChildren<Text>().text = "Keep pushing your limits by beating your own high score.";
+            left_bottom_InfoPanel.SetActive(true);
+            ButtonsInteractable(6);
+            
         }
         else
-        {         
-            leaderBoard.SetActive(true);          
-            leaderBoard_Portrait.SetActive(false);
+        {
+            if (!SettingPopup.isPortrait)
+            {
+                leaderBoard.SetActive(false);
+                leaderBoard_Portrait.SetActive(true);
+            }
+            else
+            {
+                leaderBoard.SetActive(true);
+                leaderBoard_Portrait.SetActive(false);
+            }
         }
         AudioManager.instance.PlaySound(0);
     }
     public void CoinsShopBtn()
     {
-        GameObject tempObj = null;
-        if (!SettingPopup.isPortrait)
+        if (!PlayerPrefs.HasKey("ISUSER_ENTER"))
         {
-             tempObj = Instantiate(coins_Shop_Portrait, transform.position, Quaternion.identity, mainCanvas.transform);
-           
+            touch_Btn.SetActive(true);
+            hand_Icon.SetActive(false);
+            hand_Icon.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0);
+            hand_Icon.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0);
+            hand_Icon.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+            hand_Icon.GetComponent<RectTransform>().anchoredPosition = new Vector2(50, 455);
+            right_InfoPanel.GetComponentInChildren<Text>().text = "Keep track of your coins here. Use them to buy power-ups.";
+            right_InfoPanel.SetActive(true);
+            ButtonsInteractable(3);
         }
         else
         {
-             tempObj = Instantiate(coins_Shop, transform.position, Quaternion.identity, mainCanvas.transform);
-        }
+            GameObject tempObj = null;
+            if (!SettingPopup.isPortrait)
+            {
+                tempObj = Instantiate(coins_Shop_Portrait, transform.position, Quaternion.identity, mainCanvas.transform);
 
-        tempObj.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
-        Vector3 pos = tempObj.GetComponent<RectTransform>().anchoredPosition;
-        pos.z = 0;
-        tempObj.GetComponent<RectTransform>().localPosition = pos;
+            }
+            else
+            {
+                tempObj = Instantiate(coins_Shop, transform.position, Quaternion.identity, mainCanvas.transform);
+            }
+
+            tempObj.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+            Vector3 pos = tempObj.GetComponent<RectTransform>().anchoredPosition;
+            pos.z = 0;
+            tempObj.GetComponent<RectTransform>().localPosition = pos;
+        }
+        AudioManager.instance.PlaySound(0);
+    }
+    public void CoinsShopBtn1()
+    {
+        if (!PlayerPrefs.HasKey("ISUSER_ENTER"))
+        {
+            touch_Btn.SetActive(true);
+            hand_Icon.SetActive(false);
+            hand_Icon.GetComponent<RectTransform>().anchorMin = new Vector2(0, 0);
+            hand_Icon.GetComponent<RectTransform>().anchorMax = new Vector2(0, 0);
+            hand_Icon.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+            hand_Icon.GetComponent<RectTransform>().anchoredPosition = new Vector2(630,130);
+
+            bottom_InfoPanel.GetComponent<RectTransform>().anchorMin = new Vector2(1f, 0f);
+            bottom_InfoPanel.GetComponent<RectTransform>().anchorMax = new Vector2(1f, 0f);
+            bottom_InfoPanel.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+            bottom_InfoPanel.GetComponent<RectTransform>().anchoredPosition = new Vector2(-996,747);
+            bottom_InfoPanel.GetComponentInChildren<Text>().text = "Buy extra coins or unlock powerful boosts to enhance your wordplay.";
+            bottom_InfoPanel.SetActive(true);
+            ButtonsInteractable(5);
+        }
+        else
+        {
+            GameObject tempObj = null;
+            if (!SettingPopup.isPortrait)
+            {
+                tempObj = Instantiate(coins_Shop_Portrait, transform.position, Quaternion.identity, mainCanvas.transform);
+
+            }
+            else
+            {
+                tempObj = Instantiate(coins_Shop, transform.position, Quaternion.identity, mainCanvas.transform);
+            }
+
+            tempObj.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+            Vector3 pos = tempObj.GetComponent<RectTransform>().anchoredPosition;
+            pos.z = 0;
+            tempObj.GetComponent<RectTransform>().localPosition = pos;
+        }
         AudioManager.instance.PlaySound(0);
     }
     public void DailyChallenge()
     {
-       
-        if (!SettingPopup.isPortrait)
+        if (!PlayerPrefs.HasKey("ISUSER_ENTER"))
         {
-            daily_Challenge_Popup_Portrait.SetActive(true);
+            touch_Btn.SetActive(true);
+            hand_Icon.SetActive(false);
+            hand_Icon.GetComponent<RectTransform>().anchorMin = new Vector2(1f, 0);
+            hand_Icon.GetComponent<RectTransform>().anchorMax = new Vector2(1f, 0);
+            hand_Icon.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+            hand_Icon.GetComponent<RectTransform>().anchoredPosition = new Vector2(-455,115);
+
+            bottom_InfoPanel.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0f);
+            bottom_InfoPanel.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0f);
+            bottom_InfoPanel.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+            bottom_InfoPanel.GetComponent<RectTransform>().anchoredPosition = new Vector2(-307,1022);
+            bottom_InfoPanel.GetComponentInChildren<Text>().text = "Complete three unique challenges every day to earn extra rewards.";
+            bottom_InfoPanel.SetActive(true);
+            ButtonsInteractable(4);
         }
         else
         {
-            daily_Challenge_Popup.SetActive(true);
-        }
-        for (int i =0; i < 3; i++)
-        {
-          int ch_Num= PlayerPrefs.GetInt("ROUTINECHALLENGE" + i);
-            GameObject dc_Tab = null;
             if (!SettingPopup.isPortrait)
             {
-                 dc_Tab = Instantiate(daily_Challenges_Prefab_Portrait, transform.position, Quaternion.identity, daily_Challenges_Parent_Portrait.transform);
+                daily_Challenge_Popup_Portrait.SetActive(true);
             }
             else
             {
-                 dc_Tab = Instantiate(daily_Challenges_Prefab, transform.position, Quaternion.identity, daily_Challenges_Parent.transform);
+                daily_Challenge_Popup.SetActive(true);
             }
-            dc_Tab.GetComponent<DailyChallenge>().id = ch_Num;
-            dc_Tab.GetComponent<DailyChallenge>().description.text = daily_Challenges[ch_Num];          
-        }
-        if (!SettingPopup.isPortrait)
-        {
-            for (int i = 0; i < daily_Challenges_Parent_Portrait.transform.childCount; i++)
+            for (int i = 0; i < 3; i++)
             {
-                if (!PlayerPrefs.HasKey("DAILYCHALLENGE" + i))
+                int ch_Num = PlayerPrefs.GetInt("ROUTINECHALLENGE" + i);
+                GameObject dc_Tab = null;
+                if (!SettingPopup.isPortrait)
                 {
-                    daily_Challenges_Parent_Portrait.transform.GetChild(i).GetComponent<DailyChallenge>().claimed.SetActive(true);
+                    dc_Tab = Instantiate(daily_Challenges_Prefab_Portrait, transform.position, Quaternion.identity, daily_Challenges_Parent_Portrait.transform);
                 }
                 else
                 {
-                    daily_Challenges_Parent_Portrait.transform.GetChild(i).GetComponent<DailyChallenge>().coins_Tab.SetActive(true);
+                    dc_Tab = Instantiate(daily_Challenges_Prefab, transform.position, Quaternion.identity, daily_Challenges_Parent.transform);
                 }
-                if (i == 0) 
-                {
-                    daily_Challenges_Parent_Portrait.transform.GetChild(i).GetComponent<DailyChallenge>().coins_Tab.GetComponentInChildren<Text>().text = "100";
-                }
+                dc_Tab.GetComponent<DailyChallenge>().id = ch_Num;
+                dc_Tab.GetComponent<DailyChallenge>().description.text = daily_Challenges[ch_Num];
             }
-        }
-        else
-        {
-            for (int i = 0; i < daily_Challenges_Parent.transform.childCount; i++)
+            if (!SettingPopup.isPortrait)
             {
-                if (!PlayerPrefs.HasKey("DAILYCHALLENGE" + i))
+                for (int i = 0; i < daily_Challenges_Parent_Portrait.transform.childCount; i++)
                 {
-                    daily_Challenges_Parent.transform.GetChild(i).GetComponent<DailyChallenge>().claimed.SetActive(true);
+                    if (!PlayerPrefs.HasKey("DAILYCHALLENGE" + i))
+                    {
+                        daily_Challenges_Parent_Portrait.transform.GetChild(i).GetComponent<DailyChallenge>().claimed.SetActive(true);
+                    }
+                    else
+                    {
+                        daily_Challenges_Parent_Portrait.transform.GetChild(i).GetComponent<DailyChallenge>().coins_Tab.SetActive(true);
+                    }
+                    if (i == 0)
+                    {
+                        daily_Challenges_Parent_Portrait.transform.GetChild(i).GetComponent<DailyChallenge>().coins_Tab.GetComponentInChildren<Text>().text = "100";
+                    }
                 }
-                else
+            }
+            else
+            {
+                for (int i = 0; i < daily_Challenges_Parent.transform.childCount; i++)
                 {
-                    daily_Challenges_Parent.transform.GetChild(i).GetComponent<DailyChallenge>().coins_Tab.SetActive(true);
-                }
-                if (i == 0)
-                {
-                    daily_Challenges_Parent.transform.GetChild(i).GetComponent<DailyChallenge>().coins_Tab.GetComponentInChildren<Text>().text = "100";
+                    if (!PlayerPrefs.HasKey("DAILYCHALLENGE" + i))
+                    {
+                        daily_Challenges_Parent.transform.GetChild(i).GetComponent<DailyChallenge>().claimed.SetActive(true);
+                    }
+                    else
+                    {
+                        daily_Challenges_Parent.transform.GetChild(i).GetComponent<DailyChallenge>().coins_Tab.SetActive(true);
+                    }
+                    if (i == 0)
+                    {
+                        daily_Challenges_Parent.transform.GetChild(i).GetComponent<DailyChallenge>().coins_Tab.GetComponentInChildren<Text>().text = "100";
+                    }
                 }
             }
         }
-       
         AudioManager.instance.PlaySound(0);
     }
+   
     public void BackToMainMenu()
     {
         leaderBoard.SetActive(false);
