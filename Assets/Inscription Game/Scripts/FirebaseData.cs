@@ -1,14 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Firebase.Database;
+///using Firebase.Database;
 using Samples.Purchasing.GooglePlay.FraudDetection;
 
 public class FirebaseData : MonoBehaviour
 {
     public DataToSave dataToSave;
     public string userId;
-    DatabaseReference dbReference;
+   // DatabaseReference dbReference;
     public static FirebaseData instance;
    
     private void Awake()
@@ -25,64 +25,62 @@ public class FirebaseData : MonoBehaviour
     }
     private void Start()
     {
-        StartCoroutine(DatabaseFetching());
+        //StartCoroutine(DatabaseFetching());
     }
-    IEnumerator DatabaseFetching() 
-    {
-        yield return new WaitUntil(()=>LoginWithGoogle.isFirebaseInitiliazed);
-        print("Firebase initialized.");
-        dbReference = FirebaseDatabase.DefaultInstance.RootReference;
+    //IEnumerator DatabaseFetching() 
+    //{
+    //    yield return new WaitUntil(()=>LoginWithGoogle.isFirebaseInitiliazed);
+    //    print("Firebase initialized.");
+    //    //dbReference = FirebaseDatabase.DefaultInstance.RootReference;
        
-    }
+    //}
     
     public void DateLoadFunc()
     {
         if (!PlayerPrefs.HasKey("GUEST"))
         {
-            StartCoroutine(DataLoadEnum());
+            //StartCoroutine(DataLoadEnum());
         }
     }
-    IEnumerator DataLoadEnum()
-    {
-        userId = PlayerPrefs.GetString("USERID");
+    //IEnumerator DataLoadEnum()
+    //{
+    //    userId = PlayerPrefs.GetString("USERID");
 
-        var serverData= dbReference.Child("users").Child(userId).GetValueAsync();
-        yield return new WaitUntil(predicate:()=> serverData.IsCompleted);
-        print("Process is Completed");
+    //    var serverData= dbReference.Child("users").Child(userId).GetValueAsync();
+    //    yield return new WaitUntil(predicate:()=> serverData.IsCompleted);
+    //    print("Process is Completed");
 
-        DataSnapshot snapshot = serverData.Result;
-        string jsonData=snapshot.GetRawJsonValue();
+    //    DataSnapshot snapshot = serverData.Result;
+    //    string jsonData=snapshot.GetRawJsonValue();
 
-        if (jsonData != null)
-        {
-            print("Server data found");
-            dataToSave = JsonUtility.FromJson<DataToSave>(jsonData);
-            //if (!string.IsNullOrEmpty(dataToSave.userName))
-            //{
-                PlayerPrefs.SetString("USERNAME", dataToSave.userName);
-                PlayerPrefs.SetInt("COINS", dataToSave.coins);
-                PlayerPrefs.SetInt("SCRAB_POWERUP", dataToSave.scarabPowers);
-                PlayerPrefs.SetInt("HINT_POWERUP", dataToSave.eyeHorusPowers);
-                PlayerPrefs.SetInt("LOTUS_POWERUP", dataToSave.lotusPowers);
-           // }
+    //    if (jsonData != null)
+    //    {
+    //        print("Server data found");
+    //        dataToSave = JsonUtility.FromJson<DataToSave>(jsonData);
             
-            UIHandler uIHandler =GameObject.FindAnyObjectByType<UIHandler>();
-            uIHandler.coins_Text.text = dataToSave.coins.ToString();
-            uIHandler.coins_Text_Portrait.text = dataToSave.coins.ToString();
-        }
-        else 
-        {
-            print("no data found");
-            PlayerPrefs.SetString("ISUSER_ENTER","Set");
-            PlayerPrefs.SetInt("COINS", 1000);
-            PlayerPrefs.SetInt("SCRAB_POWERUP", 1);
-            PlayerPrefs.SetInt("HINT_POWERUP", 1);
-            PlayerPrefs.SetInt("LOTUS_POWERUP", 1);
-            DataSaveFun();
-        }
+    //            PlayerPrefs.SetString("USERNAME", dataToSave.userName);
+    //            PlayerPrefs.SetInt("COINS", dataToSave.coins);
+    //            PlayerPrefs.SetInt("SCRAB_POWERUP", dataToSave.scarabPowers);
+    //            PlayerPrefs.SetInt("HINT_POWERUP", dataToSave.eyeHorusPowers);
+    //            PlayerPrefs.SetInt("LOTUS_POWERUP", dataToSave.lotusPowers);
+          
+    //        UIHandler uIHandler =GameObject.FindAnyObjectByType<UIHandler>();
+    //        uIHandler.coins_Text.text = dataToSave.coins.ToString();
+    //        uIHandler.coins_Text_Portrait.text = dataToSave.coins.ToString();
+    //    }
+    //    else 
+    //    {
+    //        print("no data found");
+    //        PlayerPrefs.SetString("ISUSER_ENTER","Set");
+    //        PlayerPrefs.SetInt("COINS", 1000);
+    //        PlayerPrefs.SetInt("SCRAB_POWERUP", 1);
+    //        PlayerPrefs.SetInt("HINT_POWERUP", 1);
+    //        PlayerPrefs.SetInt("LOTUS_POWERUP", 1);
+    //        DataSaveFun();
+    //    }
 
 
-    }
+    //}
     public void DataSaveFun()
     {
         if (!PlayerPrefs.HasKey("GUEST"))
@@ -101,7 +99,7 @@ public class FirebaseData : MonoBehaviour
             dataToSave.lotusPowers = LotusCount;
 
             string json = JsonUtility.ToJson(dataToSave);
-            dbReference.Child("users").Child(userId).SetRawJsonValueAsync(json);
+           // dbReference.Child("users").Child(userId).SetRawJsonValueAsync(json);
         }
     }
 
