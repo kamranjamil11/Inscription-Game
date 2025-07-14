@@ -358,6 +358,7 @@ GameObject:
   m_Component:
   - component: {fileID: 154883264}
   - component: {fileID: 154883263}
+  - component: {fileID: 154883265}
   m_Layer: 0
   m_Name: LoginWithGoogle
   m_TagString: Untagged
@@ -377,13 +378,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 247a4619fc6362a40bc6f0be12e115b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GoogleAPI: 54199031251-rspt676dq7dfp7spol4729vg1eh3u7i2.apps.googleusercontent.com
-  dependencyStatus: 0
-  Username: {fileID: 0}
-  UserEmail: {fileID: 0}
-  UserProfilePic: {fileID: 0}
-  loginPopup: {fileID: 1144781275}
-  loadingScreen: {fileID: 1854299518}
 --- !u!4 &154883264
 Transform:
   m_ObjectHideFlags: 0
@@ -399,6 +393,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &154883265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 154883262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2383fb25d7674cb688423c8d048725a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loginPopup: {fileID: 1144781275}
+  loadingScreen: {fileID: 1854299518}
 --- !u!1 &200199790
 GameObject:
   m_ObjectHideFlags: 0
@@ -605,8 +613,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 154883263}
-        m_TargetAssemblyTypeName: LoginWithGoogle, Assembly-CSharp
+      - m_Target: {fileID: 154883265}
+        m_TargetAssemblyTypeName: AppleAuthSample.MainMenu, Assembly-CSharp
         m_MethodName: PlayAsGuest
         m_Mode: 1
         m_Arguments:
@@ -977,7 +985,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Login With Google
+  m_Text: Login With Apple ID
 --- !u!222 &359674193
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1207,9 +1215,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 154883263}
-        m_TargetAssemblyTypeName: LoginWithGoogle, Assembly-CSharp
-        m_MethodName: Login
+      - m_Target: {fileID: 154883265}
+        m_TargetAssemblyTypeName: AppleAuthSample.MainMenu, Assembly-CSharp
+        m_MethodName: SignInWithAppleButtonPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1724,7 +1732,6 @@ GameObject:
   m_Component:
   - component: {fileID: 666337759}
   - component: {fileID: 666337758}
-  - component: {fileID: 666337760}
   m_Layer: 0
   m_Name: Ad Manager
   m_TagString: Untagged
@@ -1760,33 +1767,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!54 &666337760
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 666337757}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!1 &676169241
 GameObject:
   m_ObjectHideFlags: 0

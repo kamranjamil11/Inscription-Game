@@ -162,7 +162,8 @@ public class SettingPopup : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().name == "MainMenu") 
         {
-            ui_Handler.RemoveAdsCompleted();
+          //  ui_Handler.RemoveAdsCompleted();
+          ui_Handler.IAP_Restore.Restore();
         }
     }
 }

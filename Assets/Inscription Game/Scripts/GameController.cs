@@ -1302,16 +1302,16 @@ public class GameController : MonoBehaviour
         GameObject tempSetting = null;
         if (!SettingPopup.isPortrait)
         {
-#if UNITY_IOS
-            tempSetting = Instantiate(settingsPopup_Portrait_IOS, transform.position, Quaternion.identity, mainCanvas.transform);
-#endif
+//#if UNITY_IOS
+           // tempSetting = Instantiate(settingsPopup_Portrait_IOS, transform.position, Quaternion.identity, mainCanvas.transform);
+//#endif
             tempSetting = Instantiate(settingsPopup_Portrait, transform.position, Quaternion.identity, mainCanvas.transform);
         }
         else
         {
-#if UNITY_IOS
-            tempSetting = Instantiate(settingsPopup_IOS, transform.position, Quaternion.identity, mainCanvas.transform);
-#endif
+//#if UNITY_IOS
+           // tempSetting = Instantiate(settingsPopup_IOS, transform.position, Quaternion.identity, mainCanvas.transform);
+//#endif
             tempSetting = Instantiate(settingsPopup, transform.position, Quaternion.identity, mainCanvas.transform);
         }
         tempSetting.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;

@@ -3856,6 +3856,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc6be2705de442742b704fc0436c98a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IAP_Restore: {fileID: 704975387}
   mainCanvas: {fileID: 900502283}
   loadingPanel: {fileID: 1339621684}
   user_Name: {fileID: 1672401866}

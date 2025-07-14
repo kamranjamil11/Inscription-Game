@@ -50,7 +50,7 @@
 //                isFirebaseInitiliazed = true;
 //                // auth.UseEmulator("localhost", 9099);
 
-//               // System.Environment.SetEnvironmentVariable("USE_AUTH_EMULATOR", "true");
+//                // System.Environment.SetEnvironmentVariable("USE_AUTH_EMULATOR", "true");
 
 //            }
 //            else

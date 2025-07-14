@@ -1,5 +1,6 @@
 ﻿
 using Samples.Purchasing.GooglePlay.FraudDetection;
+using Samples.Purchasing.GooglePlay.RestoringTransactions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ public class UIHandler : MonoBehaviour
     private const string StreakCountKey = "StreakCount";
     private const string RewardClaimedKey = "RewardClaimed";
 
-    
+    public RestoringTransactions IAP_Restore;
     public GameObject mainCanvas;
     public GameObject loadingPanel;
     [Header("Landscape UI")] 
@@ -460,19 +461,19 @@ public class UIHandler : MonoBehaviour
             if (!SettingPopup.isPortrait)
             {
 
-#if UNITY_IOS
+//#if UNITY_IOS
             tempSetting = Instantiate(settingsPopup_Portrait_IOS, transform.position, Quaternion.identity, mainCanvas.transform);
            // tempSetting.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
-#endif
-                tempSetting = Instantiate(settingsPopup_Portrait, transform.position, Quaternion.identity, mainCanvas.transform);
+//#endif
+                //tempSetting = Instantiate(settingsPopup_Portrait, transform.position, Quaternion.identity, mainCanvas.transform);
             }
             else
             {
-#if UNITY_IOS
+//#if UNITY_IOS
             tempSetting = Instantiate(settingsPopup_IOS, transform.position, Quaternion.identity, mainCanvas.transform);
             //tempSetting.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
-#endif
-                tempSetting = Instantiate(settingsPopup, transform.position, Quaternion.identity, mainCanvas.transform);
+//#endif
+                //tempSetting = Instantiate(settingsPopup, transform.position, Quaternion.identity, mainCanvas.transform);
             }
             tempSetting.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
             Vector3 pos = tempSetting.GetComponent<RectTransform>().anchoredPosition;
