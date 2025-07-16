@@ -240,6 +240,8 @@ namespace AppleAuthSample
                     PlayerPrefs.SetString("USERID", credential.User);
                     PlayerPrefs.SetString("USERNAME", credential.User);
                     PlayerPrefs.SetString("EMAIL_ID", "Set");
+                    loginPopup.SetActive(false);
+                    loadingScreen.SetActive(true);
                     if (dbReference != null)
                     {
                         FirebaseData.instance.DateLoadFunc();
