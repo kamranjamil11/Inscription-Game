@@ -434,10 +434,7 @@ public class UIHandler : MonoBehaviour
         {
             touch_Btn.SetActive(true);
             hand_Icon.SetActive(false);
-            hand_Icon.GetComponent<RectTransform>().anchorMin = new Vector2(0, 1);
-            hand_Icon.GetComponent<RectTransform>().anchorMax = new Vector2(0, 1);
-            hand_Icon.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
-            hand_Icon.GetComponent<RectTransform>().anchoredPosition = new Vector2(325, -722);
+           
 
             left_InfoPanel.GetComponent<RectTransform>().anchorMin = new Vector2(0, 1);
             left_InfoPanel.GetComponent<RectTransform>().anchorMax = new Vector2(0, 1);
@@ -447,10 +444,18 @@ public class UIHandler : MonoBehaviour
             left_InfoPanel.SetActive(true);
             if (!PlayerPrefs.HasKey("NO_ADS"))
             {
+                hand_Icon.GetComponent<RectTransform>().anchorMin = new Vector2(0, 1);
+                hand_Icon.GetComponent<RectTransform>().anchorMax = new Vector2(0, 1);
+                hand_Icon.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+                hand_Icon.GetComponent<RectTransform>().anchoredPosition = new Vector2(325, -722);
                 ButtonsInteractable(1);
             }
             else 
             {
+                hand_Icon.GetComponent<RectTransform>().anchorMin = new Vector2(1, 1);
+                hand_Icon.GetComponent<RectTransform>().anchorMax = new Vector2(1, 1);
+                hand_Icon.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+                hand_Icon.GetComponent<RectTransform>().anchoredPosition = new Vector2(-210, -450);
                 ButtonsInteractable(2);
             }
         }
