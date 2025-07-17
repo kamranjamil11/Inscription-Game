@@ -204,6 +204,12 @@ public class Popup : MonoBehaviour
     {
         loading_Panel.SetActive(true);
     }
+    public void Continue()
+    {
+        PlayerPrefs.DeleteAll();
+        AudioManager.instance.PlaySound(0);
+        SceneManager.LoadScene("LoadingScene");
+    }
 }
 
 

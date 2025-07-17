@@ -59,7 +59,7 @@ public class FirebaseData : MonoBehaviour
             print("Server data found");
             dataToSave = JsonUtility.FromJson<DataToSave>(jsonData);
 
-            PlayerPrefs.SetString("USERNAME", dataToSave.userName);
+           // PlayerPrefs.SetString("USERNAME", dataToSave.userName);
             PlayerPrefs.SetInt("COINS", dataToSave.coins);
             PlayerPrefs.SetInt("SCRAB_POWERUP", dataToSave.scarabPowers);
             PlayerPrefs.SetInt("HINT_POWERUP", dataToSave.eyeHorusPowers);

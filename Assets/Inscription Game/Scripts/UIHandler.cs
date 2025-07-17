@@ -397,7 +397,7 @@ public class UIHandler : MonoBehaviour
     {
         loadingPanel.SetActive(false);
         print("Ads_Purchased");
-        PlayerPrefs.SetString("NO_ADS", "Purchased");
+       // PlayerPrefs.SetString("NO_ADS", "Purchased");
         RemoveAds();
         removeAds_Popup_Landscape.SetActive(false);
         removeAds_Popup_Portrait.SetActive(false);

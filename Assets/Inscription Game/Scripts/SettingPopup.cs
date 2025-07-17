@@ -84,7 +84,7 @@ public class SettingPopup : MonoBehaviour
             {
                 ui_Handler.landscape_UI.SetActive(true);
                 ui_Handler.portrait_UI.SetActive(false);
-                GameObject tempSetting = Instantiate(ui_Handler.settingsPopup, transform.position, Quaternion.identity, ui_Handler.mainCanvas.transform);   
+                GameObject tempSetting = Instantiate(ui_Handler.settingsPopup_IOS, transform.position, Quaternion.identity, ui_Handler.mainCanvas.transform);   
 
                 tempSetting.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
                 Vector3 pos = tempSetting.GetComponent<RectTransform>().anchoredPosition;
@@ -126,7 +126,7 @@ public class SettingPopup : MonoBehaviour
             {
                 ui_Handler.landscape_UI.SetActive(false);
                 ui_Handler.portrait_UI.SetActive(true);
-               GameObject tempSetting= Instantiate(ui_Handler.settingsPopup_Portrait, transform.position, Quaternion.identity, ui_Handler.mainCanvas.transform);
+               GameObject tempSetting= Instantiate(ui_Handler.settingsPopup_Portrait_IOS, transform.position, Quaternion.identity, ui_Handler.mainCanvas.transform);
                
                 tempSetting.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
                 Vector3 pos = tempSetting.GetComponent<RectTransform>().anchoredPosition;
@@ -163,7 +163,7 @@ public class SettingPopup : MonoBehaviour
         if (SceneManager.GetActiveScene().name == "MainMenu") 
         {
           //  ui_Handler.RemoveAdsCompleted();
-          ui_Handler.IAP_Restore.Restore();
+          ui_Handler.IAP_Restore.RestorePurchases();
         }
     }
 }

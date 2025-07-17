@@ -12,7 +12,7 @@ namespace Samples.Purchasing.GooglePlay.RestoringTransactions
     {
         IStoreController m_StoreController;
         IGooglePlayStoreExtensions m_GooglePlayStoreExtensions;
-
+        IExtensionProvider extensionProvider;
         public string noAdsProductId = "com.wordgame.inscription.no_ads";
         UIHandler ui_Handler;
         //  public Text hasNoAdsText;
@@ -61,7 +61,8 @@ namespace Samples.Purchasing.GooglePlay.RestoringTransactions
             Debug.Log("In-App Purchasing successfully initialized");
 
             m_StoreController = controller;
-         
+            extensionProvider= extensions;
+#if UNITY_ANDROID
             // ✅ Check if user already owns the product
             if (m_StoreController.products.WithID(noAdsProductId).hasReceipt)
             {
@@ -72,15 +73,35 @@ namespace Samples.Purchasing.GooglePlay.RestoringTransactions
             else
             {
                 Debug.Log("❌ 'Remove Ads' not purchased.");
-            }          
+            }
+#endif
         }
 
-        public void Restore()
+
+        // Method for Restore Purchases Button (iOS only)
+        public void RestorePurchases()
         {
-            m_GooglePlayStoreExtensions.RestoreTransactions(OnRestore);
-
+#if UNITY_IOS
+        var apple = extensionProvider.GetExtension<IAppleExtensions>();
+        apple.RestoreTransactions(result =>
+        {
+            if (result)
+            {
+                Debug.Log("Restore successful.");
+                // Here you can give back content or update UI
+                 UpdateUI();
+            }
+            else
+            {
+                Debug.Log("Restore failed or no purchases found.");
+            }
+        });
+#else
+            Debug.Log("RestorePurchases is only available on iOS.");
+#endif
         }
-
+        
+       
         void OnRestore(bool success, string error)
         {
             var restoreMessage = "";
@@ -158,12 +179,9 @@ namespace Samples.Purchasing.GooglePlay.RestoringTransactions
 
         void UpdateUI()
         {
-            PlayerPrefs.SetString("NO_ADS", "Purchased");
-            if (SceneManager.GetActiveScene().name == "MainMenu")
-            {
-                ui_Handler = FindObjectOfType<UIHandler>();
-                ui_Handler.RemoveAdsCompleted();
-            }
+           PlayerPrefs.SetString("NO_ADS", "Purchased");          
+           ui_Handler = FindObjectOfType<UIHandler>();
+           ui_Handler.RemoveAdsCompleted();          
             //  hasNoAdsText.text = HasNoAds() ? "No ads will be shown" : "Ads will be shown";
         }
 

@@ -238,7 +238,7 @@ namespace AppleAuthSample
                     //Kam
                     //this.SetupGameMenu(credential.User, credential);
                     PlayerPrefs.SetString("USERID", credential.User);
-                    PlayerPrefs.SetString("USERNAME", credential.User);
+                   //PlayerPrefs.SetString("USERNAME", credential.User);
                     PlayerPrefs.SetString("EMAIL_ID", "Set");
                     loginPopup.SetActive(false);
                     loadingScreen.SetActive(true);
