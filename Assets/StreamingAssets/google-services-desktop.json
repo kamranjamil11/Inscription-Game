@@ -8,22 +8,29 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:54199031251:android:dac9f10c89b9216694cb26",
+        "mobilesdk_app_id": "1:54199031251:ios:f9db908adaee311794cb26",
         "android_client_info": {
           "package_name": "com.wordgame.inscription"
         }
       },
-      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAyIG4Br0KL1u1x1mxoBSN5r4j0_2bjljo"
+          "current_key": "AIzaSyAyyIeOXzb3eAvdo2J1JXaT-keCPVv0jWE"
         }
       ],
       "services": {
+        "analytics_service": {
+          "status": 0
+        },
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "status": 1
         }
-      }
+      },
+      "oauth_client": [
+        {
+          "client_id": "54199031251-7ii57gc91nk07l17q9313kq8hm9kghpu.apps.googleusercontent.com"
+        }
+      ]
     }
   ],
   "configuration_version": "1"

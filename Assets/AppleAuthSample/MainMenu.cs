@@ -208,8 +208,11 @@ namespace AppleAuthSample
                     var appleIdCredential = credential as IAppleIDCredential;
                     if (appleIdCredential != null)
                     {
-                        PlayerPrefs.SetString(AppleUserIdKey, credential.User);
                         Debug.Log("AppleUserIdKey: " + credential.User);
+                        string credentialUser = credential.User;
+                        credentialUser.Replace('.', '_');
+                        PlayerPrefs.SetString(AppleUserIdKey, credentialUser);
+                        Debug.Log("After Senitize AppleUserIdKey: " + credentialUser);
                     }
 
                     this.SetupGameMenu(credential.User, credential);
@@ -233,17 +236,23 @@ namespace AppleAuthSample
                 {
                     
                     // If a sign in with apple succeeds, we should have obtained the credential with the user id, name, and email, save it
-                    PlayerPrefs.SetString(AppleUserIdKey, credential.User);
                     Debug.Log("AppleUserIdKey: "+ credential.User);
                     //Kam
                     //this.SetupGameMenu(credential.User, credential);
-                    PlayerPrefs.SetString("USERID", credential.User);
+
+                    string credentialUser = credential.User;
+                    credentialUser = credentialUser.Replace('.', '_');
+
+                    Debug.Log("After Senitze AppleUserIdKey: "+ credentialUser);
+                    PlayerPrefs.SetString(AppleUserIdKey, credentialUser);
+                    PlayerPrefs.SetString("USERID", credentialUser);
                    //PlayerPrefs.SetString("USERNAME", credential.User);
                     PlayerPrefs.SetString("EMAIL_ID", "Set");
                     loginPopup.SetActive(false);
                     loadingScreen.SetActive(true);
                     if (dbReference != null)
                     {
+                        FirebaseData.instance.dbReference = dbReference;
                         FirebaseData.instance.DateLoadFunc();
                     }
                 },

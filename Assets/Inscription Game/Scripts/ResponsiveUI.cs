@@ -15,7 +15,6 @@ public class ResponsiveUI : MonoBehaviour
     GameController gm_Controller;
    void Start()
     {
-       
 
         Screen.autorotateToPortrait = true;
         Screen.autorotateToLandscapeLeft = false;
@@ -34,6 +33,8 @@ public class ResponsiveUI : MonoBehaviour
         //}
 
     }
+
+
 
     //void Update()
     //{
@@ -98,7 +99,7 @@ public class ResponsiveUI : MonoBehaviour
     //            // ls.loadingScreen_Portrait.SetActive(true);
     //            gm_Controller.gridFrame.transform.localScale = new Vector2(1.8f,1.8f);
     //            Debug.Log("Portrait mode detected");
-                
+
     //        }
     //        else
     //        {
@@ -106,11 +107,11 @@ public class ResponsiveUI : MonoBehaviour
     //            // ls.loadingScreen_Portrait.SetActive(false);
     //            gm_Controller.gridFrame.transform.localScale = Vector2.one;
     //            Debug.Log("Landscape mode detected");
-                
+
     //        }
     //    }
-        
+
     //}
 
-    
+
 }

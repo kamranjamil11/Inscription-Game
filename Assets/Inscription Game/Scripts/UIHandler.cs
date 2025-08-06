@@ -70,8 +70,8 @@ public class UIHandler : MonoBehaviour
     public HashSet<string> wordSet = new HashSet<string>();
     
     private void Start()
-    {     
-       FirebaseData.instance.DateLoadFunc();
+    {
+        FirebaseData.instance.DateLoadFunc();
         //IsPalindrome(121);
         // PrimeNumber();
         Time.timeScale = 1;
@@ -105,7 +105,14 @@ public class UIHandler : MonoBehaviour
         StartCoroutine(LoadWords());
        
     }
- 
+
+    public void DeletePrefs()
+    {
+        PlayerPrefs.DeleteAll();
+    }
+
+
+
     void OnGameStartDataSet()
     {
         //if (!PlayerPrefs.HasKey("COINS"))

@@ -9,7 +9,7 @@ public class FirebaseData : MonoBehaviour
 {
     public DataToSave dataToSave;
     public string userId;
-    DatabaseReference dbReference;
+    public DatabaseReference dbReference;
     public static FirebaseData instance;
    
     private void Awake()
@@ -46,7 +46,6 @@ public class FirebaseData : MonoBehaviour
     IEnumerator DataLoadEnum()
     {
         userId = PlayerPrefs.GetString("USERID");
-
         var serverData = dbReference.Child("users").Child(userId).GetValueAsync();
         yield return new WaitUntil(predicate: () => serverData.IsCompleted);
         print("Process is Completed");
