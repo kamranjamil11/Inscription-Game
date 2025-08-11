@@ -17,7 +17,9 @@ public class Popup : MonoBehaviour
     GameController gm_Controller;
     UIHandler uiHandler;
     public GameObject coinsTilte, powerUpTilte, coinsShop, powerShop,loading_Panel;
+    public GameObject loginFirstPopup;
     GameObject tempCoinsShop = null;
+    public GameObject[] loginFirstBts;    
     private void Start()
     {
         int coins = PlayerPrefs.GetInt("COINS");
@@ -30,6 +32,21 @@ public class Popup : MonoBehaviour
         {
             powerUp_Txt.text = powerUps.ToString();
         }
+        if (PlayerPrefs.HasKey("GUEST"))
+        {
+            foreach (GameObject item in loginFirstBts)
+            {
+                item.SetActive(true);
+            }
+        }
+        else 
+        {
+            foreach (GameObject item in loginFirstBts)
+            {
+                item.SetActive(false);
+            }
+        }
+
         if (SceneManager.GetActiveScene().name == "MainMenu")
         {
             uiHandler = GameObject.FindObjectOfType<UIHandler>();
@@ -203,6 +220,45 @@ public class Popup : MonoBehaviour
     public void loadingActive()
     {
         loading_Panel.SetActive(true);
+    }
+    public void LoginFirst()
+    {
+        PlayerPrefs.DeleteAll();
+
+        if (SceneManager.GetActiveScene().name == "MainMenu")
+        {
+
+            if (!SettingPopup.isPortrait)
+            {
+                uiHandler.loadingScreen.gameObject.SetActive(false);
+                uiHandler.loadingScreen_Portrait.gameObject.SetActive(true);
+            }
+            else
+            {
+                uiHandler.loadingScreen.gameObject.SetActive(true);
+                uiHandler.loadingScreen_Portrait.gameObject.SetActive(false);
+            }
+            uiHandler.loadingScreen.GetComponent<LoadingScreen>().sceneName = "LoadingScene";
+            uiHandler.loadingScreen_Portrait.GetComponent<LoadingScreen>().sceneName = "LoadingScene";
+        }
+        else
+        {
+            gm_Controller.loadingScreen_Landscape.sceneName = "LoadingScene";
+            gm_Controller.loadingScreen_Portrait.sceneName = "LoadingScene";
+            gm_Controller.ShowLoading("LoadingScene");
+        }
+        Destroy(this.gameObject);
+    }
+    public void LoginFirstPopup(bool isTrue)
+    {
+        if (isTrue) 
+        {
+            loginFirstPopup.SetActive(true);
+        } else 
+        {
+            loginFirstPopup.SetActive(false);
+        }
+        AudioManager.instance.PlaySound(6);
     }
 }
 
