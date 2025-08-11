@@ -266,12 +266,16 @@ namespace AppleAuthSample
 
         public void PlayAsGuest()
         {
+            if (!PlayerPrefs.HasKey("ISUSER_ENTER"))
+            {
+                PlayerPrefs.SetInt("COINS", 1000);
+                PlayerPrefs.SetInt("SCRAB_POWERUP", 1);
+                PlayerPrefs.SetInt("HINT_POWERUP", 1);
+                PlayerPrefs.SetInt("LOTUS_POWERUP", 1);
+            }
             PlayerPrefs.SetString("GUEST", "Set");
             PlayerPrefs.SetString("EMAIL_ID", "Set");
-            PlayerPrefs.SetInt("COINS", 1000);
-            PlayerPrefs.SetInt("SCRAB_POWERUP", 1);
-            PlayerPrefs.SetInt("HINT_POWERUP", 1);
-            PlayerPrefs.SetInt("LOTUS_POWERUP", 1);
+            
             loginPopup.SetActive(false);
             loadingScreen.SetActive(true);
         }

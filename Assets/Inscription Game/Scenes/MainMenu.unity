@@ -7174,9 +7174,9 @@ RectTransform:
   - {fileID: 437630800}
   - {fileID: 1165130740}
   - {fileID: 80914842}
-  - {fileID: 1326277529}
   - {fileID: 2853383333658395681}
   - {fileID: 1409678846565676236}
+  - {fileID: 1326277529}
   m_Father: {fileID: 900502287}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -22988,8 +22988,8 @@ RectTransform:
   - {fileID: 596357551}
   - {fileID: 1416987041}
   - {fileID: 1012013817}
-  - {fileID: 330173159}
   - {fileID: 7356463222681346734}
+  - {fileID: 330173159}
   m_Father: {fileID: 900502287}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -24737,7 +24737,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 0.7
-  m_Text: You have got a new coins pack.
+  m_Text: You must first login to purchase this item.
 --- !u!222 &5030797331075738147
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -25065,7 +25065,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 0.7
-  m_Text: You have got a new coins pack.
+  m_Text: You must first login to purchase this item.
 --- !u!222 &6394905852267847224
 CanvasRenderer:
   m_ObjectHideFlags: 0
