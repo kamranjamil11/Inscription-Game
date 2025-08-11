@@ -716,7 +716,9 @@ public class UIHandler : MonoBehaviour
     }
     public void LoginFirst()
     {
-        PlayerPrefs.DeleteAll();
+        // PlayerPrefs.DeleteAll();
+        PlayerPrefs.DeleteKey("GUEST");
+        PlayerPrefs.DeleteKey("EMAIL_ID");
         loadingScreen.GetComponent<LoadingScreen>().sceneName = "LoadingScene";
         loadingScreen_Portrait.GetComponent<LoadingScreen>().sceneName = "LoadingScene";
         if (!SettingPopup.isPortrait)

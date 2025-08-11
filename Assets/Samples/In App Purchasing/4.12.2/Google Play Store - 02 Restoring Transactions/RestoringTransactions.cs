@@ -61,8 +61,10 @@ namespace Samples.Purchasing.GooglePlay.RestoringTransactions
             Debug.Log("In-App Purchasing successfully initialized");
 
             m_StoreController = controller;
-         
-            // ✅ Check if user already owns the product
+            if (!PlayerPrefs.HasKey("GUEST"))
+            {
+#if UNITY_ANDROID
+                // ✅ Check if user already owns the product              
             if (m_StoreController.products.WithID(noAdsProductId).hasReceipt)
             {
                 Debug.Log("✅ 'Remove Ads' already purchased. Disabling ads...");
@@ -72,7 +74,9 @@ namespace Samples.Purchasing.GooglePlay.RestoringTransactions
             else
             {
                 Debug.Log("❌ 'Remove Ads' not purchased.");
-            }          
+            }   
+#endif
+            }
         }
 
         public void Restore()

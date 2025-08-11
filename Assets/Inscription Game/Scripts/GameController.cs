@@ -124,8 +124,7 @@ public class GameController : MonoBehaviour
     public static string buttonType;
     private void Start()
     {
-        
-        
+       
         isNextWork = true;
         score = 0;
         usedHint = 0;

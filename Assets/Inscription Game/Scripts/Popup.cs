@@ -223,8 +223,9 @@ public class Popup : MonoBehaviour
     }
     public void LoginFirst()
     {
-        PlayerPrefs.DeleteAll();
-
+        // PlayerPrefs.DeleteAll();
+        PlayerPrefs.DeleteKey("GUEST");
+        PlayerPrefs.DeleteKey("EMAIL_ID");
         if (SceneManager.GetActiveScene().name == "MainMenu")
         {
 

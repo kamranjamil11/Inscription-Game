@@ -15,6 +15,7 @@ public class Generic_Timer : MonoBehaviour
     private void Start()
     {
         isStop = true;
+        Generic_Timer.totalTime = 60;
     }
     void Update()
     {
