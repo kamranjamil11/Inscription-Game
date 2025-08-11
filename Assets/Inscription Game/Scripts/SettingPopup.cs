@@ -16,10 +16,18 @@ public class SettingPopup : MonoBehaviour
     AudioManager audioManager;
     GameController gameController;
     UIHandler ui_Handler;
-    
+    public GameObject already_Restore_Btn, restore_Popup,loading_Panel;
     private void Start()
     {
-        audioManager=GameObject.FindObjectOfType<AudioManager>();
+        if (PlayerPrefs.HasKey("NO_ADS"))
+        {
+            already_Restore_Btn.SetActive(true);
+        }
+        else 
+        {
+            already_Restore_Btn.SetActive(false);
+        }
+         audioManager =GameObject.FindObjectOfType<AudioManager>();
         if (SceneManager.GetActiveScene().name == "MainMenu") 
         {
             ui_Handler = FindObjectOfType<UIHandler>();
@@ -162,8 +170,18 @@ public class SettingPopup : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().name == "MainMenu") 
         {
-          //  ui_Handler.RemoveAdsCompleted();
-          ui_Handler.IAP_Restore.RestorePurchases();
+            loading_Panel.SetActive(false);
+            restore_Popup.SetActive(true);
+            restore_Popup.GetComponentInChildren<Text>().text = "You have successfully restored all purchased items.";
+            ui_Handler.IAP_Restore.RestorePurchases();
+        }
+    }
+    public void OnAlreadyRestorePopup()
+    {
+        if (SceneManager.GetActiveScene().name == "MainMenu")
+        {
+            restore_Popup.SetActive(true);
+            restore_Popup.GetComponentInChildren<Text>().text = "You have already restored all purchased items.";
         }
     }
 }

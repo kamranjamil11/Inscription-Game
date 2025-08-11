@@ -43,6 +43,8 @@ public class UIHandler : MonoBehaviour
     public GameObject daily_Challenges_Parent;
     public GameObject removeAds_Landscape;
     public GameObject removeAds_Popup_Landscape;
+    public GameObject loginFirstPopup_Landsape;
+    public GameObject loginFirstButton_Landscape;
     [Header("Portrait UI")]
     public Button[] allButtons;
     public GameObject touch_Btn;
@@ -65,6 +67,10 @@ public class UIHandler : MonoBehaviour
     public GameObject daily_Challenges_Parent_Portrait;
     public GameObject removeAds_Portrait;
     public GameObject removeAds_Popup_Portrait;
+    public GameObject loginFirstPopup_Portrait;
+    public GameObject loginFirstButton_Portrait;
+
+
     public string[] first_Daily_Challenges;
     public string[] daily_Challenges;
     public HashSet<string> wordSet = new HashSet<string>();
@@ -84,7 +90,19 @@ public class UIHandler : MonoBehaviour
             coins_Text.text = FormatNumber(coins);
             coins_Text_Portrait.text = FormatNumber(coins);
         }
-        
+
+        if (PlayerPrefs.HasKey("GUEST"))
+        {
+            loginFirstButton_Landscape.SetActive(true);
+            loginFirstButton_Portrait.SetActive(true);
+        }
+        else
+        {
+            loginFirstButton_Landscape.SetActive(false);
+            loginFirstButton_Portrait.SetActive(false);
+
+        }
+
         StartCoroutine(Login());
         if (PlayerPrefs.HasKey("FIRST_CHALLENGE"))
         {
@@ -349,21 +367,17 @@ public class UIHandler : MonoBehaviour
     }
     public void RemoveAds()
     {
-        if (PlayerPrefs.HasKey("NO_ADS"))
+        if (!PlayerPrefs.HasKey("NO_ADS") || PlayerPrefs.HasKey("GUEST"))
         {
-           
-            removeAds_Portrait.GetComponent<Button>().interactable = false;
-           // removeAds_Portrait.transform.GetChild(0).gameObject.SetActive(true);
-            removeAds_Landscape.GetComponent<Button>().interactable = false;
-            //removeAds_Landscape.transform.GetChild(0).gameObject.SetActive(true);
-            
-        }
-        else 
-        {
+
             removeAds_Portrait.GetComponent<Button>().interactable = true;
-           // removeAds_Portrait.transform.GetChild(0).gameObject.SetActive(false);
             removeAds_Landscape.GetComponent<Button>().interactable = true;
-           // removeAds_Landscape.transform.GetChild(0).gameObject.SetActive(false);
+
+        }
+        else
+        {
+            removeAds_Portrait.GetComponent<Button>().interactable = false;
+            removeAds_Landscape.GetComponent<Button>().interactable = false;
         }
     }
     public void PurchaseAds()
@@ -709,6 +723,50 @@ public class UIHandler : MonoBehaviour
             }
         }
         
+    }
+
+    public void LoginFirst()
+    {
+        PlayerPrefs.DeleteAll();
+        loadingScreen.GetComponent<LoadingScreen>().sceneName = "LoadingScene";
+        loadingScreen_Portrait.GetComponent<LoadingScreen>().sceneName = "LoadingScene";
+        if (!SettingPopup.isPortrait)
+        {
+            loadingScreen.gameObject.SetActive(false);
+            loadingScreen_Portrait.gameObject.SetActive(true);
+        }
+        else
+        {
+            loadingScreen.gameObject.SetActive(true);
+            loadingScreen_Portrait.gameObject.SetActive(false);
+        }
+    }
+    public void LoginFirstPopup(bool isTrue)
+    {
+        if (isTrue)
+        {
+            if (!SettingPopup.isPortrait)
+            {
+                loginFirstPopup_Portrait.SetActive(true);
+            }
+            else
+            {
+                loginFirstPopup_Landsape.SetActive(true);
+            }
+
+        }
+        else
+        {
+            if (!SettingPopup.isPortrait)
+            {
+                loginFirstPopup_Portrait.SetActive(false);
+            }
+            else
+            {
+                loginFirstPopup_Landsape.SetActive(false);
+            }
+        }
+        AudioManager.instance.PlaySound(6);
     }
 
     public static string FormatNumber(long number)
