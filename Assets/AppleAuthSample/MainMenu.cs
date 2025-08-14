@@ -8,10 +8,11 @@ using UnityEngine;
 using Firebase;
 using Firebase.Database;
 using Firebase.Extensions;
+using Samples.Purchasing.GooglePlay.RestoringTransactions;
 
-namespace AppleAuthSample
-{
-    public class MainMenu : MonoBehaviour
+//namespace AppleAuthSample
+//{
+public class MainMenu : MonoBehaviour
     {
 
         private const string AppleUserIdKey = "AppleUserId";
@@ -20,11 +21,11 @@ namespace AppleAuthSample
 
         private DatabaseReference dbReference;
 
-       // public LoginMenuHandler LoginMenu;
-       // public GameMenuHandler GameMenu;
+    // public LoginMenuHandler LoginMenu;
+    // public GameMenuHandler GameMenu;
 
-        public GameObject loginPopup, loadingScreen;
-        public static bool isFirebaseInitiliazed;
+    public GameObject loginPopup_Landscape, loginPopup_Portrait, loadingScreen_Landscape, loadingScreen_portrait;
+    public static bool isFirebaseInitiliazed;
         private void Start()
         {
             // If the current platform is supported
@@ -36,13 +37,13 @@ namespace AppleAuthSample
                 this._appleAuthManager = new AppleAuthManager(deserializer);    
             }
 
-           
-            if (PlayerPrefs.HasKey("EMAIL_ID"))
-            {
-                loginPopup.SetActive(false);
-                loadingScreen.SetActive(true);
-            }          
-            InitializeFirebase();
+
+        if (PlayerPrefs.HasKey("EMAIL_ID"))
+        {
+            loginPopup_Portrait.SetActive(false);
+            loadingScreen_portrait.SetActive(true);
+        }
+        InitializeFirebase();
 
             this.InitializeLoginMenu();
         }
@@ -64,7 +65,23 @@ namespace AppleAuthSample
                 }
             });
         }
-        private void Update()
+
+    void ChangeOrientation()
+    {
+        if (!SettingPopup.isPortrait)
+        {
+
+            loginPopup_Portrait.SetActive(false);
+            loadingScreen_portrait.SetActive(true);
+
+        }
+        else
+        {
+            loginPopup_Landscape.SetActive(false);
+            loadingScreen_Landscape.SetActive(true);
+        }
+    }
+    private void Update()
         {
             // Updates the AppleAuthManager instance to execute
             // pending callbacks inside Unity's execution loop
@@ -243,13 +260,14 @@ namespace AppleAuthSample
                     string credentialUser = credential.User;
                     credentialUser = credentialUser.Replace('.', '_');
 
+                    RestoringTransactions.isInitiliazed= false;
+                    ChangeOrientation();
+
                     Debug.Log("After Senitze AppleUserIdKey: "+ credentialUser);
                     PlayerPrefs.SetString(AppleUserIdKey, credentialUser);
-                    PlayerPrefs.SetString("USERID", credentialUser);
-                   //PlayerPrefs.SetString("USERNAME", credential.User);
+                    PlayerPrefs.SetString("USERID", credentialUser);                  
                     PlayerPrefs.SetString("EMAIL_ID", "Set");
-                    loginPopup.SetActive(false);
-                    loadingScreen.SetActive(true);
+                   
                     if (dbReference != null)
                     {
                         FirebaseData.instance.dbReference = dbReference;
@@ -264,20 +282,19 @@ namespace AppleAuthSample
                 });
         }
 
-        public void PlayAsGuest()
+    public void PlayAsGuest()
+    {
+        if (!PlayerPrefs.HasKey("ISUSER_ENTER"))
         {
-            if (!PlayerPrefs.HasKey("ISUSER_ENTER"))
-            {
-                PlayerPrefs.SetInt("COINS", 1000);
-                PlayerPrefs.SetInt("SCRAB_POWERUP", 1);
-                PlayerPrefs.SetInt("HINT_POWERUP", 1);
-                PlayerPrefs.SetInt("LOTUS_POWERUP", 1);
-            }
-            PlayerPrefs.SetString("GUEST", "Set");
-            PlayerPrefs.SetString("EMAIL_ID", "Set");
-            
-            loginPopup.SetActive(false);
-            loadingScreen.SetActive(true);
+            PlayerPrefs.SetInt("COINS", 1000);
+            PlayerPrefs.SetInt("SCRAB_POWERUP", 1);
+            PlayerPrefs.SetInt("HINT_POWERUP", 1);
+            PlayerPrefs.SetInt("LOTUS_POWERUP", 1);
         }
+        PlayerPrefs.SetString("GUEST", "Set");
+        PlayerPrefs.SetString("EMAIL_ID", "Set");
+
+        ChangeOrientation();
     }
 }
+//}

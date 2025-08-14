@@ -129,32 +129,6 @@ public class UIHandler : MonoBehaviour
         PlayerPrefs.DeleteAll();
     }
 
-
-
-    void OnGameStartDataSet()
-    {
-        //if (!PlayerPrefs.HasKey("COINS"))
-        //{
-        //    PlayerPrefs.SetInt("COINS", 1000);
-        //}
-
-        //if (!PlayerPrefs.HasKey("HINT_POWERUP"))
-        //{
-        //    PlayerPrefs.SetInt("HINT_POWERUP", 1);
-        //}
-        
-
-        //if (!PlayerPrefs.HasKey("LOTUS_POWERUP"))
-        //{
-        //    PlayerPrefs.SetInt("LOTUS_POWERUP", 1);
-        //}
-       
-
-        //if (!PlayerPrefs.HasKey("SCRAB_POWERUP"))
-        //{
-        //    PlayerPrefs.SetInt("SCRAB_POWERUP", 1);
-        //}
-    }
     void ChangeOrientation()
     {
         if (!SettingPopup.isPortrait)
@@ -367,7 +341,7 @@ public class UIHandler : MonoBehaviour
     }
     public void RemoveAds()
     {
-        if (!PlayerPrefs.HasKey("NO_ADS") || PlayerPrefs.HasKey("GUEST"))
+        if (!PlayerPrefs.HasKey("NO_ADS"))
         {
 
             removeAds_Portrait.GetComponent<Button>().interactable = true;
@@ -418,7 +392,7 @@ public class UIHandler : MonoBehaviour
     {
         loadingPanel.SetActive(false);
         print("Ads_Purchased");
-       // PlayerPrefs.SetString("NO_ADS", "Purchased");
+        PlayerPrefs.SetString("NO_ADS", "Purchased");
         RemoveAds();
         removeAds_Popup_Landscape.SetActive(false);
         removeAds_Popup_Portrait.SetActive(false);

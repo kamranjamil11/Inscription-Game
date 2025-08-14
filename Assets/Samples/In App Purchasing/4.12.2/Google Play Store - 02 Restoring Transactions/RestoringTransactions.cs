@@ -19,19 +19,7 @@ namespace Samples.Purchasing.GooglePlay.RestoringTransactions
 
         // public Text restoreStatusText;
          public static bool isInitiliazed;
-        //public static RestoringTransactions Instance;
-        //private void Awake()
-        //{
-        //    if (Instance == null)
-        //    {
-        //        Instance = this;
-        //        DontDestroyOnLoad(gameObject);
-        //    }
-        //    else
-        //    {
-        //        Destroy(gameObject);
-        //    }
-        //}
+        
         void Start()
         {
 
@@ -158,17 +146,8 @@ namespace Samples.Purchasing.GooglePlay.RestoringTransactions
                     break;
 
                 case "com.wordgame.inscription.no_ads":                   
-                    Debug.Log("Remove Ads purchased. Disabling ads");
-                   // if (m_StoreController.products.WithID(noAdsProductId).hasReceipt)
-                   // {
-                       // Debug.Log("✅ 'Remove Ads' already purchased. Disabling ads...");
-                        // 👉 Disable ads or unlock features here
-                        UpdateUI();
-                   // }
-                   // else
-                   // {
-                       // Debug.Log("❌ 'Remove Ads' not purchased.");
-                   // }
+                    Debug.Log("Remove Ads purchased. Disabling ads");                 
+                        UpdateUI();                 
                     break;
             }
 
@@ -182,10 +161,12 @@ namespace Samples.Purchasing.GooglePlay.RestoringTransactions
 
         void UpdateUI()
         {
-           PlayerPrefs.SetString("NO_ADS", "Purchased");          
-           ui_Handler = FindObjectOfType<UIHandler>();
-           ui_Handler.RemoveAdsCompleted();          
-            //  hasNoAdsText.text = HasNoAds() ? "No ads will be shown" : "Ads will be shown";
+            if (!PlayerPrefs.HasKey("GUEST"))
+            {             
+                ui_Handler = FindObjectOfType<UIHandler>();
+                ui_Handler.RemoveAdsCompleted();
+                //  hasNoAdsText.text = HasNoAds() ? "No ads will be shown" : "Ads will be shown";
+            }
         }
 
         bool HasNoAds()
