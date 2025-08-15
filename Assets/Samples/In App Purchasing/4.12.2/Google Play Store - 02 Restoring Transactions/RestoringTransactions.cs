@@ -16,22 +16,9 @@ namespace Samples.Purchasing.GooglePlay.RestoringTransactions
         public string noAdsProductId = "com.wordgame.inscription.no_ads";
         UIHandler ui_Handler;
         //  public Text hasNoAdsText;
-
         // public Text restoreStatusText;
          public static bool isInitiliazed;
-        //public static RestoringTransactions Instance;
-        //private void Awake()
-        //{
-        //    if (Instance == null)
-        //    {
-        //        Instance = this;
-        //        DontDestroyOnLoad(gameObject);
-        //    }
-        //    else
-        //    {
-        //        Destroy(gameObject);
-        //    }
-        //}
+        
         void Start()
         {
 
@@ -61,8 +48,7 @@ namespace Samples.Purchasing.GooglePlay.RestoringTransactions
             Debug.Log("In-App Purchasing successfully initialized");
 
             m_StoreController = controller;
-            if (!PlayerPrefs.HasKey("GUEST"))
-            {
+           
 #if UNITY_ANDROID
                 // ✅ Check if user already owns the product              
             if (m_StoreController.products.WithID(noAdsProductId).hasReceipt)
@@ -76,7 +62,7 @@ namespace Samples.Purchasing.GooglePlay.RestoringTransactions
                 Debug.Log("❌ 'Remove Ads' not purchased.");
             }   
 #endif
-            }
+            
         }
 
         public void Restore()
@@ -138,17 +124,8 @@ namespace Samples.Purchasing.GooglePlay.RestoringTransactions
                     break;
 
                 case "com.wordgame.inscription.no_ads":                   
-                    Debug.Log("Remove Ads purchased. Disabling ads");
-                   // if (m_StoreController.products.WithID(noAdsProductId).hasReceipt)
-                   // {
-                       // Debug.Log("✅ 'Remove Ads' already purchased. Disabling ads...");
-                        // 👉 Disable ads or unlock features here
-                        UpdateUI();
-                   // }
-                   // else
-                   // {
-                       // Debug.Log("❌ 'Remove Ads' not purchased.");
-                   // }
+                    Debug.Log("Remove Ads purchased. Disabling ads");                 
+                        UpdateUI();                 
                     break;
             }
 
@@ -162,13 +139,14 @@ namespace Samples.Purchasing.GooglePlay.RestoringTransactions
 
         void UpdateUI()
         {
-            PlayerPrefs.SetString("NO_ADS", "Purchased");
-            if (SceneManager.GetActiveScene().name == "MainMenu")
+            if (!PlayerPrefs.HasKey("GUEST"))
             {
-                ui_Handler = FindObjectOfType<UIHandler>();
-                ui_Handler.RemoveAdsCompleted();
-            }
-            //  hasNoAdsText.text = HasNoAds() ? "No ads will be shown" : "Ads will be shown";
+                if (SceneManager.GetActiveScene().name == "MainMenu")
+                {
+                    ui_Handler = FindObjectOfType<UIHandler>();
+                    ui_Handler.RemoveAdsCompleted();
+                }
+            }     
         }
 
         bool HasNoAds()

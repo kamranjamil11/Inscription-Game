@@ -9,6 +9,7 @@ using Firebase;
 using Firebase.Auth;
 using UnityEngine.UI;
 using UnityEngine.Networking;
+using Samples.Purchasing.GooglePlay.RestoringTransactions;
 
 public class LoginWithGoogle : MonoBehaviour
 {
@@ -23,14 +24,14 @@ public class LoginWithGoogle : MonoBehaviour
     public Image UserProfilePic;
     private string imageUrl;
     private bool isGoogleSignInInitialized = false;
-    public GameObject loginPopup, loadingScreen;
+    public GameObject loginPopup_Landscape,loginPopup_Portrait, loadingScreen_Landscape, loadingScreen_portrait;
     public static bool isFirebaseInitiliazed = false;
     private void Start()
     {
         if (PlayerPrefs.HasKey("EMAIL_ID"))
         {
-            loginPopup.SetActive(false);        
-            loadingScreen.SetActive(true);
+            loginPopup_Portrait.SetActive(false);        
+            loadingScreen_portrait.SetActive(true);
         }
         //  InitFirebase();
         InitializeFirebase();
@@ -61,7 +62,21 @@ public class LoginWithGoogle : MonoBehaviour
             }
         });
     }
+    void ChangeOrientation()
+    {
+        if (!SettingPopup.isPortrait)
+        {
+           
+            loginPopup_Portrait.SetActive(false);
+            loadingScreen_portrait.SetActive(true);
 
+        }
+        else
+        {
+            loginPopup_Landscape.SetActive(false);
+            loadingScreen_Landscape.SetActive(true);
+        }
+    }
     public void Login()
     {       
         if (!isGoogleSignInInitialized)
@@ -120,18 +135,13 @@ public class LoginWithGoogle : MonoBehaviour
                         signInCompleted.SetResult(((Task<FirebaseUser>)authTask).Result);
                         Debug.Log("Success");
                         user = auth.CurrentUser;
-                        loginPopup.SetActive(false);                       
-                        loadingScreen.SetActive(true);
+                        RestoringTransactions.isInitiliazed = false;
+                        ChangeOrientation();
                         PlayerPrefs.SetString("USERID", user.UserId);
                         PlayerPrefs.SetString("USERNAME", user.DisplayName);
                         PlayerPrefs.SetString("EMAIL_ID", "Set");
                         FirebaseData.instance.DateLoadFunc();
                         
-                        
-                        // Username.text = user.DisplayName;
-                        // UserEmail.text = user.Email;
-
-                        // StartCoroutine(LoadImage(CheckImageUrl(user.PhotoUrl.ToString())));
                     }
                 });
             }
@@ -150,8 +160,8 @@ public class LoginWithGoogle : MonoBehaviour
         PlayerPrefs.SetString("GUEST", "Set");
         PlayerPrefs.SetString("EMAIL_ID", "Set");
 
-        loginPopup.SetActive(false);
-        loadingScreen.SetActive(true);
+        ChangeOrientation();
+      
     }
     private string CheckImageUrl(string url)
     {
